@@ -9,15 +9,18 @@ function App() {
     i18n.changeLanguage(lang);
   };
 
+  const languages = [
+    { label: 'Suomi', value: 'fi', isPrimary: true },
+    { label: 'Svenska', value: 'sv', isPrimary: true },
+    { label: 'English', value: 'en', isPrimary: true },
+  ];
+
   return (
     <>
       <Header
-        languages={[
-          { label: 'Suomi', value: 'fi', isPrimary: true },
-          { label: 'Svenska', value: 'sv', isPrimary: true },
-          { label: 'English', value: 'en', isPrimary: true },
-        ]}
+        languages={languages}
         onDidChangeLanguage={(newLanguage) => changeLanguage(newLanguage)}
+        defaultLanguage={i18n.language}
       >
         <Header.ActionBar
           className=""
