@@ -5,6 +5,8 @@
 ### Requirements:
 - Node.js >= 24.0.0
 
+### Setup
+
 1. Install packages:
 ```
 npm install
