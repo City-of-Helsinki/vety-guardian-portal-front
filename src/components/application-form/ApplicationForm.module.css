@@ -1,0 +1,15 @@
+.container {
+  margin-top: 3rem;
+}
+
+.step-container {
+  text-align: left;
+  padding-bottom: 2rem;
+}
+
+.stepper-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 24px;
+}

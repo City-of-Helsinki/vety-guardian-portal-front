@@ -1,0 +1,62 @@
+.item {
+  border: 0.125rem solid #9fc9eb;
+  display: flex;
+  flex-direction: column;
+}
+
+.dependant-card {
+  display: flex;
+  flex-direction: row;
+  background: #f2f8fd;
+}
+
+.application-card {
+  padding: 1.125rem 1.875rem;
+  background: #ffff;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  border-top: 0.125rem solid #9fc9eb;
+}
+
+.dependant-icon {
+  width: 4rem;
+  height: 4rem;
+  margin: 1rem 1rem 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  background-color: #ffff;
+  border-radius: 50%;
+  color: #0072c6;
+}
+
+.basic-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding-left: 2.125rem;
+}
+
+.application-card-content {
+  padding: 1rem;
+  text-align: start;
+  & > h3 {
+    color: #0072c6;
+    margin: 0 0 1rem 0;
+  }
+  & > p {
+    margin-bottom: 1rem;
+  }
+}
+
+.age-text {
+  color: #0072c6;
+  font-weight: 500;
+}
+
+.dependant-name {
+  font-weight: bold;
+  color: #000000;
+}

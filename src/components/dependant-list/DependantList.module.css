@@ -1,0 +1,13 @@
+.items {
+  display: flex;
+  flex-direction: column;
+  margin-top: 3rem;
+}
+
+.items > div:not(:last-child) {
+  margin-bottom: 3rem;
+}
+
+.items > div:last-child {
+  margin-bottom: 1rem;
+}

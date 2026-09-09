@@ -1,0 +1,1 @@
+export { DependantItem } from './DependantItem';

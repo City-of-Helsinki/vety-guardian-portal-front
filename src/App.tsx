@@ -1,6 +1,7 @@
 import './App.css';
 import { useTranslation } from 'react-i18next';
 import { Footer, Header, Logo, logoFi, logoSv } from 'hds-react';
+import { Outlet } from 'react-router';
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -26,7 +27,8 @@ function App() {
           className=""
           frontPageLabel="test"
           title="test"
-          titleHref="#"
+          titleHref="/"
+          logoHref="/"
           logo={
             <Logo src={i18n.language === 'sv' ? logoSv : logoFi} alt="asd" />
           }
@@ -34,8 +36,10 @@ function App() {
           <Header.LanguageSelector />
         </Header.ActionBar>
       </Header>
-      <section style={{ flexGrow: 1 }}>
-        <h1>{t('title')}</h1>
+      <section className="main-container">
+        <div className="main-content">
+          <Outlet />
+        </div>
       </section>
       <Footer></Footer>
     </>

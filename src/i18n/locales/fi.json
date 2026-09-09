@@ -1,3 +1,12 @@
 {
-  "title": "Testi"
+  "title": "Testi",
+  "landing": {
+    "title": "Etusivu",
+    "applicationTitle": "Esiopetukseen ilmoittautuminen",
+    "applicationDescription": "Tästä voi ilmoittautua esiopetukseen.",
+    "applicationLink": "Ilmoittaudu"
+  },
+  "application": {
+    "title": "Esiopetukseen ilmoittautuminen"
+  }
 }
