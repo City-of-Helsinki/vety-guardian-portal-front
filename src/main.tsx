@@ -5,6 +5,7 @@ import './index.css';
 import App from './App.tsx';
 import { Home, Landing, Application } from './pages';
 import './i18n/i18n';
+import './api/client.ts';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
