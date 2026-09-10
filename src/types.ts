@@ -1,15 +1,19 @@
 import type React from 'react';
 import type { FieldPath } from 'react-hook-form';
+import type { PreschoolApplicationWritable } from './api/generated';
 
 export type Dependant = {
   id: number;
   nimi: string;
 };
 
+export type FormValues = PreschoolApplicationWritable;
+/*
 export type FormValues = {
   appliedToPrivatePreschool: boolean;
   preschoolLanguage: 'fi' | 'sv';
 };
+*/
 
 export type FormStep = {
   id: string;
