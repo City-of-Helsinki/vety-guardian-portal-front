@@ -9,7 +9,8 @@ export const FirstStep = ({}) => {
   return (
     <ApplicationFormStep title="Esiopetus">
       <Controller
-        name="appliedToPrivatePreschool"
+        //name="appliedToPrivatePreschool"
+        name="hakenutEnsisijaisestiYksityiseen"
         control={control}
         render={({ field }) => (
           <Checkbox

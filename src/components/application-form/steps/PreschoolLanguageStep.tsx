@@ -9,7 +9,8 @@ export const PreschoolLanguageStep = ({}) => {
   return (
     <ApplicationFormStep title="Esiopetuksen kieli">
       <Controller
-        name="preschoolLanguage"
+        //name="preschoolLanguage"
+        name="kieli"
         control={control}
         rules={{ required: 'Valitse esiopetuksen kieli' }}
         render={({ field, fieldState }) => (
