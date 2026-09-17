@@ -5,6 +5,11 @@
 .step-container {
   text-align: left;
   padding-bottom: 2rem;
+  padding-top: 2rem;
+
+  & > fieldset {
+    margin-top: 2rem;
+  }
 }
 
 .stepper-buttons {
@@ -12,4 +17,25 @@
   justify-content: flex-end;
   align-items: flex-end;
   gap: 24px;
+}
+
+.selection-group {
+  & > div {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+}
+
+.selection-group-item {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  border: 2px solid #4e4e4e;
+  padding: 2rem;
+}
+
+.selection-group-item:has(input:checked) {
+  background-color: #f2f8fd;
+  border-color: #9fc9eb;
 }

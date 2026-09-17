@@ -7,11 +7,17 @@ export type Dependant = {
   nimi: string;
 };
 
-export type FormValues = PreschoolApplicationWritable;
+export type FormValues = PreschoolApplicationWritable & {
+  h1SahkopostiConfirm?: string;
+  h2SahkopostiConfirm?: string;
+};
 /*
 export type FormValues = {
   appliedToPrivatePreschool: boolean;
   preschoolLanguage: 'fi' | 'sv';
+  extendedCare: boolean;
+  extendedCareStartDate: Date;
+  extendedCareDetail: string;
 };
 */
 
