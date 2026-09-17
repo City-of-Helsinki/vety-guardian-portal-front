@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router';
 import './index.css';
 import App from './App.tsx';
-import { Home, Landing, Application } from './pages';
+import { Home, Landing, Application } from './pages/index.ts';
 import './i18n/i18n';
 import './api/client.ts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

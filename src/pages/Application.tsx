@@ -2,8 +2,14 @@ import { ApplicationForm } from '../components/application-form';
 import { useTranslation } from 'react-i18next';
 import { Divider } from '../components/divider';
 import {
-  FirstStep,
-  PreschoolLanguageStep,
+  Alku,
+  Kieli,
+  Taydentava,
+  TaydentavaLisatiedot,
+  TukiJaLaakehoito,
+  VarhaiskasvatuksenLaajuus,
+  Yhteystiedot,
+  Esikatselu,
 } from '../components/application-form/steps';
 import { ApplicationFormSteps } from '../components/application-form';
 import type { FormStep, FormValues } from '../types';
@@ -20,18 +26,52 @@ export const Application = ({}) => {
 
   const steps: FormStep[] = [
     {
-      id: 'firstStep',
+      id: 'alku',
       label: 'Alku',
-      //fields: ['appliedToPrivatePreschool'],
       fields: ['hakenutEnsisijaisestiYksityiseen'],
-      component: FirstStep,
+      component: Alku,
     },
     {
-      id: 'language',
+      id: 'kieli',
       label: 'Esiopetuksen kieli',
-      //fields: ['preschoolLanguage'],
       fields: ['kieli'],
-      component: PreschoolLanguageStep,
+      component: Kieli,
+    },
+    {
+      id: 'taydentava',
+      label: 'Esiopetusta täydentävä varhaiskasvatus',
+      fields: ['taydentavaVarhaiskasvatus'],
+      component: Taydentava,
+    },
+    {
+      id: 'hoidon-tarve',
+      label: 'Aloituspäivä ja hoidon tarve',
+      fields: ['taydentavaVarhaiskasvatusAloitus', 'hoidonTarve'],
+      component: TaydentavaLisatiedot,
+    },
+    {
+      id: 'varhaiskasvatuksen-laajuus',
+      label: 'Varhaiskasvatuksen laajuus',
+      fields: ['palvelunTarve', 'arkipoissaolotLkm'],
+      component: VarhaiskasvatuksenLaajuus,
+    },
+    {
+      id: 'tuki-ja-laakehoito',
+      label: 'Tuki ja lääkehoidon tarve',
+      fields: ['erityisenTuenTarve', 'laakehoidonTarve'],
+      component: TukiJaLaakehoito,
+    },
+    {
+      id: 'yhteystiedot',
+      label: 'Yhteystiedot',
+      fields: ['h1Sahkoposti', 'h2Sahkoposti'],
+      component: Yhteystiedot,
+    },
+    {
+      id: 'esikatselu',
+      label: 'Esikatselu ja lähettäminen',
+      fields: [],
+      component: Esikatselu,
     },
   ];
 
@@ -42,9 +82,14 @@ export const Application = ({}) => {
 
   type DrfFieldErrors = Record<string, string | string[]>;
 
+  const omitFields = ['h1SahkopostiConfirm', 'h2SahkopostiConfirm'];
+
   const onSubmit = (values: FormValues, form: UseFormReturn<FormValues>) => {
+    const data = Object.fromEntries(
+      Object.entries(values).filter(([k]) => !omitFields.includes(k)),
+    );
     createApplication.mutate(
-      { body: values },
+      { body: data },
       {
         onError: (error) => {
           console.error(
@@ -67,17 +112,6 @@ export const Application = ({}) => {
       },
     );
   };
-
-  /*
-  const defaultValues: FormValues = {
-    preschoolLanguage: 'fi',
-    appliedToPrivatePreschool: false,
-  };
-
-  const onSubmit = (values: FormValues) => {
-    return;
-  };
-  */
 
   return (
     <>
