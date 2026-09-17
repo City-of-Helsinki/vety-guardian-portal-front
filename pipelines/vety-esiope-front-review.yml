@@ -36,14 +36,14 @@ pool: Default
 resources:
   repositories:
     # Azure DevOps repository
-    - repository: vety-esiope-front-pipelines
+    - repository: vety-esiope-pipelines
       type: git
       # Azure DevOps project/repository
-      name: vety-esiope-front/vety-esiope-front-pipelines
+      name: vety-esiope/vety-esiope-pipelines
 
 extends:
   # Filename in Azure DevOps Repository
-  template: components/vety-esiope-front/pipelines/vety-esiope-front-review.yml@vety-esiope-front-pipelines
+  template: components/vety-esiope-front/pipelines/vety-esiope-front-review.yml@vety-esiope-pipelines
   # parameters:
     # Application build arguments and config map values as key value pairs.
     # Does not contain all buildArguments or configMap values, the rest located in vety-esiope-front-pipelines
