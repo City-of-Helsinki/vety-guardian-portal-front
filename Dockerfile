@@ -1,5 +1,45 @@
 FROM nginx:alpine
 
+
+RUN rm -f /etc/nginx/conf.d/default.conf && \
+    cat > /etc/nginx/nginx.conf <<'EOF'
+worker_processes auto;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    access_log /dev/stdout;
+    error_log /dev/stderr;
+
+    sendfile on;
+
+    # Writable locations for OpenShift's non-root container
+    client_body_temp_path /tmp/nginx/client_temp;
+    proxy_temp_path       /tmp/nginx/proxy_temp;
+    fastcgi_temp_path     /tmp/nginx/fastcgi_temp;
+    uwsgi_temp_path       /tmp/nginx/uwsgi_temp;
+    scgi_temp_path        /tmp/nginx/scgi_temp;
+
+    server {
+        listen 8080;
+        server_name _;
+
+        root /usr/share/nginx/html;
+        index index.html;
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+    }
+}
+EOF
+
+#  the test page
 RUN cat > /usr/share/nginx/html/index.html <<'EOF'
 <!DOCTYPE html>
 <html lang="en">
@@ -39,7 +79,7 @@ RUN cat > /usr/share/nginx/html/index.html <<'EOF'
 </head>
 <body>
     <div class="card">
-        <h1>Docker Test Page</h1>
+        <h1>Test Page</h1>
         <p class="status">✓ Container is running</p>
         <p>Hello from Nginx!</p>
     </div>
@@ -47,4 +87,6 @@ RUN cat > /usr/share/nginx/html/index.html <<'EOF'
 </html>
 EOF
 
-EXPOSE 80
+EXPOSE 8080
+
+CMD ["nginx", "-g", "daemon off;"]
