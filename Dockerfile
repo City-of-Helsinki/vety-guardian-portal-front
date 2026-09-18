@@ -1,11 +1,10 @@
 FROM nginx:alpine
 
-# Remove the default configuration and entrypoint scripts.
-# We provide our own OpenShift-compatible configuration.
+# Remove the default configuration and entrypoint scripts
 RUN rm -f /etc/nginx/conf.d/default.conf && \
     rm -rf /docker-entrypoint.d
 
-# Create directories that are writable by OpenShift's arbitrary non-root UID.
+# Create writable directories for OpenShift's arbitrary non-root UID
 RUN mkdir -p \
         /tmp/nginx/client_temp \
         /tmp/nginx/proxy_temp \
@@ -14,7 +13,7 @@ RUN mkdir -p \
         /tmp/nginx/scgi_temp && \
     chmod -R 777 /tmp/nginx
 
-# Create OpenShift-compatible Nginx configuration.
+# Create OpenShift-compatible Nginx configuration
 RUN cat > /etc/nginx/nginx.conf <<'EOF'
 pid /tmp/nginx/nginx.pid;
 
@@ -38,7 +37,7 @@ http {
     proxy_temp_path       /tmp/nginx/proxy_temp;
     fastcgi_temp_path     /tmp/nginx/fastcgi_temp;
     uwsgi_temp_path       /tmp/nginx/uwsgi_temp;
-    scgi_temp_path        /tmp/nginx/scgi_temp;
+    scgi_temp_path         /tmp/nginx/scgi_temp;
 
     server {
         listen 8080;
@@ -47,6 +46,14 @@ http {
         root /usr/share/nginx/html;
         index index.html;
 
+        # Kubernetes/OpenShift readiness probe
+        location = /readiness {
+            access_log off;
+            default_type text/plain;
+            return 200 "OK\n";
+        }
+
+        # Application
         location / {
             try_files $uri $uri/ =404;
         }
