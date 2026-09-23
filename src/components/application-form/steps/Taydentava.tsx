@@ -1,14 +1,24 @@
-import { SelectionGroup, RadioButton } from 'hds-react';
+import { SelectionGroup, RadioButton, Link } from 'hds-react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';
 import styles from '../ApplicationForm.module.css';
+import { Trans, useTranslation } from 'react-i18next';
 
 export const Taydentava = ({}) => {
   const { control } = useFormContext<FormValues>();
+  const { t } = useTranslation('lomake');
 
   return (
-    <ApplicationFormStep title="Täydentävän varhaiskasvatuksen tarve">
+    <ApplicationFormStep title={t('taydentava.title')}>
+      <Trans t={t} i18nKey="taydentava.taydentavaText" />
+      <Link
+        data-testid="link-vk-maksut"
+        external
+        href="https://www.hel.fi/fi/kasvatus-ja-koulutus/varhaiskasvatus/varhaiskasvatusmaksut"
+      >
+        {t('varhaiskasvatusmaksutAnchor')}
+      </Link>
       <Controller
         name="taydentavaVarhaiskasvatus"
         control={control}
@@ -18,12 +28,16 @@ export const Taydentava = ({}) => {
             'Valitse täydentävän varhaiskasvatuksen tarve',
         }}
         render={({ field, fieldState }) => (
-          <SelectionGroup className={styles['selection-group']}>
+          <SelectionGroup
+            className={styles['selection-group']}
+            label={t('taydentava.selectionGroupLabel')}
+          >
             <div className={styles['selection-group-item']}>
               <RadioButton
                 id="needs-extended-care"
+                data-testid="rb-extended-care"
                 name={field.name}
-                label="Kyllä, lapsi tarvitsee esiopetuksen lisäksi täydentävää varhaiskasvatusta."
+                label={t('taydentava.needsExtendedCare')}
                 checked={field.value === true}
                 onChange={() => field.onChange(true)}
                 onBlur={field.onBlur}
@@ -32,8 +46,9 @@ export const Taydentava = ({}) => {
             <div className={styles['selection-group-item']}>
               <RadioButton
                 id="no-extended-care"
+                data-testid="rb-no-extended-care"
                 name={field.name}
-                label="Ei, lapsi ei tarvitse esiopetuksen lisäksi täydentävää varhaiskasvatusta."
+                label={t('taydentava.doesntNeedExtendedCare')}
                 checked={field.value === false}
                 onChange={() => field.onChange(false)}
                 onBlur={field.onBlur}

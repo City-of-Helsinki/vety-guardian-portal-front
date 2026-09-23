@@ -2,23 +2,18 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import {
-  StepState,
-  Stepper,
-  Button,
-  ButtonVariant,
-  IconArrowLeft,
-  IconArrowRight,
-} from 'hds-react';
+import { StepState, Stepper, Button, ButtonVariant } from 'hds-react';
 import { type FormValues, type FormStep } from '../../types';
 import styles from './ApplicationForm.module.css';
+import { useNavigate } from 'react-router';
 
 interface ApplicationFormStepsProps {
   steps: FormStep[];
 }
 
 export const ApplicationFormSteps = ({ steps }: ApplicationFormStepsProps) => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation('lomake');
+  const navigate = useNavigate();
   const { trigger } = useFormContext<FormValues>();
   const [current, setCurrent] = useState(0);
   const [completed, setCompleted] = useState<Set<string>>(new Set());
@@ -64,13 +59,13 @@ export const ApplicationFormSteps = ({ steps }: ApplicationFormStepsProps) => {
 
       <div className={styles['stepper-buttons']}>
         <Button
-          disabled={current === 0}
           variant={ButtonVariant.Secondary}
-          onClick={() => setCurrent((i) => i - 1)}
+          onClick={
+            current === 0 ? () => navigate('/') : () => setCurrent((i) => i - 1)
+          }
           style={{ height: 'fit-content', width: 'fit-content' }}
-          iconStart={<IconArrowLeft />}
         >
-          Previous
+          {t('previousPage')}
         </Button>
         {isLast ? (
           <Button
@@ -78,16 +73,15 @@ export const ApplicationFormSteps = ({ steps }: ApplicationFormStepsProps) => {
             type="submit"
             style={{ height: 'fit-content', width: 'fit-content' }}
           >
-            Send
+            {t('sendApplication')}
           </Button>
         ) : (
           <Button
             variant={ButtonVariant.Secondary}
             onClick={next}
             style={{ height: 'fit-content', width: 'fit-content' }}
-            iconEnd={<IconArrowRight />}
           >
-            Next
+            {t('nextPage')}
           </Button>
         )}
       </div>
