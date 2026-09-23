@@ -9,6 +9,12 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';
 import { useEffect } from 'react';
+import {
+  DISPLAY_DATE_FORMAT,
+  dateToIso,
+  isoToDisplay,
+  isValidDate,
+} from '../../../utils/date';
 import styles from '../ApplicationForm.module.css';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -54,7 +60,13 @@ export const TaydentavaLisatiedot = ({}) => {
               id="extendedCareStartDate"
               data-testid="date-extended-care-start"
               initialMonth={new Date()}
-              onChange={field.onChange}
+              dateFormat={DISPLAY_DATE_FORMAT}
+              value={isoToDisplay(field.value)}
+              onChange={(_, valueAsDate) => {
+                field.onChange(
+                  isValidDate(valueAsDate) ? dateToIso(valueAsDate) : null,
+                );
+              }}
               onBlur={field.onBlur}
               disabled={field.disabled}
             />
