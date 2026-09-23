@@ -38,7 +38,7 @@ export const Alku = ({}) => {
             <Checkbox
               id="applied-to-private-preschool"
               label={t('alku.yksityinenLabel')}
-              checked={field.value}
+              checked={field.value ?? false}
               onChange={(e) => field.onChange(e.target.checked)}
               onBlur={field.onBlur}
             />

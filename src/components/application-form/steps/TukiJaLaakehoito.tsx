@@ -22,7 +22,7 @@ export const TukiJaLaakehoito = ({}) => {
                 id="erityisen-tuen-tarve"
                 data-testid="cb-erityinen-tuki"
                 label={t('tukiJaLaakehoito.erityinenTukiLabel')}
-                checked={field.value}
+                checked={field.value ?? false}
                 onChange={(e) => field.onChange(e.target.checked)}
                 onBlur={field.onBlur}
               />
@@ -39,7 +39,7 @@ export const TukiJaLaakehoito = ({}) => {
                 id="laakehoidon-tarve"
                 data-testid="cb-laakehoidon-tarve"
                 label={t('tukiJaLaakehoito.laakehoitoLabel')}
-                checked={field.value}
+                checked={field.value ?? false}
                 onChange={(e) => field.onChange(e.target.checked)}
                 onBlur={field.onBlur}
               />
