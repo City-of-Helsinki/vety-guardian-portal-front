@@ -33,7 +33,7 @@ export const Alku = ({}) => {
         name="hakenutEnsisijaisestiYksityiseen"
         data-testid="cb-hakenut-yksityiseen"
         control={control}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <SelectionGroup>
             <Checkbox
               id="applied-to-private-preschool"
@@ -41,6 +41,7 @@ export const Alku = ({}) => {
               checked={field.value ?? false}
               onChange={(e) => field.onChange(e.target.checked)}
               onBlur={field.onBlur}
+              errorText={fieldState.error?.message}
             />
           </SelectionGroup>
         )}

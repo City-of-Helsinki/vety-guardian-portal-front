@@ -69,6 +69,8 @@ export const TaydentavaLisatiedot = ({}) => {
               }}
               onBlur={field.onBlur}
               disabled={field.disabled}
+              invalid={!!fieldState.error}
+              errorText={fieldState.error?.message}
             />
           )}
         />
@@ -81,7 +83,10 @@ export const TaydentavaLisatiedot = ({}) => {
           required: taydentavaVarhaiskasvatus ? 'Valitse hoidon tarve' : false,
         }}
         render={({ field, fieldState }) => (
-          <SelectionGroup className={styles['selection-group']}>
+          <SelectionGroup
+            className={styles['selection-group']}
+            errorText={fieldState.error?.message}
+          >
             <div className={styles['selection-group-item']}>
               <RadioButton
                 id="paiva-aikainen"
