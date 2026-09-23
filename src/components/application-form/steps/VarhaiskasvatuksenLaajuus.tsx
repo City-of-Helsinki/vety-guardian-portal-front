@@ -1,12 +1,20 @@
-import { SelectionGroup, RadioButton, NumberInput, Fieldset } from 'hds-react';
+import {
+  SelectionGroup,
+  RadioButton,
+  NumberInput,
+  Fieldset,
+  Link,
+} from 'hds-react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';
 import { useEffect } from 'react';
 import styles from '../ApplicationForm.module.css';
+import { Trans, useTranslation } from 'react-i18next';
 
 export const VarhaiskasvatuksenLaajuus = ({}) => {
   const { control, watch, resetField } = useFormContext<FormValues>();
+  const { t } = useTranslation('lomake');
 
   const taydentavaVarhaiskasvatus = useWatch({
     control,
@@ -21,8 +29,18 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
   }, [taydentavaVarhaiskasvatus, resetField]);
 
   return (
-    <ApplicationFormStep title="Esiopetusta täydentävä varhaiskasvatus">
-      <Fieldset heading="Varhaiskasvatuksen ja esiopetuksen laajuus yhteensä">
+    <ApplicationFormStep title={t('varhaiskasvatuksenLaajuus.title')}>
+      <Trans
+        t={t}
+        i18nKey="varhaiskasvatuksenLaajuus.varhaiskasvatuksenLaajuusText"
+      />
+      <Link
+        external
+        href="https://www.hel.fi/fi/kasvatus-ja-koulutus/varhaiskasvatus/varhaiskasvatusmaksut"
+      >
+        {t('varhaiskasvatusmaksutAnchor')}
+      </Link>
+      <Fieldset heading={t('varhaiskasvatuksenLaajuus.selectionGroupLabel')}>
         <Controller
           name="palvelunTarve"
           control={control}
@@ -37,6 +55,7 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
               <div className={styles['selection-group-item']}>
                 <RadioButton
                   id="4h_1h_vaka"
+                  data-testid="rb-esiopetus_4h_1h_vaka"
                   name={field.name}
                   value="esiopetus_4h_1h_vaka"
                   label="Esiopetus 4 tuntia, jonka lisäksi enintään tunti täydentävää varhaiskasvatusta"
@@ -49,6 +68,7 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
               <div className={styles['selection-group-item']}>
                 <RadioButton
                   id="4h_1_3h_vaka"
+                  data-testid="rb-esiopetus_4h_1_3h_vaka"
                   name={field.name}
                   value="esiopetus_4h_1_3h_vaka"
                   label="Esiopetus 4 tuntia, jonka lisäksi 1-3 tuntia täydentävää varhaiskasvatusta"
@@ -61,6 +81,7 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
               <div className={styles['selection-group-item']}>
                 <RadioButton
                   id="4h_3_4h_vaka"
+                  data-testid="rb-esiopetus_4h_3_4h_vaka"
                   name={field.name}
                   value="esiopetus_4h_3_4h_vaka"
                   label="Esiopetus 4 tuntia, jonka lisäksi 3-4 tuntia täydentävää varhaiskasvatusta"
@@ -73,6 +94,7 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
               <div className={styles['selection-group-item']}>
                 <RadioButton
                   id="4h_4_6h_vaka"
+                  data-testid="rb-esiopetus_4h_4_6h_vaka"
                   name={field.name}
                   value="esiopetus_4h_4_6h_vaka"
                   label="Esiopetus 4 tuntia, jonka lisäksi 4-6 tuntia täydentävää varhaiskasvatusta"
@@ -86,7 +108,8 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
           )}
         />
       </Fieldset>
-      <Fieldset heading="Arkipoissaolojen määrä täydentävässä varhaiskasvatuksessa kuukaudessa">
+      <Fieldset heading={t('varhaiskasvatuksenLaajuus.arkipoissaolotTitle')}>
+        <p>{t('varhaiskasvatuksenLaajuus.arkipoissaolotText')}</p>
         <Controller
           name="arkipoissaolotLkm"
           control={control}
@@ -99,7 +122,8 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
           render={({ field, fieldState }) => (
             <NumberInput
               id="arki-poissaolot"
-              label="Arkipoissaolojen määrä"
+              data-testid="input-arki-poissaolot"
+              label=""
               min={0}
               max={30}
               step={1}

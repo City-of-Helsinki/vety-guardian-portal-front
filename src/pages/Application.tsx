@@ -18,7 +18,7 @@ import type { UseFormReturn } from 'react-hook-form';
 import { preschoolApplicationFormCreateMutation } from '../api/generated/@tanstack/react-query.gen';
 
 export const Application = ({}) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('lomake');
 
   const createApplication = useMutation(
     preschoolApplicationFormCreateMutation(),
@@ -27,49 +27,49 @@ export const Application = ({}) => {
   const steps: FormStep[] = [
     {
       id: 'alku',
-      label: 'Alku',
+      label: t('stepper.alku'),
       fields: ['hakenutEnsisijaisestiYksityiseen'],
       component: Alku,
     },
     {
       id: 'kieli',
-      label: 'Esiopetuksen kieli',
+      label: t('stepper.kieli'),
       fields: ['kieli'],
       component: Kieli,
     },
     {
       id: 'taydentava',
-      label: 'Esiopetusta täydentävä varhaiskasvatus',
+      label: t('stepper.taydentava'),
       fields: ['taydentavaVarhaiskasvatus'],
       component: Taydentava,
     },
     {
       id: 'hoidon-tarve',
-      label: 'Aloituspäivä ja hoidon tarve',
+      label: t('stepper.taydentavaLisatiedot'),
       fields: ['taydentavaVarhaiskasvatusAloitus', 'hoidonTarve'],
       component: TaydentavaLisatiedot,
     },
     {
       id: 'varhaiskasvatuksen-laajuus',
-      label: 'Varhaiskasvatuksen laajuus',
+      label: t('stepper.varhaiskasvatuksenLaajuus'),
       fields: ['palvelunTarve', 'arkipoissaolotLkm'],
       component: VarhaiskasvatuksenLaajuus,
     },
     {
       id: 'tuki-ja-laakehoito',
-      label: 'Tuki ja lääkehoidon tarve',
+      label: t('stepper.tukiJaLaakehoito'),
       fields: ['erityisenTuenTarve', 'laakehoidonTarve'],
       component: TukiJaLaakehoito,
     },
     {
       id: 'yhteystiedot',
-      label: 'Yhteystiedot',
+      label: t('stepper.yhteystiedot'),
       fields: ['h1Sahkoposti', 'h2Sahkoposti'],
       component: Yhteystiedot,
     },
     {
       id: 'esikatselu',
-      label: 'Esikatselu ja lähettäminen',
+      label: t('stepper.esikatselu'),
       fields: [],
       component: Esikatselu,
     },
@@ -115,7 +115,7 @@ export const Application = ({}) => {
 
   return (
     <>
-      <h1>{t('application.title')}</h1>
+      <h1>{t('title')}</h1>
       <Divider />
       <ApplicationForm defaultValues={defaultValues} onSubmit={onSubmit}>
         <ApplicationFormSteps steps={steps} />
