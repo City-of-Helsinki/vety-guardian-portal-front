@@ -11,17 +11,21 @@ import {
   Yhteystiedot,
   Esikatselu,
 } from '../components/application-form/steps';
-import { ApplicationFormSteps } from '../components/application-form';
-import type { FormStep, FormValues } from '../types';
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import type { UseFormReturn } from 'react-hook-form';
-import { useNavigate } from 'react-router';
 import {
-  preschoolApplicationFormCreateMutation,
+  ApplicationDataContext,
+  ApplicationFormSteps,
+} from '../components/application-form';
+import type { FormStep, FormValues } from '../types';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import type { UseFormReturn } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router';
+import { LoadingSpinner, Notification } from 'hds-react';
+import {
+  preschoolApplicationFormRetrieveOptions,
   preschoolApplicationFormUpdateMutation,
 } from '../api/generated/@tanstack/react-query.gen';
 import type {
+  PreschoolApplication,
   PreschoolApplicationWritable,
   StatusEnum,
 } from '../api/generated';
@@ -38,6 +42,28 @@ const toBody = (
     Object.entries(values).filter(([k]) => !omitFields.includes(k)),
   ),
   status,
+});
+
+// Only the editable fields go into the form; the read-only VTJ data is shown via ApplicationDataContext.
+const toFormValues = (application: PreschoolApplication): FormValues => ({
+  // Fields with default values.
+  hakenutEnsisijaisestiYksityiseen:
+    application.hakenutEnsisijaisestiYksityiseen ?? false,
+  kieli: application.kieli || 'fi',
+  // No default value. Can have "null" value.
+  taydentavaVarhaiskasvatus: application.taydentavaVarhaiskasvatus,
+  taydentavaVarhaiskasvatusAloitus:
+    application.taydentavaVarhaiskasvatusAloitus,
+  hoidonTarve: application.hoidonTarve,
+  palvelunTarve: application.palvelunTarve,
+  arkipoissaolotLkm: application.arkipoissaolotLkm,
+  erityisenTuenTarve: application.erityisenTuenTarve,
+  laakehoidonTarve: application.laakehoidonTarve,
+  h1Sahkoposti: application.h1Sahkoposti,
+  h1Puhelinnumero: application.h1Puhelinnumero,
+  h2Sahkoposti: application.h2Sahkoposti,
+  h2Puhelinnumero: application.h2Puhelinnumero,
+  status: application.status,
 });
 
 const applyServerErrors = (
@@ -68,15 +94,19 @@ export const Application = ({}) => {
   const { t } = useTranslation('lomake');
 
   const navigate = useNavigate();
-  const [applicationId, setApplicationId] = useState<string>();
+  const { applicationId = '' } = useParams();
 
-  const createApplication = useMutation(
-    preschoolApplicationFormCreateMutation(),
-  );
+  // No cache: the form reads its defaultValues only on mount, so it must never start from stale data.
+  const application = useQuery({
+    ...preschoolApplicationFormRetrieveOptions({
+      path: { uuid: applicationId },
+    }),
+    gcTime: 0,
+  });
   const updateApplication = useMutation(
     preschoolApplicationFormUpdateMutation(),
   );
-  const isSaving = createApplication.isPending || updateApplication.isPending;
+  const isSaving = updateApplication.isPending;
 
   const steps: FormStep[] = [
     {
@@ -129,11 +159,6 @@ export const Application = ({}) => {
     },
   ];
 
-  const defaultValues: FormValues = {
-    kieli: 'fi',
-    hakenutEnsisijaisestiYksityiseen: false,
-  };
-
   const fieldNames = steps.flatMap((step) => step.fields as string[]);
 
   const save = async (
@@ -143,18 +168,6 @@ export const Application = ({}) => {
   ): Promise<boolean> => {
     form.clearErrors('root.server');
     try {
-      if (!applicationId) {
-        const created = await createApplication.mutateAsync({
-          body: toBody(values, 'draft'),
-        });
-        setApplicationId(created.id);
-        if (status === 'draft') return true;
-        await updateApplication.mutateAsync({
-          path: { uuid: created.id },
-          body: toBody(values, status),
-        });
-        return true;
-      }
       await updateApplication.mutateAsync({
         path: { uuid: applicationId },
         body: toBody(values, status),
@@ -181,17 +194,44 @@ export const Application = ({}) => {
     }
   };
 
+  const renderContent = () => {
+    if (application.isPending) {
+      return <LoadingSpinner />;
+    }
+    if (application.isError) {
+      return (
+        <Notification type="error" label={t('loadError')}>
+          {String(application.error)}
+        </Notification>
+      );
+    }
+    // A submitted application can't be edited: show only the sent information (Esikatselu step).
+    const isSubmitted = application.data.status === 'submitted';
+    return (
+      <ApplicationDataContext.Provider value={application.data}>
+        <ApplicationForm
+          defaultValues={toFormValues(application.data)}
+          onSubmit={onSubmit}
+        >
+          {isSubmitted ? (
+            <Esikatselu />
+          ) : (
+            <ApplicationFormSteps
+              steps={steps}
+              onStepSave={saveDraft}
+              isSaving={isSaving}
+            />
+          )}
+        </ApplicationForm>
+      </ApplicationDataContext.Provider>
+    );
+  };
+
   return (
     <>
       <h1>{t('title')}</h1>
       <Divider />
-      <ApplicationForm defaultValues={defaultValues} onSubmit={onSubmit}>
-        <ApplicationFormSteps
-          steps={steps}
-          onStepSave={saveDraft}
-          isSaving={isSaving}
-        />
-      </ApplicationForm>
+      {renderContent()}
     </>
   );
 };

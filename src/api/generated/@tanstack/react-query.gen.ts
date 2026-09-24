@@ -3,8 +3,8 @@
 import { type DefaultError, queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { type Options, preschoolApplicationFormCreate, preschoolApplicationFormRetrieve, preschoolApplicationFormUpdate, schemaRetrieve, vtjDependantsRetrieve, vtjGuardiansRetrieve, vtjIsProtectedFamilyRetrieve } from '../sdk.gen';
-import type { PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponse, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponse, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponse, SchemaRetrieveData, SchemaRetrieveResponse, VtjDependantsRetrieveData, VtjDependantsRetrieveError, VtjDependantsRetrieveResponse, VtjGuardiansRetrieveData, VtjGuardiansRetrieveError, VtjGuardiansRetrieveResponse, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveError, VtjIsProtectedFamilyRetrieveResponse } from '../types.gen';
+import { type Options, preschoolApplicationFormCreate, preschoolApplicationFormForDependantCreate, preschoolApplicationFormRetrieve, preschoolApplicationFormUpdate, schemaRetrieve, vtjDependantsRetrieve, vtjGuardiansRetrieve, vtjIsProtectedFamilyRetrieve } from '../sdk.gen';
+import type { PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponse, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateError, PreschoolApplicationFormForDependantCreateResponse, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponse, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponse, SchemaRetrieveData, SchemaRetrieveResponse, VtjDependantsRetrieveData, VtjDependantsRetrieveError, VtjDependantsRetrieveResponse, VtjGuardiansRetrieveData, VtjGuardiansRetrieveError, VtjGuardiansRetrieveResponse, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveError, VtjIsProtectedFamilyRetrieveResponse } from '../types.gen';
 
 /**
  * POST /preschool-application-form/
@@ -95,6 +95,27 @@ export const preschoolApplicationFormUpdateMutation = (options?: Partial<Options
     const mutationOptions: UseMutationOptions<PreschoolApplicationFormUpdateResponse, DefaultError, Options<PreschoolApplicationFormUpdateData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await preschoolApplicationFormUpdate({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * POST /preschool-application-form/for-dependant/<uuid:dependant_id>/?ssn=<guardian_ssn>
+ *
+ * Returns the dependant's existing application (200), or creates a new draft (201)
+ * prefilled with the child's and guardians' VTJ data.
+ * Refused (403) when the family has an active Turvakielto.
+ */
+export const preschoolApplicationFormForDependantCreateMutation = (options?: Partial<Options<PreschoolApplicationFormForDependantCreateData>>): UseMutationOptions<PreschoolApplicationFormForDependantCreateResponse, PreschoolApplicationFormForDependantCreateError, Options<PreschoolApplicationFormForDependantCreateData>> => {
+    const mutationOptions: UseMutationOptions<PreschoolApplicationFormForDependantCreateResponse, PreschoolApplicationFormForDependantCreateError, Options<PreschoolApplicationFormForDependantCreateData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await preschoolApplicationFormForDependantCreate({
                 ...options,
                 ...fnOptions,
                 throwOnError: true

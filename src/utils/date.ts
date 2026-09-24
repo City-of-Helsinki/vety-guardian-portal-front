@@ -2,7 +2,7 @@
 // transitive copy, but it's pinned to 2.30.0 to match hds-react's own dependency
 // (see hds-react/package.json) — a newer major here would install a second, separate
 // copy of date-fns alongside the one hds-react already bundles for DateInput.
-import { format, isValid, parseISO } from 'date-fns';
+import { format, intervalToDuration, isValid, parseISO } from 'date-fns';
 
 export const ISO_DATE_FORMAT = 'yyyy-MM-dd';
 export const DISPLAY_DATE_FORMAT = 'd.M.yyyy';
@@ -17,4 +17,22 @@ export const isoToDisplay = (iso?: string | null): string => {
   }
   const parsed = parseISO(iso);
   return isValid(parsed) ? format(parsed, DISPLAY_DATE_FORMAT) : '';
+};
+
+/** Age in full years and months, e.g. { years: 1, months: 8 }. Undefined for a missing or invalid date. */
+export const ageFromIso = (
+  iso?: string | null,
+): { years: number; months: number } | undefined => {
+  if (!iso) {
+    return undefined;
+  }
+  const parsed = parseISO(iso);
+  if (!isValid(parsed)) {
+    return undefined;
+  }
+  const { years = 0, months = 0 } = intervalToDuration({
+    start: parsed,
+    end: new Date(),
+  });
+  return { years, months };
 };

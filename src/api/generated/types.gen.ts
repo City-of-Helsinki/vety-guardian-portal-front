@@ -193,26 +193,30 @@ export type PreschoolApplication = {
      */
     laakehoidonTarve?: boolean | null;
     /**
+     * Lapsi
+     */
+    readonly dependant: string | null;
+    /**
      * Lapsen nimi
      */
-    nimi?: string | null;
+    readonly nimi: string;
     /**
      * Henkilötunnus
      */
-    henkilotunnus?: string | null;
-    karttaosoite?: string | null;
+    readonly henkilotunnus: string;
+    readonly karttaosoite: string;
     /**
      * Syntymävuosi
      */
-    syntymavuosi?: number | null;
+    readonly syntymavuosi: number | null;
     /**
      * Huoltaja 1 nimi
      */
-    h1Nimi?: string | null;
+    readonly h1Nimi: string;
     /**
      * Huoltaja 1 osoite
      */
-    h1Osoite?: string | null;
+    readonly h1Osoite: string;
     /**
      * Huoltaja 1 sähköposti
      */
@@ -224,11 +228,11 @@ export type PreschoolApplication = {
     /**
      * Huoltaja 2 nimi
      */
-    h2Nimi?: string | null;
+    readonly h2Nimi: string;
     /**
      * Huoltaja 2 osoite
      */
-    h2Osoite?: string | null;
+    readonly h2Osoite: string;
     /**
      * Huoltaja 2 sähköposti
      */
@@ -307,27 +311,6 @@ export type PreschoolApplicationWritable = {
      */
     laakehoidonTarve?: boolean | null;
     /**
-     * Lapsen nimi
-     */
-    nimi?: string | null;
-    /**
-     * Henkilötunnus
-     */
-    henkilotunnus?: string | null;
-    karttaosoite?: string | null;
-    /**
-     * Syntymävuosi
-     */
-    syntymavuosi?: number | null;
-    /**
-     * Huoltaja 1 nimi
-     */
-    h1Nimi?: string | null;
-    /**
-     * Huoltaja 1 osoite
-     */
-    h1Osoite?: string | null;
-    /**
      * Huoltaja 1 sähköposti
      */
     h1Sahkoposti?: string | string | null;
@@ -335,14 +318,6 @@ export type PreschoolApplicationWritable = {
      * Huoltaja 1 puhelinnumero
      */
     h1Puhelinnumero?: string | null;
-    /**
-     * Huoltaja 2 nimi
-     */
-    h2Nimi?: string | null;
-    /**
-     * Huoltaja 2 osoite
-     */
-    h2Osoite?: string | null;
     /**
      * Huoltaja 2 sähköposti
      */
@@ -395,6 +370,38 @@ export type PreschoolApplicationFormUpdateResponses = {
 };
 
 export type PreschoolApplicationFormUpdateResponse = PreschoolApplicationFormUpdateResponses[keyof PreschoolApplicationFormUpdateResponses];
+
+export type PreschoolApplicationFormForDependantCreateData = {
+    body?: never;
+    path: {
+        /**
+         * Database id (UUID) of the Dependant the application is for.
+         */
+        dependant_id: string;
+    };
+    query: {
+        /**
+         * Finnish personal identity code (Henkilotunnus) of the guardian whose family this is.
+         */
+        ssn: string;
+    };
+    url: '/preschool-application-form/for-dependant/{dependant_id}/';
+};
+
+export type PreschoolApplicationFormForDependantCreateErrors = {
+    400: ErrorResponse;
+    403: ErrorResponse;
+    404: ErrorResponse;
+};
+
+export type PreschoolApplicationFormForDependantCreateError = PreschoolApplicationFormForDependantCreateErrors[keyof PreschoolApplicationFormForDependantCreateErrors];
+
+export type PreschoolApplicationFormForDependantCreateResponses = {
+    200: PreschoolApplication;
+    201: PreschoolApplication;
+};
+
+export type PreschoolApplicationFormForDependantCreateResponse = PreschoolApplicationFormForDependantCreateResponses[keyof PreschoolApplicationFormForDependantCreateResponses];
 
 export type SchemaRetrieveData = {
     body?: never;
