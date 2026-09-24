@@ -16,15 +16,16 @@ export const TukiJaLaakehoito = ({}) => {
         <Controller
           name="erityisenTuenTarve"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <div className={styles['selection-group-item']}>
               <Checkbox
                 id="erityisen-tuen-tarve"
                 data-testid="cb-erityinen-tuki"
                 label={t('tukiJaLaakehoito.erityinenTukiLabel')}
-                checked={field.value}
+                checked={field.value ?? false}
                 onChange={(e) => field.onChange(e.target.checked)}
                 onBlur={field.onBlur}
+                errorText={fieldState.error?.message}
               />
               <Trans t={t} i18nKey="tukiJaLaakehoito.erityinenTukiText" />
             </div>
@@ -33,15 +34,16 @@ export const TukiJaLaakehoito = ({}) => {
         <Controller
           name="laakehoidonTarve"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <div className={styles['selection-group-item']}>
               <Checkbox
                 id="laakehoidon-tarve"
                 data-testid="cb-laakehoidon-tarve"
                 label={t('tukiJaLaakehoito.laakehoitoLabel')}
-                checked={field.value}
+                checked={field.value ?? false}
                 onChange={(e) => field.onChange(e.target.checked)}
                 onBlur={field.onBlur}
+                errorText={fieldState.error?.message}
               />
               <p>{t('tukiJaLaakehoito.laakehoitoText')}</p>
             </div>

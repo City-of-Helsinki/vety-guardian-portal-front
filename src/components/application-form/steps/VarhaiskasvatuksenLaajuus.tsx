@@ -51,7 +51,10 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
               : false,
           }}
           render={({ field, fieldState }) => (
-            <SelectionGroup className={styles['selection-group']}>
+            <SelectionGroup
+              className={styles['selection-group']}
+              errorText={fieldState.error?.message}
+            >
               <div className={styles['selection-group-item']}>
                 <RadioButton
                   id="4h_1h_vaka"
@@ -130,6 +133,8 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
               onChange={field.onChange}
               onBlur={field.onBlur}
               disabled={field.disabled}
+              invalid={!!fieldState.error}
+              errorText={fieldState.error?.message}
             />
           )}
         />

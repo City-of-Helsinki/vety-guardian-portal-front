@@ -128,6 +128,8 @@ export type IsProtectedFamilyResponse = {
  */
 export type KieliEnum = 'fi' | 'sv';
 
+export type NullEnum = never;
+
 /**
  * * `esiopetus_4h_1h_vaka` - Esiopetus 4h + 1h vaka
  * * `esiopetus_4h_1_3h_vaka` - Esiopetus 4h + 1-3h vaka
@@ -138,90 +140,114 @@ export type PalvelunTarveEnum = 'esiopetus_4h_1h_vaka' | 'esiopetus_4h_1_3h_vaka
 
 /**
  * Serializer for PreschoolApplication.
+ *
+ * Drafts accept any subset of fields, and null / empty values.
+ * Full validation is run only when the status is changed to "submitted".
+ * Submitted applications cannot be modified.
  */
 export type PreschoolApplication = {
     readonly id: string;
     readonly createdAt: string;
     readonly updatedAt: string;
     /**
+     * Tila
+     */
+    status?: StatusEnum;
+    /**
+     * Lähetetty
+     */
+    readonly submittedAt: string | null;
+    /**
      * Onko hakenut ensisijaisesti yksityiseen päiväkotiin
      */
-    hakenutEnsisijaisestiYksityiseen?: boolean;
+    hakenutEnsisijaisestiYksityiseen?: boolean | null;
     /**
      * Esiopetuksen kieli
      */
-    kieli?: KieliEnum | BlankEnum;
+    kieli?: KieliEnum | BlankEnum | NullEnum | null;
     /**
      * Tarvitseeko täydentävää varhaiskasvatusta
      */
-    taydentavaVarhaiskasvatus?: boolean;
+    taydentavaVarhaiskasvatus?: boolean | null;
     /**
      * Täydentävän varhaiskasvatuksen aloituspäivä
+     *
+     * Date in ISO 8601 format (YYYY-MM-DD).
      */
     taydentavaVarhaiskasvatusAloitus?: string | null;
     /**
      * Vuorohoidon tarve
      */
-    hoidonTarve?: HoidonTarveEnum | BlankEnum;
+    hoidonTarve?: HoidonTarveEnum | BlankEnum | NullEnum | null;
     /**
      * Laajuus yhteensä
      */
-    palvelunTarve?: PalvelunTarveEnum | BlankEnum;
+    palvelunTarve?: PalvelunTarveEnum | BlankEnum | NullEnum | null;
     /**
      * Arkipoissaolojen lukumäärä
      */
     arkipoissaolotLkm?: number | null;
-    erityisenTuenTarve?: boolean;
+    erityisenTuenTarve?: boolean | null;
     /**
      * Lääkehoidon tarve
      */
-    laakehoidonTarve?: boolean;
+    laakehoidonTarve?: boolean | null;
+    /**
+     * Lapsi
+     */
+    readonly dependant: string | null;
     /**
      * Lapsen nimi
      */
-    nimi?: string;
+    readonly nimi: string;
     /**
      * Henkilötunnus
      */
-    henkilotunnus?: string;
-    karttaosoite?: string;
+    readonly henkilotunnus: string;
+    readonly karttaosoite: string;
     /**
      * Syntymävuosi
      */
-    syntymavuosi?: number | null;
+    readonly syntymavuosi: number | null;
     /**
      * Huoltaja 1 nimi
      */
-    h1Nimi?: string;
+    readonly h1Nimi: string;
     /**
      * Huoltaja 1 osoite
      */
-    h1Osoite?: string;
+    readonly h1Osoite: string;
     /**
      * Huoltaja 1 sähköposti
      */
-    h1Sahkoposti?: string | string;
+    h1Sahkoposti?: string | string | null;
     /**
      * Huoltaja 1 puhelinnumero
      */
-    h1Puhelinnumero?: string;
+    h1Puhelinnumero?: string | null;
     /**
      * Huoltaja 2 nimi
      */
-    h2Nimi?: string;
+    readonly h2Nimi: string;
     /**
      * Huoltaja 2 osoite
      */
-    h2Osoite?: string;
+    readonly h2Osoite: string;
     /**
      * Huoltaja 2 sähköposti
      */
-    h2Sahkoposti?: string | string;
+    h2Sahkoposti?: string | string | null;
     /**
      * Huoltaja 2 puhelinnumero
      */
-    h2Puhelinnumero?: string;
+    h2Puhelinnumero?: string | null;
 };
+
+/**
+ * * `draft` - Draft
+ * * `submitted` - Submitted
+ */
+export type StatusEnum = 'draft' | 'submitted';
 
 /**
  * Schema-only: the `GET /dependants/` response envelope.
@@ -239,86 +265,67 @@ export type GuardiansResponseWritable = {
 
 /**
  * Serializer for PreschoolApplication.
+ *
+ * Drafts accept any subset of fields, and null / empty values.
+ * Full validation is run only when the status is changed to "submitted".
+ * Submitted applications cannot be modified.
  */
 export type PreschoolApplicationWritable = {
     /**
+     * Tila
+     */
+    status?: StatusEnum;
+    /**
      * Onko hakenut ensisijaisesti yksityiseen päiväkotiin
      */
-    hakenutEnsisijaisestiYksityiseen?: boolean;
+    hakenutEnsisijaisestiYksityiseen?: boolean | null;
     /**
      * Esiopetuksen kieli
      */
-    kieli?: KieliEnum | BlankEnum;
+    kieli?: KieliEnum | BlankEnum | NullEnum | null;
     /**
      * Tarvitseeko täydentävää varhaiskasvatusta
      */
-    taydentavaVarhaiskasvatus?: boolean;
+    taydentavaVarhaiskasvatus?: boolean | null;
     /**
      * Täydentävän varhaiskasvatuksen aloituspäivä
+     *
+     * Date in ISO 8601 format (YYYY-MM-DD).
      */
     taydentavaVarhaiskasvatusAloitus?: string | null;
     /**
      * Vuorohoidon tarve
      */
-    hoidonTarve?: HoidonTarveEnum | BlankEnum;
+    hoidonTarve?: HoidonTarveEnum | BlankEnum | NullEnum | null;
     /**
      * Laajuus yhteensä
      */
-    palvelunTarve?: PalvelunTarveEnum | BlankEnum;
+    palvelunTarve?: PalvelunTarveEnum | BlankEnum | NullEnum | null;
     /**
      * Arkipoissaolojen lukumäärä
      */
     arkipoissaolotLkm?: number | null;
-    erityisenTuenTarve?: boolean;
+    erityisenTuenTarve?: boolean | null;
     /**
      * Lääkehoidon tarve
      */
-    laakehoidonTarve?: boolean;
-    /**
-     * Lapsen nimi
-     */
-    nimi?: string;
-    /**
-     * Henkilötunnus
-     */
-    henkilotunnus?: string;
-    karttaosoite?: string;
-    /**
-     * Syntymävuosi
-     */
-    syntymavuosi?: number | null;
-    /**
-     * Huoltaja 1 nimi
-     */
-    h1Nimi?: string;
-    /**
-     * Huoltaja 1 osoite
-     */
-    h1Osoite?: string;
+    laakehoidonTarve?: boolean | null;
     /**
      * Huoltaja 1 sähköposti
      */
-    h1Sahkoposti?: string | string;
+    h1Sahkoposti?: string | string | null;
     /**
      * Huoltaja 1 puhelinnumero
      */
-    h1Puhelinnumero?: string;
-    /**
-     * Huoltaja 2 nimi
-     */
-    h2Nimi?: string;
-    /**
-     * Huoltaja 2 osoite
-     */
-    h2Osoite?: string;
+    h1Puhelinnumero?: string | null;
     /**
      * Huoltaja 2 sähköposti
      */
-    h2Sahkoposti?: string | string;
+    h2Sahkoposti?: string | string | null;
     /**
      * Huoltaja 2 puhelinnumero
      */
-    h2Puhelinnumero?: string;
+    h2Puhelinnumero?: string | null;
 };
 
 export type PreschoolApplicationFormCreateData = {
@@ -348,6 +355,53 @@ export type PreschoolApplicationFormRetrieveResponses = {
 };
 
 export type PreschoolApplicationFormRetrieveResponse = PreschoolApplicationFormRetrieveResponses[keyof PreschoolApplicationFormRetrieveResponses];
+
+export type PreschoolApplicationFormUpdateData = {
+    body?: PreschoolApplicationWritable;
+    path: {
+        uuid: string;
+    };
+    query?: never;
+    url: '/preschool-application-form/{uuid}/';
+};
+
+export type PreschoolApplicationFormUpdateResponses = {
+    200: PreschoolApplication;
+};
+
+export type PreschoolApplicationFormUpdateResponse = PreschoolApplicationFormUpdateResponses[keyof PreschoolApplicationFormUpdateResponses];
+
+export type PreschoolApplicationFormForDependantCreateData = {
+    body?: never;
+    path: {
+        /**
+         * Database id (UUID) of the Dependant the application is for.
+         */
+        dependant_id: string;
+    };
+    query: {
+        /**
+         * Finnish personal identity code (Henkilotunnus) of the guardian whose family this is.
+         */
+        ssn: string;
+    };
+    url: '/preschool-application-form/for-dependant/{dependant_id}/';
+};
+
+export type PreschoolApplicationFormForDependantCreateErrors = {
+    400: ErrorResponse;
+    403: ErrorResponse;
+    404: ErrorResponse;
+};
+
+export type PreschoolApplicationFormForDependantCreateError = PreschoolApplicationFormForDependantCreateErrors[keyof PreschoolApplicationFormForDependantCreateErrors];
+
+export type PreschoolApplicationFormForDependantCreateResponses = {
+    200: PreschoolApplication;
+    201: PreschoolApplication;
+};
+
+export type PreschoolApplicationFormForDependantCreateResponse = PreschoolApplicationFormForDependantCreateResponses[keyof PreschoolApplicationFormForDependantCreateResponses];
 
 export type SchemaRetrieveData = {
     body?: never;
