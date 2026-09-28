@@ -16,7 +16,8 @@ import {
   isValidDate,
 } from '../../../utils/date';
 import styles from '../ApplicationForm.module.css';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { MarkdownContent } from '../../MarkdownContent';
 
 export const TaydentavaLisatiedot = ({}) => {
   const { control, watch, resetField } = useFormContext<FormValues>();
@@ -36,7 +37,9 @@ export const TaydentavaLisatiedot = ({}) => {
 
   return (
     <ApplicationFormStep title={t('taydentavaLisatiedot.title')}>
-      <Trans t={t} i18nKey="taydentavaLisatiedot.taydentavaLisatiedotText" />
+      <MarkdownContent>
+        {t('taydentavaLisatiedot.taydentavaLisatiedotText')}
+      </MarkdownContent>
       <Link
         data-testid="link-vk-maksut"
         external

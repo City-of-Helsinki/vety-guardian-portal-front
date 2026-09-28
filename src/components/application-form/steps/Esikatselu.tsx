@@ -6,6 +6,7 @@ import { Link, Notification } from 'hds-react';
 import { Divider } from '../../divider';
 import { LabelValue, LabelValueWrapper, SummarySection } from '../../summary';
 import type { FormValues } from '../../../types';
+import { MarkdownContent } from '../../MarkdownContent';
 
 export const Esikatselu = ({}) => {
   const { t } = useTranslation('lomake');
@@ -19,10 +20,7 @@ export const Esikatselu = ({}) => {
       )}
       <Divider />
       <SummarySection title={t('esikatselu.lapsenTiedotTitle')}>
-        <p>{t('esikatselu.lapsenTiedotText')}</p>
-        <Link external href="">
-          {t('esikatselu.digiJaVaestoAnchor')}
-        </Link>
+        <MarkdownContent>{t('esikatselu.lapsenTiedotText')}</MarkdownContent>
         <LabelValueWrapper>
           <LabelValue
             label={t('esikatselu.lapsenNimi')}
