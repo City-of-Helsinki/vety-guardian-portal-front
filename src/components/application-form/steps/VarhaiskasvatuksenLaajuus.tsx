@@ -10,7 +10,8 @@ import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';
 import { useEffect } from 'react';
 import styles from '../ApplicationForm.module.css';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { MarkdownContent } from '../../MarkdownContent';
 
 export const VarhaiskasvatuksenLaajuus = ({}) => {
   const { control, watch, resetField } = useFormContext<FormValues>();
@@ -30,10 +31,9 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
 
   return (
     <ApplicationFormStep title={t('varhaiskasvatuksenLaajuus.title')}>
-      <Trans
-        t={t}
-        i18nKey="varhaiskasvatuksenLaajuus.varhaiskasvatuksenLaajuusText"
-      />
+      <MarkdownContent>
+        {t('varhaiskasvatuksenLaajuus.varhaiskasvatuksenLaajuusText')}
+      </MarkdownContent>
       <Link
         external
         href="https://www.hel.fi/fi/kasvatus-ja-koulutus/varhaiskasvatus/varhaiskasvatusmaksut"
@@ -126,7 +126,7 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
             <NumberInput
               id="arki-poissaolot"
               data-testid="input-arki-poissaolot"
-              label=""
+              label={t('varhaiskasvatuksenLaajuus.arkipoissaolotLabel')}
               min={0}
               max={30}
               step={1}

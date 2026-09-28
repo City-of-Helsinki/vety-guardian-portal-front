@@ -3,7 +3,8 @@ import { useFormContext, Controller } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';
 import { Divider } from '../../divider';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { MarkdownContent } from '../../MarkdownContent';
 
 export const Alku = ({}) => {
   const { control } = useFormContext<FormValues>();
@@ -11,22 +12,7 @@ export const Alku = ({}) => {
 
   return (
     <ApplicationFormStep title={t('alku.title')}>
-      <Trans
-        t={t}
-        i18nKey="alku.introText"
-        components={{
-          serviceMap: (
-            <Link external href="https://palvelukartta.hel.fi/fi/">
-              {''}
-            </Link>
-          ),
-          acceptService: (
-            <Link external href="https://hel.fi">
-              {''}
-            </Link>
-          ),
-        }}
-      />
+      <MarkdownContent>{t('alku.introText')}</MarkdownContent>
       <Divider />
       <p>{t('alku.yksityinenDescription')}</p>
       <Controller
@@ -50,9 +36,6 @@ export const Alku = ({}) => {
         <p>{t('alku.osoiteMuutosText')}</p>
       </Accordion>
       <Divider />
-      <Link external href="/">
-        {t('alku.lisatietoaAnchor')}
-      </Link>
     </ApplicationFormStep>
   );
 };

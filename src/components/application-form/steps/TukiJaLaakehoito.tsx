@@ -2,8 +2,9 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import { Checkbox, SelectionGroup } from 'hds-react';
 import type { FormValues } from '../../../types';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import styles from '../ApplicationForm.module.css';
+import { MarkdownContent } from '../../MarkdownContent';
 
 export const TukiJaLaakehoito = ({}) => {
   const { control } = useFormContext<FormValues>();
@@ -11,7 +12,9 @@ export const TukiJaLaakehoito = ({}) => {
 
   return (
     <ApplicationFormStep title={t('tukiJaLaakehoito.title')}>
-      <Trans t={t} i18nKey="tukiJaLaakehoito.tukiJaLaakehoitoText" />
+      <MarkdownContent>
+        {t('tukiJaLaakehoito.tukiJaLaakehoitoText')}
+      </MarkdownContent>
       <SelectionGroup className={styles['selection-group']}>
         <Controller
           name="erityisenTuenTarve"
@@ -27,7 +30,9 @@ export const TukiJaLaakehoito = ({}) => {
                 onBlur={field.onBlur}
                 errorText={fieldState.error?.message}
               />
-              <Trans t={t} i18nKey="tukiJaLaakehoito.erityinenTukiText" />
+              <MarkdownContent>
+                {t('tukiJaLaakehoito.erityinenTukiText')}
+              </MarkdownContent>
             </div>
           )}
         />
@@ -45,7 +50,9 @@ export const TukiJaLaakehoito = ({}) => {
                 onBlur={field.onBlur}
                 errorText={fieldState.error?.message}
               />
-              <p>{t('tukiJaLaakehoito.laakehoitoText')}</p>
+              <MarkdownContent>
+                {t('tukiJaLaakehoito.laakehoitoText')}
+              </MarkdownContent>
             </div>
           )}
         />

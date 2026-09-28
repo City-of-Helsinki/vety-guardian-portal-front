@@ -1,0 +1,16 @@
+.markdownContent {
+  padding: 0.75rem 0;
+  line-height: 1.63;
+}
+
+.markdownContent a {
+  text-decoration: underline;
+}
+
+.markdownContent > :first-child {
+  margin-top: 0;
+}
+
+.markdownContent > :last-child {
+  margin-bottom: 0;
+}

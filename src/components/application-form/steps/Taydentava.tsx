@@ -3,7 +3,8 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';
 import styles from '../ApplicationForm.module.css';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { MarkdownContent } from '../../MarkdownContent';
 
 export const Taydentava = ({}) => {
   const { control } = useFormContext<FormValues>();
@@ -11,7 +12,7 @@ export const Taydentava = ({}) => {
 
   return (
     <ApplicationFormStep title={t('taydentava.title')}>
-      <Trans t={t} i18nKey="taydentava.taydentavaText" />
+      <MarkdownContent>{t('taydentava.taydentavaText')}</MarkdownContent>
       <Link
         data-testid="link-vk-maksut"
         external
