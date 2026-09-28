@@ -17,7 +17,10 @@ export const Kieli = ({}) => {
         control={control}
         rules={{ required: 'Valitse esiopetuksen kieli' }}
         render={({ field, fieldState }) => (
-          <SelectionGroup className={styles['selection-group']}>
+          <SelectionGroup
+            className={styles['selection-group']}
+            errorText={fieldState.error?.message}
+          >
             <div className={styles['selection-group-item']}>
               <RadioButton
                 id="esiopetuksen-kieli-fi"

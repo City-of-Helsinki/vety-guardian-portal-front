@@ -1,65 +1,78 @@
-import type { Dependant } from '../../types';
 import { DependantItem } from '../dependant-item';
 import styles from './DependantList.module.css';
+import { LoadingSpinner, Notification } from 'hds-react';
+import { useTranslation } from 'react-i18next';
 
 import { useQuery } from '@tanstack/react-query';
 
 import {
   vtjIsProtectedFamilyRetrieveOptions,
   vtjDependantsRetrieveOptions,
-  vtjGuardiansRetrieveOptions,
 } from '../../api/generated/@tanstack/react-query.gen';
 
+// Fetches the family from VTJ and saves it to the backend DB, so it is not refetched automatically.
 function useFamilyProtectionStatus(guardianSsn: string) {
-  return useQuery(
-    vtjIsProtectedFamilyRetrieveOptions({
-      query: { ssn: guardianSsn },
-    }),
-  );
-}
-
-function useGuardianDependants(guardianSsn: string) {
-  return useQuery(
-    vtjDependantsRetrieveOptions({
-      query: { ssn: guardianSsn },
-    }),
-  );
-}
-
-function useDependantGuardians(dependantId: string | undefined) {
   return useQuery({
-    ...vtjGuardiansRetrieveOptions({
-      path: { dependant_id: dependantId! },
+    ...vtjIsProtectedFamilyRetrieveOptions({
+      query: { ssn: guardianSsn },
     }),
-    enabled: dependantId !== undefined,
+    staleTime: Infinity,
   });
 }
 
-const mock: Dependant[] = [
-  { id: 1, nimi: 'Testi 1' },
-  { id: 2, nimi: 'Testi 2' },
-  { id: 3, nimi: 'Testi 3' },
-];
+// Reads the dependants saved by the family sync above, so it must run after it.
+function useGuardianDependants(guardianSsn: string, enabled: boolean) {
+  return useQuery({
+    ...vtjDependantsRetrieveOptions({
+      query: { ssn: guardianSsn },
+    }),
+    enabled,
+  });
+}
 
-export const DependantList = ({ items = mock }) => {
-  // NOTE: Testing Backend calls
-  const hardcodedGuardianSsn: string = '010170-999X'; // NOTE: Hardcoded value from VTJ mock server
+interface DependantListProps {
+  guardianSsn: string;
+}
 
-  const { data: familyProtection, isLoading: loadingProtection } =
-    useFamilyProtectionStatus(hardcodedGuardianSsn);
+export const DependantList = ({ guardianSsn }: DependantListProps) => {
+  const { t } = useTranslation();
 
-  const { data: dependants, isLoading: loadingDependants } =
-    useGuardianDependants(hardcodedGuardianSsn);
+  const familyProtection = useFamilyProtectionStatus(guardianSsn);
+  const dependants = useGuardianDependants(
+    guardianSsn,
+    familyProtection.data !== undefined,
+  );
 
-  console.log('hardcodedGuardianSsn', hardcodedGuardianSsn);
-  console.log('familyProtection', familyProtection);
-  console.log('dependants', dependants);
-  //const { data: guardians, isLoading: loadingGuardians } = useDependantGuardians(selectedDependantId);
+  if (familyProtection.isError || dependants.isError) {
+    return (
+      <Notification type="error" label={t('landing.error')}>
+        {String((familyProtection.error ?? dependants.error)?.error ?? '')}
+      </Notification>
+    );
+  }
+
+  if (familyProtection.isPending || dependants.isPending) {
+    return <LoadingSpinner />;
+  }
+
+  const isProtectedFamily = familyProtection.data.isProtectedFamily;
+  const items = dependants.data.dependants;
 
   return (
     <div className={styles.items}>
-      {items.map((item, index) => (
-        <DependantItem key={index} item={item} />
+      {isProtectedFamily && (
+        <Notification type="alert" label={t('landing.turvakieltoTitle')}>
+          {t('landing.turvakieltoText')}
+        </Notification>
+      )}
+      {items.length === 0 && <p>{t('landing.noDependants')}</p>}
+      {items.map((item) => (
+        <DependantItem
+          key={item.id}
+          item={item}
+          guardianSsn={guardianSsn}
+          canApply={!isProtectedFamily}
+        />
       ))}
     </div>
   );

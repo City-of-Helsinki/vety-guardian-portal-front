@@ -2,11 +2,6 @@ import type React from 'react';
 import type { FieldPath } from 'react-hook-form';
 import type { PreschoolApplicationWritable } from './api/generated';
 
-export type Dependant = {
-  id: number;
-  nimi: string;
-};
-
 export type FormValues = PreschoolApplicationWritable & {
   h1SahkopostiConfirm?: string;
   h2SahkopostiConfirm?: string;

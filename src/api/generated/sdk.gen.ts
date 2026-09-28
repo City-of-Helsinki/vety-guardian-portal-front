@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponses, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponses, SchemaRetrieveData, SchemaRetrieveResponses, VtjDependantsRetrieveData, VtjDependantsRetrieveErrors, VtjDependantsRetrieveResponses, VtjGuardiansRetrieveData, VtjGuardiansRetrieveErrors, VtjGuardiansRetrieveResponses, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveErrors, VtjIsProtectedFamilyRetrieveResponses } from './types.gen';
+import type { PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponses, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateErrors, PreschoolApplicationFormForDependantCreateResponses, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponses, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponses, SchemaRetrieveData, SchemaRetrieveResponses, VtjDependantsRetrieveData, VtjDependantsRetrieveErrors, VtjDependantsRetrieveResponses, VtjGuardiansRetrieveData, VtjGuardiansRetrieveErrors, VtjGuardiansRetrieveResponses, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveErrors, VtjIsProtectedFamilyRetrieveResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -21,7 +21,7 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 /**
  * POST /preschool-application-form/
  *
- * Tallenna uusi hakemus.
+ * Create a new application in "draft" status.
  */
 export const preschoolApplicationFormCreate = <ThrowOnError extends boolean = false>(options?: Options<PreschoolApplicationFormCreateData, ThrowOnError>) => (options?.client ?? client).post<PreschoolApplicationFormCreateResponses, unknown, ThrowOnError>({
     security: [{
@@ -39,8 +39,12 @@ export const preschoolApplicationFormCreate = <ThrowOnError extends boolean = fa
 
 /**
  * GET /preschool-application-form/<uuid:uuid>/
+ * PUT /preschool-application-form/<uuid:uuid>/
  *
- * Hae hakemus sen uuid:lla.
+ * Retrieve or update the application using its UUID.
+ * Fields can be null or empty in the "draft".
+ * When the status is changed to "submitted", then the fields are validated.
+ * Submitted applications cannot be modified.
  */
 export const preschoolApplicationFormRetrieve = <ThrowOnError extends boolean = false>(options: Options<PreschoolApplicationFormRetrieveData, ThrowOnError>) => (options.client ?? client).get<PreschoolApplicationFormRetrieveResponses, unknown, ThrowOnError>({
     security: [{
@@ -49,6 +53,46 @@ export const preschoolApplicationFormRetrieve = <ThrowOnError extends boolean = 
             type: 'apiKey'
         }, { scheme: 'basic', type: 'http' }],
     url: '/preschool-application-form/{uuid}/',
+    ...options
+});
+
+/**
+ * GET /preschool-application-form/<uuid:uuid>/
+ * PUT /preschool-application-form/<uuid:uuid>/
+ *
+ * Retrieve or update the application using its UUID.
+ * Fields can be null or empty in the "draft".
+ * When the status is changed to "submitted", then the fields are validated.
+ * Submitted applications cannot be modified.
+ */
+export const preschoolApplicationFormUpdate = <ThrowOnError extends boolean = false>(options: Options<PreschoolApplicationFormUpdateData, ThrowOnError>) => (options.client ?? client).put<PreschoolApplicationFormUpdateResponses, unknown, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'sessionid',
+            type: 'apiKey'
+        }, { scheme: 'basic', type: 'http' }],
+    url: '/preschool-application-form/{uuid}/',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * POST /preschool-application-form/for-dependant/<uuid:dependant_id>/?ssn=<guardian_ssn>
+ *
+ * Returns the dependant's existing application (200), or creates a new draft (201)
+ * prefilled with the child's and guardians' VTJ data.
+ * Refused (403) when the family has an active Turvakielto.
+ */
+export const preschoolApplicationFormForDependantCreate = <ThrowOnError extends boolean = false>(options: Options<PreschoolApplicationFormForDependantCreateData, ThrowOnError>) => (options.client ?? client).post<PreschoolApplicationFormForDependantCreateResponses, PreschoolApplicationFormForDependantCreateErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'sessionid',
+            type: 'apiKey'
+        }, { scheme: 'basic', type: 'http' }],
+    url: '/preschool-application-form/for-dependant/{dependant_id}/',
     ...options
 });
 

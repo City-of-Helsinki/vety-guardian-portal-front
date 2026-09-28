@@ -31,6 +31,7 @@ export const Taydentava = ({}) => {
           <SelectionGroup
             className={styles['selection-group']}
             label={t('taydentava.selectionGroupLabel')}
+            errorText={fieldState.error?.message}
           >
             <div className={styles['selection-group-item']}>
               <RadioButton
