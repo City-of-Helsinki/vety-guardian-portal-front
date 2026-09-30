@@ -109,6 +109,7 @@ export const Esikatselu = ({}) => {
         sectionLink={
           application.status !== 'submitted' ? (
             <TextButton
+              data-testid="go-to-taydentava"
               label={t('edit')}
               onClick={() => goToStep('taydentava')}
             />
