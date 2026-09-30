@@ -7,6 +7,7 @@ import { StepState, Stepper, Button, ButtonVariant } from 'hds-react';
 import { type FormValues, type FormStep } from '../../types';
 import styles from './ApplicationForm.module.css';
 import { useNavigate } from 'react-router';
+import { StepsContextProvider } from './StepsContext';
 
 interface ApplicationFormStepsProps {
   steps: FormStep[];
@@ -60,6 +61,13 @@ export const ApplicationFormSteps = ({
     if (completed.has(steps[index - 1]?.id)) setCurrent(index);
   };
 
+  const goToStep = (id: string) => {
+    const index = steps.findIndex((s) => s.id === id);
+    // allow only backwards
+    if (index === -1 || index > current) return;
+    setCurrent(index);
+  };
+
   // If the backend returns field errors upon submission, then navigate to the first page containing errors.
   const serverErrorStep = steps.findIndex((step) =>
     step.fields.some((field) => get(errors, field)?.type === 'server'),
@@ -77,47 +85,53 @@ export const ApplicationFormSteps = ({
 
   return (
     <div>
-      <Stepper
-        steps={stepperSteps}
-        language={i18n.language}
-        selectedStep={current}
-        onStepClick={goTo}
-      />
+      <StepsContextProvider value={{ goToStep, currentId: steps[current].id }}>
+        <Stepper
+          steps={stepperSteps}
+          language={i18n.language}
+          selectedStep={current}
+          onStepClick={goTo}
+        />
 
-      <ActiveStep />
+        <ActiveStep />
 
-      {errors.root?.server && <p role="alert">{errors.root.server.message}</p>}
+        {errors.root?.server && (
+          <p role="alert">{errors.root.server.message}</p>
+        )}
 
-      <div className={styles['stepper-buttons']}>
-        <Button
-          variant={ButtonVariant.Secondary}
-          onClick={
-            current === 0 ? () => navigate('/') : () => setCurrent((i) => i - 1)
-          }
-          style={{ height: 'fit-content', width: 'fit-content' }}
-        >
-          {t('previousPage')}
-        </Button>
-        {isLast ? (
-          <Button
-            variant={ButtonVariant.Primary}
-            type="submit"
-            disabled={isSaving}
-            style={{ height: 'fit-content', width: 'fit-content' }}
-          >
-            {t('sendApplication')}
-          </Button>
-        ) : (
+        <div className={styles['stepper-buttons']}>
           <Button
             variant={ButtonVariant.Secondary}
-            onClick={next}
-            disabled={isSaving}
+            onClick={
+              current === 0
+                ? () => navigate('/')
+                : () => setCurrent((i) => i - 1)
+            }
             style={{ height: 'fit-content', width: 'fit-content' }}
           >
-            {t('nextPage')}
+            {t('previousPage')}
           </Button>
-        )}
-      </div>
+          {isLast ? (
+            <Button
+              variant={ButtonVariant.Primary}
+              type="submit"
+              disabled={isSaving}
+              style={{ height: 'fit-content', width: 'fit-content' }}
+            >
+              {t('sendApplication')}
+            </Button>
+          ) : (
+            <Button
+              variant={ButtonVariant.Secondary}
+              onClick={next}
+              disabled={isSaving}
+              style={{ height: 'fit-content', width: 'fit-content' }}
+            >
+              {t('nextPage')}
+            </Button>
+          )}
+        </div>
+      </StepsContextProvider>
     </div>
   );
 };

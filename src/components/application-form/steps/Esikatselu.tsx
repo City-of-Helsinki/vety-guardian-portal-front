@@ -2,16 +2,29 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import { useApplicationData } from '../ApplicationDataContext';
-import { Link, Notification } from 'hds-react';
+import { Notification } from 'hds-react';
 import { Divider } from '../../divider';
 import { LabelValue, LabelValueWrapper, SummarySection } from '../../summary';
+import { TextButton } from '../../text-button';
 import type { FormValues } from '../../../types';
-import { MarkdownContent } from '../../MarkdownContent';
+import { MarkdownContent } from '../../markdown-content';
+import { useSteps } from '../StepsContext';
+import { isoToDisplay } from '../../../utils/date';
 
 export const Esikatselu = ({}) => {
   const { t } = useTranslation('lomake');
   const application = useApplicationData();
   const values = useFormContext<FormValues>().getValues();
+
+  const { goToStep } = useSteps();
+
+  const laajuus = [];
+  if (values.hoidonTarve) {
+    laajuus.push(t(`taydentava.options.${values.hoidonTarve}`));
+  }
+  if (values.palvelunTarve) {
+    laajuus.push(t(`taydentava.options.${values.palvelunTarve}`));
+  }
 
   return (
     <ApplicationFormStep title={t('esikatselu.title')}>
@@ -42,7 +55,77 @@ export const Esikatselu = ({}) => {
           />
         </LabelValueWrapper>
       </SummarySection>
-
+      <h3>{t('esikatselu.ilmoittautuminenTitle')}</h3>
+      <MarkdownContent>{t('esikatselu.ilmoittautuminenText')}</MarkdownContent>
+      <Divider />
+      <LabelValueWrapper>
+        <LabelValue
+          label={t('esikatselu.esiopetusAlkaa')}
+          value={t('esiopetusAlkaa')}
+        />
+      </LabelValueWrapper>
+      <Divider />
+      <SummarySection
+        title={t('esikatselu.kieli')}
+        sectionLink={
+          application.status !== 'submitted' ? (
+            <TextButton
+              data-testid="go-to-kieli"
+              label={t('edit')}
+              onClick={() => goToStep('kieli')}
+            />
+          ) : null
+        }
+      >
+        {t(`language.${values.kieli}`)}
+      </SummarySection>
+      <SummarySection
+        title={t('esikatselu.tukiJaLaakehoito')}
+        sectionLink={
+          application.status !== 'submitted' ? (
+            <TextButton
+              data-testid="go-to-tuki-ja-laakehoito"
+              label={t('edit')}
+              onClick={() => goToStep('tuki-ja-laakehoito')}
+            />
+          ) : null
+        }
+      >
+        {!values.erityisenTuenTarve && !values.laakehoidonTarve ? (
+          t('esikatselu.eiTuenTaiLaakehoidonTarvetta')
+        ) : (
+          <div>
+            {values.erityisenTuenTarve && (
+              <p>{t('tukiJaLaakehoito.laakehoitoLabel')}</p>
+            )}
+            {values.laakehoidonTarve && (
+              <p>{t('tukiJaLaakehoito.erityinenTukiLabel')}</p>
+            )}
+          </div>
+        )}
+      </SummarySection>
+      <SummarySection
+        title={t('esikatselu.varhaiskasvatus')}
+        sectionLink={
+          application.status !== 'submitted' ? (
+            <TextButton
+              label={t('edit')}
+              onClick={() => goToStep('taydentava')}
+            />
+          ) : null
+        }
+      >
+        <LabelValueWrapper>
+          <LabelValue
+            label={t('esikatselu.taydentavaAlkaa')}
+            value={isoToDisplay(values.taydentavaVarhaiskasvatusAloitus)}
+          />
+          <LabelValue
+            label={t('esikatselu.taydentavaLaajuus')}
+            value={laajuus}
+          />
+        </LabelValueWrapper>
+      </SummarySection>
       <SummarySection title={t('esikatselu.huoltajanTiedotTitle')}>
         <LabelValueWrapper>
           <LabelValue
@@ -89,10 +172,6 @@ export const Esikatselu = ({}) => {
           </LabelValueWrapper>
         </SummarySection>
       )}
-
-      <h3>{t('esikatselu.ilmoittautuminenTitle')}</h3>
-      <p>{t('esikatselu.ilmoittautuminenText')}</p>
-      <Divider />
     </ApplicationFormStep>
   );
 };

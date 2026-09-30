@@ -11,7 +11,7 @@ import type { FormValues } from '../../../types';
 import { useEffect } from 'react';
 import styles from '../ApplicationForm.module.css';
 import { useTranslation } from 'react-i18next';
-import { MarkdownContent } from '../../MarkdownContent';
+import { MarkdownContent } from '../../markdown-content';
 
 export const VarhaiskasvatuksenLaajuus = ({}) => {
   const { control, watch, resetField } = useFormContext<FormValues>();

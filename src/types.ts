@@ -21,4 +21,5 @@ export type FormStep = {
   label: string;
   fields: FieldPath<FormValues>[];
   component: React.ComponentType;
+  isApplicable?: (values: FormValues) => boolean;
 };

@@ -29,6 +29,7 @@ import type {
   PreschoolApplicationWritable,
   StatusEnum,
 } from '../api/generated';
+import { StepsContextProvider } from '../components/application-form/StepsContext';
 
 type DrfFieldErrors = Record<string, string | string[]>;
 
@@ -132,12 +133,14 @@ export const Application = ({}) => {
       label: t('stepper.taydentavaLisatiedot'),
       fields: ['taydentavaVarhaiskasvatusAloitus', 'hoidonTarve'],
       component: TaydentavaLisatiedot,
+      isApplicable: (v) => v.taydentavaVarhaiskasvatus === true,
     },
     {
       id: 'varhaiskasvatuksen-laajuus',
       label: t('stepper.varhaiskasvatuksenLaajuus'),
       fields: ['palvelunTarve', 'arkipoissaolotLkm'],
       component: VarhaiskasvatuksenLaajuus,
+      isApplicable: (v) => v.taydentavaVarhaiskasvatus === true,
     },
     {
       id: 'tuki-ja-laakehoito',
@@ -214,7 +217,11 @@ export const Application = ({}) => {
           onSubmit={onSubmit}
         >
           {isSubmitted ? (
-            <Esikatselu />
+            <StepsContextProvider
+              value={{ goToStep: () => {}, currentId: 'esikatselu' }}
+            >
+              <Esikatselu />
+            </StepsContextProvider>
           ) : (
             <ApplicationFormSteps
               steps={steps}
