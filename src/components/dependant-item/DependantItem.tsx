@@ -10,12 +10,15 @@ import { ageFromIso, isoToDisplay } from '../../utils/date';
 
 interface DependantItemProps {
   item: Dependant;
+  // Position in the dependant list, used only for data-testids.
+  index: number;
   guardianSsn: string;
   canApply: boolean;
 }
 
 export const DependantItem = ({
   item,
+  index,
   guardianSsn,
   canApply,
 }: DependantItemProps) => {
@@ -30,13 +33,16 @@ export const DependantItem = ({
   const age = ageFromIso(item.dateOfBirth);
 
   return (
-    <div className={styles.item}>
+    <div className={styles.item} data-testid={`dependant-${index}`}>
       <div className={styles['dependant-card']}>
         <div className={styles['dependant-icon']}>
           <DependantIcon />
         </div>
         <div className={styles['basic-info']}>
-          <span className={styles['age-text']}>
+          <span
+            className={styles['age-text']}
+            data-testid={`dependant-age-${index}`}
+          >
             {isoToDisplay(item.dateOfBirth)}
             {age && ` - ${age.years}v ${age.months}kk`}
             {/*
@@ -44,7 +50,10 @@ export const DependantItem = ({
               ` - ${t('landing.ageYears', { count: age.years })} ${t('landing.ageMonths', { count: age.months })}`}
             */}
           </span>
-          <h2 className={styles['dependant-name']}>
+          <h2
+            className={styles['dependant-name']}
+            data-testid={`dependant-name-${index}`}
+          >
             {item.firstNames} {item.lastName}
           </h2>
         </div>
@@ -52,10 +61,15 @@ export const DependantItem = ({
       {canApply && (
         <div className={styles['application-card']}>
           <div className={styles['application-card-content']}>
-            <h3>{t('landing.applicationTitle')}</h3>
-            <p>{t('landing.applicationDescription')}</p>
+            <h3 data-testid={`dependant-application-title-${index}`}>
+              {t('landing.applicationTitle')}
+            </h3>
+            <p data-testid={`dependant-application-text-${index}`}>
+              {t('landing.applicationDescription')}
+            </p>
             <Button
               variant={ButtonVariant.Primary}
+              data-testid={`btn-open-application-${index}`}
               disabled={openApplication.isPending}
               onClick={() =>
                 openApplication.mutate({
@@ -67,7 +81,12 @@ export const DependantItem = ({
               {t('landing.applicationLink')}
             </Button>
             {openApplication.isError && (
-              <p role="alert">{openApplication.error.error}</p>
+              <p
+                role="alert"
+                data-testid={`dependant-application-error-${index}`}
+              >
+                {openApplication.error.error}
+              </p>
             )}
           </div>
         </div>

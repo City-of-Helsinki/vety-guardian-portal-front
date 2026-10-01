@@ -197,11 +197,15 @@ export const Application = ({}) => {
 
   const renderContent = () => {
     if (application.isPending) {
-      return <LoadingSpinner />;
+      return <LoadingSpinner data-testid="loading-spinner" />;
     }
     if (application.isError) {
       return (
-        <Notification type="error" label={t('loadError')}>
+        <Notification
+          type="error"
+          label={t('loadError')}
+          data-testid="notification-load-error"
+        >
           {String(application.error)}
         </Notification>
       );
@@ -234,7 +238,7 @@ export const Application = ({}) => {
 
   return (
     <>
-      <h1>{t('title')}</h1>
+      <h1 data-testid="title-application">{t('title')}</h1>
       <Divider />
       {renderContent()}
     </>

@@ -30,17 +30,24 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
   }, [taydentavaVarhaiskasvatus, resetField]);
 
   return (
-    <ApplicationFormStep title={t('varhaiskasvatuksenLaajuus.title')}>
-      <MarkdownContent>
+    <ApplicationFormStep
+      data-testid="step-varhaiskasvatuksen-laajuus"
+      title={t('varhaiskasvatuksenLaajuus.title')}
+    >
+      <MarkdownContent data-testid="text-varhaiskasvatuksen-laajuus">
         {t('varhaiskasvatuksenLaajuus.varhaiskasvatuksenLaajuusText')}
       </MarkdownContent>
       <Link
+        data-testid="link-vk-maksut"
         external
         href="https://www.hel.fi/fi/kasvatus-ja-koulutus/varhaiskasvatus/varhaiskasvatusmaksut"
       >
         {t('varhaiskasvatusmaksutAnchor')}
       </Link>
-      <Fieldset heading={t('varhaiskasvatuksenLaajuus.selectionGroupLabel')}>
+      <Fieldset
+        heading={t('varhaiskasvatuksenLaajuus.selectionGroupLabel')}
+        data-testid="fieldset-palvelun-tarve"
+      >
         <Controller
           name="palvelunTarve"
           control={control}
@@ -53,6 +60,7 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
           render={({ field, fieldState }) => (
             <SelectionGroup
               className={styles['selection-group']}
+              data-testid="group-palvelun-tarve"
               errorText={fieldState.error?.message}
             >
               <div className={styles['selection-group-item']}>
@@ -111,8 +119,13 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
           )}
         />
       </Fieldset>
-      <Fieldset heading={t('varhaiskasvatuksenLaajuus.arkipoissaolotTitle')}>
-        <p>{t('varhaiskasvatuksenLaajuus.arkipoissaolotText')}</p>
+      <Fieldset
+        heading={t('varhaiskasvatuksenLaajuus.arkipoissaolotTitle')}
+        data-testid="fieldset-arkipoissaolot"
+      >
+        <p data-testid="text-arkipoissaolot">
+          {t('varhaiskasvatuksenLaajuus.arkipoissaolotText')}
+        </p>
         <Controller
           name="arkipoissaolotLkm"
           control={control}

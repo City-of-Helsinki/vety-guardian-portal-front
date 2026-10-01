@@ -11,8 +11,13 @@ export const Taydentava = ({}) => {
   const { t } = useTranslation('lomake');
 
   return (
-    <ApplicationFormStep title={t('taydentava.title')}>
-      <MarkdownContent>{t('taydentava.taydentavaText')}</MarkdownContent>
+    <ApplicationFormStep
+      data-testid="step-taydentava"
+      title={t('taydentava.title')}
+    >
+      <MarkdownContent data-testid="text-taydentava">
+        {t('taydentava.taydentavaText')}
+      </MarkdownContent>
       <Link
         data-testid="link-vk-maksut"
         external
@@ -31,6 +36,7 @@ export const Taydentava = ({}) => {
         render={({ field, fieldState }) => (
           <SelectionGroup
             className={styles['selection-group']}
+            data-testid="group-taydentava"
             label={t('taydentava.selectionGroupLabel')}
             errorText={fieldState.error?.message}
           >

@@ -11,11 +11,17 @@ export const TukiJaLaakehoito = ({}) => {
   const { t } = useTranslation('lomake');
 
   return (
-    <ApplicationFormStep title={t('tukiJaLaakehoito.title')}>
-      <MarkdownContent>
+    <ApplicationFormStep
+      data-testid="step-tuki-ja-laakehoito"
+      title={t('tukiJaLaakehoito.title')}
+    >
+      <MarkdownContent data-testid="text-tuki-ja-laakehoito">
         {t('tukiJaLaakehoito.tukiJaLaakehoitoText')}
       </MarkdownContent>
-      <SelectionGroup className={styles['selection-group']}>
+      <SelectionGroup
+        className={styles['selection-group']}
+        data-testid="group-tuki-ja-laakehoito"
+      >
         <Controller
           name="erityisenTuenTarve"
           control={control}
@@ -30,7 +36,7 @@ export const TukiJaLaakehoito = ({}) => {
                 onBlur={field.onBlur}
                 errorText={fieldState.error?.message}
               />
-              <MarkdownContent>
+              <MarkdownContent data-testid="text-erityinen-tuki">
                 {t('tukiJaLaakehoito.erityinenTukiText')}
               </MarkdownContent>
             </div>
@@ -50,7 +56,7 @@ export const TukiJaLaakehoito = ({}) => {
                 onBlur={field.onBlur}
                 errorText={fieldState.error?.message}
               />
-              <MarkdownContent>
+              <MarkdownContent data-testid="text-laakehoito">
                 {t('tukiJaLaakehoito.laakehoitoText')}
               </MarkdownContent>
             </div>

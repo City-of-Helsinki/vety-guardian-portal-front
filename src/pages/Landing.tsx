@@ -14,7 +14,7 @@ export const Landing = ({}) => {
 
   return (
     <>
-      <h1>{t('landing.title')}</h1>
+      <h1 data-testid="title-landing">{t('landing.title')}</h1>
       <Divider />
       <DependantList guardianSsn={ssn} />
     </>

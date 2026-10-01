@@ -45,31 +45,42 @@ export const DependantList = ({ guardianSsn }: DependantListProps) => {
 
   if (familyProtection.isError || dependants.isError) {
     return (
-      <Notification type="error" label={t('landing.error')}>
+      <Notification
+        type="error"
+        label={t('landing.error')}
+        data-testid="notification-landing-error"
+      >
         {String((familyProtection.error ?? dependants.error)?.error ?? '')}
       </Notification>
     );
   }
 
   if (familyProtection.isPending || dependants.isPending) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner data-testid="loading-spinner" />;
   }
 
   const isProtectedFamily = familyProtection.data.isProtectedFamily;
   const items = dependants.data.dependants;
 
   return (
-    <div className={styles.items}>
+    <div className={styles.items} data-testid="dependant-list">
       {isProtectedFamily && (
-        <Notification type="alert" label={t('landing.turvakieltoTitle')}>
+        <Notification
+          type="alert"
+          label={t('landing.turvakieltoTitle')}
+          data-testid="notification-turvakielto"
+        >
           {t('landing.turvakieltoText')}
         </Notification>
       )}
-      {items.length === 0 && <p>{t('landing.noDependants')}</p>}
-      {items.map((item) => (
+      {items.length === 0 && (
+        <p data-testid="text-no-dependants">{t('landing.noDependants')}</p>
+      )}
+      {items.map((item, index) => (
         <DependantItem
           key={item.id}
           item={item}
+          index={index}
           guardianSsn={guardianSsn}
           canApply={!isProtectedFamily}
         />
