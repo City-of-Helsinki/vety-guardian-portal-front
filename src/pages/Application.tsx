@@ -29,6 +29,7 @@ import type {
   PreschoolApplicationWritable,
   StatusEnum,
 } from '../api/generated';
+import { StepsContextProvider } from '../components/application-form/StepsContext';
 
 type DrfFieldErrors = Record<string, string | string[]>;
 
@@ -214,7 +215,11 @@ export const Application = ({}) => {
           onSubmit={onSubmit}
         >
           {isSubmitted ? (
-            <Esikatselu />
+            <StepsContextProvider
+              value={{ goToStep: () => {}, currentId: 'esikatselu' }}
+            >
+              <Esikatselu />
+            </StepsContextProvider>
           ) : (
             <ApplicationFormSteps
               steps={steps}

@@ -4,7 +4,7 @@ import { Checkbox, SelectionGroup } from 'hds-react';
 import type { FormValues } from '../../../types';
 import { useTranslation } from 'react-i18next';
 import styles from '../ApplicationForm.module.css';
-import { MarkdownContent } from '../../MarkdownContent';
+import { MarkdownContent } from '../../markdown-content';
 
 export const TukiJaLaakehoito = ({}) => {
   const { control } = useFormContext<FormValues>();

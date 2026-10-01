@@ -4,7 +4,7 @@ import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';
 import { Divider } from '../../divider';
 import { useTranslation } from 'react-i18next';
-import { MarkdownContent } from '../../MarkdownContent';
+import { MarkdownContent } from '../../markdown-content';
 
 export const Alku = ({}) => {
   const { control } = useFormContext<FormValues>();

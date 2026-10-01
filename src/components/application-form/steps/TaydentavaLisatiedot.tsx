@@ -17,7 +17,7 @@ import {
 } from '../../../utils/date';
 import styles from '../ApplicationForm.module.css';
 import { useTranslation } from 'react-i18next';
-import { MarkdownContent } from '../../MarkdownContent';
+import { MarkdownContent } from '../../markdown-content';
 
 export const TaydentavaLisatiedot = ({}) => {
   const { control, watch, resetField } = useFormContext<FormValues>();

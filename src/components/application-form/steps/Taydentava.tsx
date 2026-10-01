@@ -4,7 +4,7 @@ import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';
 import styles from '../ApplicationForm.module.css';
 import { useTranslation } from 'react-i18next';
-import { MarkdownContent } from '../../MarkdownContent';
+import { MarkdownContent } from '../../markdown-content';
 
 export const Taydentava = ({}) => {
   const { control } = useFormContext<FormValues>();
