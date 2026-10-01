@@ -27,45 +27,67 @@ export const Esikatselu = ({}) => {
   }
 
   return (
-    <ApplicationFormStep title={t('esikatselu.title')}>
+    <ApplicationFormStep
+      data-testid="step-esikatselu"
+      title={t('esikatselu.title')}
+    >
       {application.status === 'submitted' && (
-        <Notification type="info" label={t('esikatselu.alreadySubmitted')} />
+        <Notification
+          type="info"
+          label={t('esikatselu.alreadySubmitted')}
+          data-testid="notification-already-submitted"
+        />
       )}
       <Divider />
-      <SummarySection title={t('esikatselu.lapsenTiedotTitle')}>
-        <MarkdownContent>{t('esikatselu.lapsenTiedotText')}</MarkdownContent>
+      <SummarySection
+        data-testid="section-lapsen-tiedot"
+        title={t('esikatselu.lapsenTiedotTitle')}
+      >
+        <MarkdownContent data-testid="text-lapsen-tiedot">
+          {t('esikatselu.lapsenTiedotText')}
+        </MarkdownContent>
         <LabelValueWrapper>
           <LabelValue
+            data-testid="summary-lapsi-nimi"
             label={t('esikatselu.lapsenNimi')}
             value={application.nimi}
           />
         </LabelValueWrapper>
         <LabelValueWrapper>
           <LabelValue
+            data-testid="summary-lapsi-henkilotunnus"
             label={t('esikatselu.henkilotunnus')}
             value={application.henkilotunnus}
           />
           <LabelValue
+            data-testid="summary-lapsi-syntymavuosi"
             label={t('esikatselu.syntymavuosi')}
             value={String(application.syntymavuosi ?? '')}
           />
           <LabelValue
+            data-testid="summary-lapsi-karttaosoite"
             label={t('esikatselu.karttaosoite')}
             value={application.karttaosoite}
           />
         </LabelValueWrapper>
       </SummarySection>
-      <h3>{t('esikatselu.ilmoittautuminenTitle')}</h3>
-      <MarkdownContent>{t('esikatselu.ilmoittautuminenText')}</MarkdownContent>
+      <h3 data-testid="title-ilmoittautuminen">
+        {t('esikatselu.ilmoittautuminenTitle')}
+      </h3>
+      <MarkdownContent data-testid="text-ilmoittautuminen">
+        {t('esikatselu.ilmoittautuminenText')}
+      </MarkdownContent>
       <Divider />
       <LabelValueWrapper>
         <LabelValue
+          data-testid="summary-esiopetus-alkaa"
           label={t('esikatselu.esiopetusAlkaa')}
           value={t('esiopetusAlkaa')}
         />
       </LabelValueWrapper>
       <Divider />
       <SummarySection
+        data-testid="section-kieli"
         title={t('esikatselu.kieli')}
         sectionLink={
           application.status !== 'submitted' ? (
@@ -80,6 +102,7 @@ export const Esikatselu = ({}) => {
         {t(`language.${values.kieli}`)}
       </SummarySection>
       <SummarySection
+        data-testid="section-tuki-ja-laakehoito"
         title={t('esikatselu.tukiJaLaakehoito')}
         sectionLink={
           application.status !== 'submitted' ? (
@@ -96,15 +119,20 @@ export const Esikatselu = ({}) => {
         ) : (
           <div>
             {values.erityisenTuenTarve && (
-              <p>{t('tukiJaLaakehoito.laakehoitoLabel')}</p>
+              <p data-testid="summary-erityinen-tuki">
+                {t('tukiJaLaakehoito.laakehoitoLabel')}
+              </p>
             )}
             {values.laakehoidonTarve && (
-              <p>{t('tukiJaLaakehoito.erityinenTukiLabel')}</p>
+              <p data-testid="summary-laakehoito">
+                {t('tukiJaLaakehoito.erityinenTukiLabel')}
+              </p>
             )}
           </div>
         )}
       </SummarySection>
       <SummarySection
+        data-testid="section-varhaiskasvatus"
         title={t('esikatselu.varhaiskasvatus')}
         sectionLink={
           application.status !== 'submitted' ? (
@@ -118,34 +146,43 @@ export const Esikatselu = ({}) => {
       >
         <LabelValueWrapper>
           <LabelValue
+            data-testid="summary-taydentava-alkaa"
             label={t('esikatselu.taydentavaAlkaa')}
             value={isoToDisplay(values.taydentavaVarhaiskasvatusAloitus)}
           />
           <LabelValue
+            data-testid="summary-taydentava-laajuus"
             label={t('esikatselu.taydentavaLaajuus')}
             value={laajuus}
           />
         </LabelValueWrapper>
       </SummarySection>
-      <SummarySection title={t('esikatselu.huoltajanTiedotTitle')}>
+      <SummarySection
+        data-testid="section-huoltajan-tiedot"
+        title={t('esikatselu.huoltajanTiedotTitle')}
+      >
         <LabelValueWrapper>
           <LabelValue
+            data-testid="summary-h1-nimi"
             label={t('esikatselu.huoltajanNimi')}
             value={application.h1Nimi}
           />
         </LabelValueWrapper>
         <LabelValueWrapper>
           <LabelValue
+            data-testid="summary-h1-osoite"
             label={t('esikatselu.osoite')}
             value={application.h1Osoite}
           />
         </LabelValueWrapper>
         <LabelValueWrapper>
           <LabelValue
+            data-testid="summary-h1-puhelinnumero"
             label={t('esikatselu.puhelinnumero')}
             value={values.h1Puhelinnumero}
           />
           <LabelValue
+            data-testid="summary-h1-sahkoposti"
             label={t('esikatselu.sahkoposti')}
             value={values.h1Sahkoposti}
           />
@@ -153,20 +190,28 @@ export const Esikatselu = ({}) => {
       </SummarySection>
 
       {application.h2Nimi && (
-        <SummarySection title={t('esikatselu.muutHuoltajatTitle')}>
-          <p>{t('esikatselu.muutHuoltajatText')}</p>
+        <SummarySection
+          data-testid="section-muut-huoltajat"
+          title={t('esikatselu.muutHuoltajatTitle')}
+        >
+          <p data-testid="text-muut-huoltajat">
+            {t('esikatselu.muutHuoltajatText')}
+          </p>
           <LabelValueWrapper>
             <LabelValue
+              data-testid="summary-h2-nimi"
               label={t('esikatselu.huoltajanNimi')}
               value={[application.h2Nimi]}
             />
           </LabelValueWrapper>
           <LabelValueWrapper>
             <LabelValue
+              data-testid="summary-h2-osoite"
               label={t('esikatselu.osoite')}
               value={application.h2Osoite}
             />
             <LabelValue
+              data-testid="summary-h2-sahkoposti"
               label={t('esikatselu.sahkoposti')}
               value={values.h2Sahkoposti}
             />

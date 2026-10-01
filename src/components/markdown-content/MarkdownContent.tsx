@@ -18,6 +18,7 @@ export type MarkdownContentProps = {
   className?: string;
   plugins?: PluggableList;
   rehypePlugins?: PluggableList;
+  'data-testid'?: string;
 };
 
 export const defaultAllowedElements = [
@@ -51,6 +52,7 @@ export const MarkdownContent = ({
   className,
   plugins = [],
   rehypePlugins = [],
+  'data-testid': dataTestId,
 }: MarkdownContentProps) => {
   const defaultPlugins = [remarkGfm];
 
@@ -63,13 +65,17 @@ export const MarkdownContent = ({
       external={linkTarget === '_blank'}
       color="black"
       target={linkTarget}
+      data-testid={dataTestId && `${dataTestId}-link`}
     >
       {myChildren}
     </Link>
   );
 
   return (
-    <div className={classNames(styles.markdownContent, className)}>
+    <div
+      className={classNames(styles.markdownContent, className)}
+      data-testid={dataTestId}
+    >
       <ReactMarkdown
         remarkPlugins={[...defaultPlugins, ...plugins]}
         rehypePlugins={rehypePlugins}

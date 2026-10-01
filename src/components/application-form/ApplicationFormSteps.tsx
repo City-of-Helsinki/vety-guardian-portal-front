@@ -87,6 +87,7 @@ export const ApplicationFormSteps = ({
     <div>
       <StepsContextProvider value={{ goToStep, currentId: steps[current].id }}>
         <Stepper
+          data-testid="stepper"
           steps={stepperSteps}
           language={i18n.language}
           selectedStep={current}
@@ -96,12 +97,15 @@ export const ApplicationFormSteps = ({
         <ActiveStep />
 
         {errors.root?.server && (
-          <p role="alert">{errors.root.server.message}</p>
+          <p role="alert" data-testid="error-server">
+            {errors.root.server.message}
+          </p>
         )}
 
         <div className={styles['stepper-buttons']}>
           <Button
             variant={ButtonVariant.Secondary}
+            data-testid="btn-previous"
             onClick={
               current === 0
                 ? () => navigate('/')
@@ -115,6 +119,7 @@ export const ApplicationFormSteps = ({
             <Button
               variant={ButtonVariant.Primary}
               type="submit"
+              data-testid="btn-submit"
               disabled={isSaving}
               style={{ height: 'fit-content', width: 'fit-content' }}
             >
@@ -124,6 +129,7 @@ export const ApplicationFormSteps = ({
             <Button
               variant={ButtonVariant.Secondary}
               onClick={next}
+              data-testid="btn-next"
               disabled={isSaving}
               style={{ height: 'fit-content', width: 'fit-content' }}
             >

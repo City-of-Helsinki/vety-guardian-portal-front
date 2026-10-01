@@ -11,18 +11,22 @@ export const Alku = ({}) => {
   const { t } = useTranslation('lomake');
 
   return (
-    <ApplicationFormStep title={t('alku.title')}>
-      <MarkdownContent>{t('alku.introText')}</MarkdownContent>
+    <ApplicationFormStep data-testid="step-alku" title={t('alku.title')}>
+      <MarkdownContent data-testid="text-alku-intro">
+        {t('alku.introText')}
+      </MarkdownContent>
       <Divider />
-      <p>{t('alku.yksityinenDescription')}</p>
+      <p data-testid="text-yksityinen-description">
+        {t('alku.yksityinenDescription')}
+      </p>
       <Controller
         name="hakenutEnsisijaisestiYksityiseen"
-        data-testid="cb-hakenut-yksityiseen"
         control={control}
         render={({ field, fieldState }) => (
           <SelectionGroup>
             <Checkbox
               id="applied-to-private-preschool"
+              data-testid="cb-hakenut-yksityiseen"
               label={t('alku.yksityinenLabel')}
               checked={field.value ?? false}
               onChange={(e) => field.onChange(e.target.checked)}
@@ -32,8 +36,11 @@ export const Alku = ({}) => {
           </SelectionGroup>
         )}
       />
-      <Accordion heading={t('alku.osoiteMuutosTitle')}>
-        <p>{t('alku.osoiteMuutosText')}</p>
+      <Accordion
+        heading={t('alku.osoiteMuutosTitle')}
+        data-testid="accordion-osoitemuutos"
+      >
+        <p data-testid="text-osoitemuutos">{t('alku.osoiteMuutosText')}</p>
       </Accordion>
       <Divider />
     </ApplicationFormStep>

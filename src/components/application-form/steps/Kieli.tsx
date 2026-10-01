@@ -10,8 +10,8 @@ export const Kieli = ({}) => {
   const { t } = useTranslation('lomake');
 
   return (
-    <ApplicationFormStep title={t('kieli.title')}>
-      <p>{t('kieli.kieliText')}</p>
+    <ApplicationFormStep data-testid="step-kieli" title={t('kieli.title')}>
+      <p data-testid="text-kieli">{t('kieli.kieliText')}</p>
       <Controller
         name="kieli"
         control={control}
@@ -19,6 +19,7 @@ export const Kieli = ({}) => {
         render={({ field, fieldState }) => (
           <SelectionGroup
             className={styles['selection-group']}
+            data-testid="group-kieli"
             errorText={fieldState.error?.message}
           >
             <div className={styles['selection-group-item']}>

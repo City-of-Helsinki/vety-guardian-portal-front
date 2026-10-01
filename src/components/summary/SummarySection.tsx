@@ -6,17 +6,19 @@ interface SummarySectionProps {
   title: string;
   sectionLink?: React.ReactNode;
   children: React.ReactNode;
+  'data-testid'?: string;
 }
 
 export const SummarySection = ({
   title,
   sectionLink,
   children,
+  'data-testid': dataTestId,
 }: SummarySectionProps) => {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} data-testid={dataTestId}>
       <div className={styles['section-title']}>
-        <h3>{title}</h3>
+        <h3 data-testid={dataTestId && `${dataTestId}-title`}>{title}</h3>
         {sectionLink && (
           <div className={styles['section-link']}>{sectionLink}</div>
         )}

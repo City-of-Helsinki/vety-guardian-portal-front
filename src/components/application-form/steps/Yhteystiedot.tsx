@@ -10,10 +10,14 @@ export const Yhteystiedot = ({}) => {
   } = useFormContext<FormValues>();
 
   return (
-    <ApplicationFormStep title="Yhteystiedot">
-      <Fieldset heading="Huoltajan sähköpostiosoite">
+    <ApplicationFormStep data-testid="step-yhteystiedot" title="Yhteystiedot">
+      <Fieldset
+        heading="Huoltajan sähköpostiosoite"
+        data-testid="fieldset-h1-sahkoposti"
+      >
         <TextInput
           id="h1-sahkoposti"
+          data-testid="input-h1-sahkoposti"
           label="Sähköpostiosoite"
           type="email"
           {...register('h1Sahkoposti', {
@@ -24,6 +28,7 @@ export const Yhteystiedot = ({}) => {
         />
         <TextInput
           id="h1-sahkoposti-confirm"
+          data-testid="input-h1-sahkoposti-confirm"
           label="Sähköpostiosoite uudestaan"
           type="email"
           {...register('h1SahkopostiConfirm')}
@@ -31,9 +36,13 @@ export const Yhteystiedot = ({}) => {
           errorText={errors.h1SahkopostiConfirm?.message}
         />
       </Fieldset>
-      <Fieldset heading="Toisen huoltajan sähköpostiosoite">
+      <Fieldset
+        heading="Toisen huoltajan sähköpostiosoite"
+        data-testid="fieldset-h2-sahkoposti"
+      >
         <TextInput
           id="h2-sahkoposti"
+          data-testid="input-h2-sahkoposti"
           label="Sähköpostiosoite"
           type="email"
           {...register('h2Sahkoposti')}
@@ -42,6 +51,7 @@ export const Yhteystiedot = ({}) => {
         />
         <TextInput
           id="h2-sahkoposti-confirm"
+          data-testid="input-h2-sahkoposti-confirm"
           label="Sähköpostiosoite uudestaan"
           type="email"
           {...register('h2SahkopostiConfirm')}

@@ -15,11 +15,12 @@ export const Home = ({}) => {
 
   return (
     <>
-      <h1>{t('title')}</h1>
+      <h1 data-testid="title-home">{t('title')}</h1>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
         {MOCK_GUARDIANS.map((guardian) => (
           <Button
             key={guardian.ssn}
+            data-testid={`btn-login-${guardian.ssn}`}
             variant={ButtonVariant.Primary}
             onClick={() => loginAs(guardian.ssn)}
           >

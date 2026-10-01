@@ -36,8 +36,11 @@ export const TaydentavaLisatiedot = ({}) => {
   }, [taydentavaVarhaiskasvatus, resetField]);
 
   return (
-    <ApplicationFormStep title={t('taydentavaLisatiedot.title')}>
-      <MarkdownContent>
+    <ApplicationFormStep
+      data-testid="step-hoidon-tarve"
+      title={t('taydentavaLisatiedot.title')}
+    >
+      <MarkdownContent data-testid="text-taydentava-lisatiedot">
         {t('taydentavaLisatiedot.taydentavaLisatiedotText')}
       </MarkdownContent>
       <Link
@@ -47,8 +50,13 @@ export const TaydentavaLisatiedot = ({}) => {
       >
         {t('varhaiskasvatusmaksutAnchor')}
       </Link>
-      <h3>{t('taydentavaLisatiedot.fieldsTitle')}</h3>
-      <Fieldset heading={t('taydentavaLisatiedot.aloitusPvmTitle')}>
+      <h3 data-testid="title-taydentava-lisatiedot-fields">
+        {t('taydentavaLisatiedot.fieldsTitle')}
+      </h3>
+      <Fieldset
+        heading={t('taydentavaLisatiedot.aloitusPvmTitle')}
+        data-testid="fieldset-aloitus-pvm"
+      >
         <Controller
           name="taydentavaVarhaiskasvatusAloitus"
           control={control}
@@ -88,6 +96,7 @@ export const TaydentavaLisatiedot = ({}) => {
         render={({ field, fieldState }) => (
           <SelectionGroup
             className={styles['selection-group']}
+            data-testid="group-hoidon-tarve"
             errorText={fieldState.error?.message}
           >
             <div className={styles['selection-group-item']}>
