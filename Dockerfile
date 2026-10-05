@@ -8,7 +8,7 @@ RUN npm ci --no-audit --no-fund
 COPY --chown=1001:0 . .
 RUN npm run build
 
-FROM helsinki.azurecr.io/ubi9/nginx-126
+FROM registry.access.redhat.com/ubi9/nginx-126
 
 COPY docker/nginx-default.conf "${NGINX_DEFAULT_CONF_PATH}/spa.conf"
 COPY --from=build --chown=1001:0 /opt/app-root/src/dist /opt/app-root/src
