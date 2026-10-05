@@ -1,4 +1,4 @@
-import { Checkbox, SelectionGroup, Accordion, Link } from 'hds-react';
+import { Checkbox, SelectionGroup, Accordion } from 'hds-react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';

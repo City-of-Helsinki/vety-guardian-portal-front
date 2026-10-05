@@ -4,7 +4,7 @@ import { Footer, Header, Logo, logoFi, logoSv } from 'hds-react';
 import { Outlet } from 'react-router';
 
 function App() {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
 
   const changeLanguage = (lang: string) => {
     i18n.changeLanguage(lang);
