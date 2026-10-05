@@ -1,4 +1,4 @@
-FROM helsinki.azurecr.io/ubi9/nodejs-24 AS build
+FROM registry.access.redhat.com/ubi9/nodejs-24 AS build
 
 WORKDIR /opt/app-root/src
 
