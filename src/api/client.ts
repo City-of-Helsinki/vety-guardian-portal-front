@@ -1,7 +1,8 @@
+import { config } from '../config';
 import { client } from './generated/client.gen';
 
 client.setConfig({
-  baseUrl: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8001',
+  baseUrl: config.apiBaseUrl,
   credentials: 'include', // send/receive the sessionid cookie cross-origin
 });
 

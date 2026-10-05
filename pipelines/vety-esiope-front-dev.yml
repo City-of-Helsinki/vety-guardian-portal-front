@@ -39,11 +39,13 @@ resources:
 extends:
   # Filename in Azure DevOps Repository
   template: components/vety-esiope-front/pipelines/vety-esiope-front-dev.yml@vety-esiope-pipelines
-  # parameters:
+  parameters:
     # Application build arguments and config map values as key value pairs.
     # Does not contain all buildArguments or configMap values, the rest located in vety-esiope-front-pipelines
     # The values here will override the values defined in the vety-esiope-front-pipelines repository
+    # VITE_* values are read at container start into /env-config.js (see src/config.ts), so they go in configMap
     # buildArgs:
     #   DEBUG: 1
-    # configMap: # pod environment variables
-    #   DEBUG: 1
+    configMap: # pod environment variables
+      VITE_API_BASE_URL: https://vety-esiope-back.dev-se.hel.ninja
+      VITE_LOCIZE_PROJECT_ID: 8d851889-2950-437b-80e8-b4ef26317ff9

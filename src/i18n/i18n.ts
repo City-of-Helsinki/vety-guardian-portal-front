@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-locize-backend';
+import { config } from '../config';
 
 i18n
   .use(Backend)
@@ -16,7 +17,7 @@ i18n
       escapeValue: false,
     },
     backend: {
-      projectId: import.meta.env.VITE_LOCIZE_PROJECT_ID,
+      projectId: config.locizeProjectId,
       cdnType: 'standard',
     },
   });
