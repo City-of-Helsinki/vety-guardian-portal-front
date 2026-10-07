@@ -38,12 +38,17 @@ const omitFields = ['h1SahkopostiConfirm', 'h2SahkopostiConfirm'];
 const toBody = (
   values: FormValues,
   status: StatusEnum,
-): PreschoolApplicationWritable => ({
-  ...Object.fromEntries(
-    Object.entries(values).filter(([k]) => !omitFields.includes(k)),
-  ),
-  status,
-});
+): PreschoolApplicationWritable => {
+  const omit = values.taydentavaVarhaiskasvatus
+    ? omitFields
+    : [...omitFields, 'arkipoissaolotLkm'];
+  return {
+    ...Object.fromEntries(
+      Object.entries(values).filter(([k]) => !omit.includes(k)),
+    ),
+    status,
+  };
+};
 
 // Only the editable fields go into the form; the read-only VTJ data is shown via ApplicationDataContext.
 const toFormValues = (application: PreschoolApplication): FormValues => ({
@@ -57,7 +62,7 @@ const toFormValues = (application: PreschoolApplication): FormValues => ({
     application.taydentavaVarhaiskasvatusAloitus,
   hoidonTarve: application.hoidonTarve,
   palvelunTarve: application.palvelunTarve,
-  arkipoissaolotLkm: application.arkipoissaolotLkm,
+  arkipoissaolotLkm: application.arkipoissaolotLkm ?? 0,
   erityisenTuenTarve: application.erityisenTuenTarve,
   laakehoidonTarve: application.laakehoidonTarve,
   h1Sahkoposti: application.h1Sahkoposti,
