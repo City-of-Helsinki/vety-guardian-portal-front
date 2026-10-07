@@ -8,6 +8,21 @@ import { type FormValues, type FormStep } from '../../types';
 import styles from './ApplicationForm.module.css';
 import { useNavigate } from 'react-router';
 import { StepsContextProvider } from './StepsContext';
+import { useApplicationData } from './ApplicationDataContext';
+
+// Steps are filled up to the last one whose saved values say so, stopping at the first
+// step that is known to be unfilled.
+const filledStepIds = (steps: FormStep[], values: FormValues) => {
+  const firstUnfilled = steps.findIndex(
+    (step) => step.isFilled && !step.isFilled(values),
+  );
+  const candidates =
+    firstUnfilled === -1 ? steps : steps.slice(0, firstUnfilled);
+  const lastFilled = candidates.findLastIndex((step) =>
+    step.isFilled?.(values),
+  );
+  return new Set(steps.slice(0, lastFilled + 1).map((step) => step.id));
+};
 
 interface ApplicationFormStepsProps {
   steps: FormStep[];
@@ -31,8 +46,16 @@ export const ApplicationFormSteps = ({
     getValues,
     formState: { errors },
   } = form;
+  const application = useApplicationData();
   const [current, setCurrent] = useState(0);
-  const [completed, setCompleted] = useState<Set<string>>(new Set());
+  // Restore progress from the saved draft, so that e.g. the summary is reachable after logging in again.
+  const [completed, setCompleted] = useState<Set<string>>(() =>
+    filledStepIds(steps, application),
+  );
+
+  // A step can be opened once every step before it has been completed.
+  const isReachable = (index: number, done = completed) =>
+    steps.slice(0, index).every((step) => done.has(step.id));
 
   const stepperSteps = steps.map((step, i) => ({
     label: step.label,
@@ -41,24 +64,41 @@ export const ApplicationFormSteps = ({
         ? StepState.available
         : completed.has(step.id)
           ? StepState.completed
-          : StepState.disabled,
+          : isReachable(i)
+            ? StepState.available
+            : StepState.disabled,
   }));
 
-  const next = async () => {
+  // Validates and saves the current step, then moves to the target step, or to the first
+  // step that still needs filling if the change made later steps incomplete
+  // (e.g. selecting extended care after it was previously declined).
+  const saveAndGoTo = async (index: number) => {
     const valid = await trigger(steps[current].fields);
     if (!valid) return;
-    const saved = await onStepSave(getValues(), form);
+    const values = getValues();
+    const saved = await onStepSave(values, form);
     if (!saved) return;
-    setCompleted((prev) => new Set(prev).add(steps[current].id));
-    setCurrent((i) => i + 1);
+    const done = new Set(completed).add(steps[current].id);
+    steps.forEach((step, i) => {
+      if (i !== current && step.isFilled && !step.isFilled(values)) {
+        done.delete(step.id);
+      }
+    });
+    setCompleted(done);
+    const firstUnreachable = steps.findIndex((_, i) => !isReachable(i, done));
+    setCurrent(
+      firstUnreachable === -1 ? index : Math.min(index, firstUnreachable - 1),
+    );
   };
+
+  const next = () => saveAndGoTo(current + 1);
 
   const goTo = (_e: React.MouseEvent<HTMLButtonElement>, index: number) => {
     if (index < current) {
       setCurrent(index);
       return;
     }
-    if (completed.has(steps[index - 1]?.id)) setCurrent(index);
+    if (index > current && isReachable(index)) void saveAndGoTo(index);
   };
 
   const goToStep = (id: string) => {

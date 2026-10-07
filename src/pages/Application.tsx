@@ -115,30 +115,39 @@ export const Application = ({}) => {
       label: t('stepper.alku'),
       fields: ['hakenutEnsisijaisestiYksityiseen'],
       component: Alku,
+      isFilled: (v) => v.hakenutEnsisijaisestiYksityiseen != null,
     },
     {
       id: 'kieli',
       label: t('stepper.kieli'),
       fields: ['kieli'],
       component: Kieli,
+      isFilled: (v) => !!v.kieli,
     },
     {
       id: 'taydentava',
       label: t('stepper.taydentava'),
       fields: ['taydentavaVarhaiskasvatus'],
       component: Taydentava,
+      isFilled: (v) => typeof v.taydentavaVarhaiskasvatus === 'boolean',
     },
     {
       id: 'hoidon-tarve',
       label: t('stepper.taydentavaLisatiedot'),
       fields: ['taydentavaVarhaiskasvatusAloitus', 'hoidonTarve'],
       component: TaydentavaLisatiedot,
+      isFilled: (v) =>
+        v.taydentavaVarhaiskasvatus === false ||
+        (!!v.taydentavaVarhaiskasvatusAloitus && !!v.hoidonTarve),
     },
     {
       id: 'varhaiskasvatuksen-laajuus',
       label: t('stepper.varhaiskasvatuksenLaajuus'),
       fields: ['palvelunTarve', 'arkipoissaolotLkm'],
       component: VarhaiskasvatuksenLaajuus,
+      isFilled: (v) =>
+        v.taydentavaVarhaiskasvatus === false ||
+        (!!v.palvelunTarve && v.arkipoissaolotLkm != null),
     },
     {
       id: 'tuki-ja-laakehoito',
@@ -151,6 +160,7 @@ export const Application = ({}) => {
       label: t('stepper.yhteystiedot'),
       fields: ['h1Sahkoposti', 'h2Sahkoposti'],
       component: Yhteystiedot,
+      isFilled: (v) => !!v.h1Sahkoposti,
     },
     {
       id: 'esikatselu',
