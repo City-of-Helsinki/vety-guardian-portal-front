@@ -18,10 +18,11 @@ import {
 import styles from '../ApplicationForm.module.css';
 import { useTranslation } from 'react-i18next';
 import { MarkdownContent } from '../../markdown-content';
+import { toLanguage } from '../../../i18n/i18n';
 
 export const TaydentavaLisatiedot = ({}) => {
   const { control, watch, resetField } = useFormContext<FormValues>();
-  const { t } = useTranslation('lomake');
+  const { t, i18n } = useTranslation('lomake');
 
   const taydentavaVarhaiskasvatus = useWatch({
     control,
@@ -72,6 +73,7 @@ export const TaydentavaLisatiedot = ({}) => {
               data-testid="date-extended-care-start"
               initialMonth={new Date()}
               dateFormat={DISPLAY_DATE_FORMAT}
+              language={toLanguage(i18n.resolvedLanguage)}
               value={isoToDisplay(field.value)}
               onChange={(_, valueAsDate) => {
                 field.onChange(

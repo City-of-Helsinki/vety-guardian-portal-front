@@ -8,6 +8,7 @@ import { type FormValues, type FormStep } from '../../types';
 import styles from './ApplicationForm.module.css';
 import { useNavigate } from 'react-router';
 import { StepsContextProvider } from './StepsContext';
+import { toLanguage } from '../../i18n/i18n';
 
 interface ApplicationFormStepsProps {
   steps: FormStep[];
@@ -89,7 +90,7 @@ export const ApplicationFormSteps = ({
         <Stepper
           data-testid="stepper"
           steps={stepperSteps}
-          language={i18n.language}
+          language={toLanguage(i18n.resolvedLanguage)}
           selectedStep={current}
           onStepClick={goTo}
         />
