@@ -5,6 +5,7 @@ import {
   Fieldset,
   Link,
 } from 'hds-react';
+import type { ChangeEvent } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';
@@ -19,13 +20,22 @@ import { useTranslation } from 'react-i18next';
 import { MarkdownContent } from '../../markdown-content';
 
 export const TaydentavaLisatiedot = ({}) => {
-  const { control, watch } = useFormContext<FormValues>();
+  const { control, watch, setValue } = useFormContext<FormValues>();
   const { t } = useTranslation('lomake');
 
   const taydentavaVarhaiskasvatus = useWatch({
     control,
     name: 'taydentavaVarhaiskasvatus',
   });
+
+  // The palvelunTarve options in the next step depend on hoidonTarve, so clear
+  // the previous selection when hoidonTarve changes.
+  const onHoidonTarveChange =
+    (onChange: (event: ChangeEvent<HTMLInputElement>) => void) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+      onChange(event);
+      setValue('palvelunTarve', null);
+    };
 
   return (
     <ApplicationFormStep
@@ -97,38 +107,22 @@ export const TaydentavaLisatiedot = ({}) => {
                 data-testid="rb-paivaaikainen_varhaiskasvatus"
                 name={field.name}
                 value="paivaaikainen_varhaiskasvatus"
-                label="Esiopetus 4 tuntia jonka lisäksi päiväaikainen varhaiskasvatus"
+                label={t('vakaOptions.paivaaikainen_varhaiskasvatus')}
                 checked={field.value === 'paivaaikainen_varhaiskasvatus'}
-                onChange={field.onChange}
+                onChange={onHoidonTarveChange(field.onChange)}
                 onBlur={field.onBlur}
                 disabled={field.disabled}
               />
             </div>
             <div className={styles['selection-group-item']}>
               <RadioButton
-                id="paiva-ja-ilta"
-                data-testid="rb-paiva_ja_ilta_aikainen_varhaiskasvatus_arkisin"
+                id="vuorohoito"
+                data-testid="rb-vuorohoito_varhaiskasvatus"
                 name={field.name}
-                value="paiva_ja_ilta_aikainen_varhaiskasvatus_arkisin"
-                label="Esiopetus 4 tuntia jonka lisäksi päivä- ja ilta-aikainen varhaiskasvatus arkisin"
-                checked={
-                  field.value ===
-                  'paiva_ja_ilta_aikainen_varhaiskasvatus_arkisin'
-                }
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                disabled={field.disabled}
-              />
-            </div>
-            <div className={styles['selection-group-item']}>
-              <RadioButton
-                id="ymparivuorokautinen"
-                data-testid="rb-ymparivuorokautinen_varhaiskasvatus"
-                name={field.name}
-                value="ymparivuorokautinen_varhaiskasvatus"
-                label="Esiopetus 4 tuntia arkisin jonka lisäksi ympärivuorokautinen varhaiskasvatus"
-                checked={field.value === 'ymparivuorokautinen_varhaiskasvatus'}
-                onChange={field.onChange}
+                value="vuorohoito_varhaiskasvatus"
+                label={t('vakaOptions.vuorohoito_varhaiskasvatus')}
+                checked={field.value === 'vuorohoito_varhaiskasvatus'}
+                onChange={onHoidonTarveChange(field.onChange)}
                 onBlur={field.onBlur}
                 disabled={field.disabled}
               />

@@ -110,10 +110,9 @@ export type GuardiansResponse = {
 
 /**
  * * `paivaaikainen_varhaiskasvatus` - Esiopetus 4 tuntia jonka lisäksi päiväaikainen varhaiskasvatus
- * * `paiva_ja_ilta_aikainen_varhaiskasvatus_arkisin` - Esiopetus 4 tuntia jonka lisäksi päivä- ja ilta-aikainen varhaiskasvatus arkisin
- * * `ymparivuorokautinen_varhaiskasvatus` - Esiopetus 4 tuntia jonka lisäksi ympärivuorokautinen varhaiskasvatus
+ * * `vuorohoito_varhaiskasvatus` - Esiopetus 4 tuntia arkisin, jonka lisäksi vuorohoidon tarve varhaiskasvatuksessa
  */
-export type HoidonTarveEnum = 'paivaaikainen_varhaiskasvatus' | 'paiva_ja_ilta_aikainen_varhaiskasvatus_arkisin' | 'ymparivuorokautinen_varhaiskasvatus';
+export type HoidonTarveEnum = 'paivaaikainen_varhaiskasvatus' | 'vuorohoito_varhaiskasvatus';
 
 /**
  * Schema-only: the `GET /is_protected_family/` response envelope.
@@ -131,12 +130,15 @@ export type KieliEnum = 'fi' | 'sv';
 export type NullEnum = never;
 
 /**
- * * `esiopetus_4h_1h_vaka` - Esiopetus 4h + 1h vaka
- * * `esiopetus_4h_1_3h_vaka` - Esiopetus 4h + 1-3h vaka
- * * `esiopetus_4h_3_4h_vaka` - Esiopetus 4h + 3-4h vaka
- * * `esiopetus_4h_4_6h_vaka` - Esiopetus 4h + 4-6h vaka
+ * * `esiopetus_4h_1h_vaka` - Esiop +päiväh, yht 5t/pv
+ * * `esiopetus_4h_1_3h_vaka` - Esiop+ päiväh, yht 5-7/pv
+ * * `esiopetus_4h_3_4h_vaka` - Esiop +päiväh, yht 7-8/pv
+ * * `esiopetus_4h_4_6h_vaka` - Esiop +päiväh, yli 7t/pv
+ * * `esiopetus_4h_61_100h_vuoroh` - Esiopetus + Vuorohoito 61-100h/kk
+ * * `esiopetus_4h_101_160h_vuoroh` - Esiopetus + Vuorohoito 101-160h/kk
+ * * `esiopetus_4h_160h_vuoroh` - Esiopetus + Vuorohoito yli 160h/kk
  */
-export type PalvelunTarveEnum = 'esiopetus_4h_1h_vaka' | 'esiopetus_4h_1_3h_vaka' | 'esiopetus_4h_3_4h_vaka' | 'esiopetus_4h_4_6h_vaka';
+export type PalvelunTarveEnum = 'esiopetus_4h_1h_vaka' | 'esiopetus_4h_1_3h_vaka' | 'esiopetus_4h_3_4h_vaka' | 'esiopetus_4h_4_6h_vaka' | 'esiopetus_4h_61_100h_vuoroh' | 'esiopetus_4h_101_160h_vuoroh' | 'esiopetus_4h_160h_vuoroh';
 
 /**
  * Serializer for PreschoolApplication.
