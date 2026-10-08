@@ -8,26 +8,18 @@ import {
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';
-import { useEffect } from 'react';
 import styles from '../ApplicationForm.module.css';
 import { useTranslation } from 'react-i18next';
 import { MarkdownContent } from '../../markdown-content';
 
 export const VarhaiskasvatuksenLaajuus = ({}) => {
-  const { control, watch, resetField } = useFormContext<FormValues>();
+  const { control, watch } = useFormContext<FormValues>();
   const { t } = useTranslation('lomake');
 
   const taydentavaVarhaiskasvatus = useWatch({
     control,
     name: 'taydentavaVarhaiskasvatus',
   });
-
-  useEffect(() => {
-    if (!taydentavaVarhaiskasvatus) {
-      resetField('palvelunTarve');
-      resetField('arkipoissaolotLkm');
-    }
-  }, [taydentavaVarhaiskasvatus, resetField]);
 
   return (
     <ApplicationFormStep
