@@ -55,7 +55,10 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
               data-testid="group-palvelun-tarve"
               errorText={fieldState.error?.message}
             >
-              <div className={styles['selection-group-item']}>
+              <div
+                id="4h_1h_vaka-item"
+                className={styles['selection-group-item']}
+              >
                 <RadioButton
                   id="4h_1h_vaka"
                   data-testid="rb-esiopetus_4h_1h_vaka"
@@ -68,7 +71,10 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
                   disabled={field.disabled}
                 />
               </div>
-              <div className={styles['selection-group-item']}>
+              <div
+                id="4h_1_3h_vaka-item"
+                className={styles['selection-group-item']}
+              >
                 <RadioButton
                   id="4h_1_3h_vaka"
                   data-testid="rb-esiopetus_4h_1_3h_vaka"
@@ -81,7 +87,10 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
                   disabled={field.disabled}
                 />
               </div>
-              <div className={styles['selection-group-item']}>
+              <div
+                id="4h_3_4h_vaka-item"
+                className={styles['selection-group-item']}
+              >
                 <RadioButton
                   id="4h_3_4h_vaka"
                   data-testid="rb-esiopetus_4h_3_4h_vaka"
@@ -94,7 +103,10 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
                   disabled={field.disabled}
                 />
               </div>
-              <div className={styles['selection-group-item']}>
+              <div
+                id="4h_4_6h_vaka-item"
+                className={styles['selection-group-item']}
+              >
                 <RadioButton
                   id="4h_4_6h_vaka"
                   data-testid="rb-esiopetus_4h_4_6h_vaka"

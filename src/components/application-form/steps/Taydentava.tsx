@@ -40,7 +40,10 @@ export const Taydentava = ({}) => {
             label={t('taydentava.selectionGroupLabel')}
             errorText={fieldState.error?.message}
           >
-            <div className={styles['selection-group-item']}>
+            <div
+              id="needs-extended-care-item"
+              className={styles['selection-group-item']}
+            >
               <RadioButton
                 id="needs-extended-care"
                 data-testid="rb-extended-care"
@@ -51,7 +54,10 @@ export const Taydentava = ({}) => {
                 onBlur={field.onBlur}
               />
             </div>
-            <div className={styles['selection-group-item']}>
+            <div
+              id="no-extended-care-item"
+              className={styles['selection-group-item']}
+            >
               <RadioButton
                 id="no-extended-care"
                 data-testid="rb-no-extended-care"

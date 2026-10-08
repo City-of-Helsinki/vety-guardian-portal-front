@@ -4,7 +4,8 @@ import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-import { Link } from 'hds-react';
+import { useTranslation } from 'react-i18next';
+import 'hds-core/lib/components/link/link.min.css';
 import styles from './MarkdownContent.module.css';
 
 type LinkTarget = '_blank' | '_self';
@@ -54,22 +55,37 @@ export const MarkdownContent = ({
   rehypePlugins = [],
   'data-testid': dataTestId,
 }: MarkdownContentProps) => {
+  const { t } = useTranslation('common');
   const defaultPlugins = [remarkGfm];
 
   const link: Components['a'] = ({
     href,
     children: myChildren,
-  }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <Link
-      href={href ?? '#'}
-      external={linkTarget === '_blank'}
-      color="black"
-      target={linkTarget}
-      data-testid={dataTestId && `${dataTestId}-link`}
-    >
-      {myChildren}
-    </Link>
-  );
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+    const openInNewTab = linkTarget === '_blank';
+    return (
+      <a
+        href={href ?? '#'}
+        className={classNames(
+          'hds-link',
+          openInNewTab && [
+            'hds-icon--link-external',
+            'hds-icon-end--link-external',
+          ],
+        )}
+        target={linkTarget}
+        rel={openInNewTab ? 'noopener noreferrer' : undefined}
+        data-testid={dataTestId && `${dataTestId}-link`}
+      >
+        {myChildren}
+        {openInNewTab && (
+          <span className={styles.visuallyHidden}>
+            {` (${t('linkOpensInNewTab', { defaultValue: 'avautuu uudessa välilehdessä' })})`}
+          </span>
+        )}
+      </a>
+    );
+  };
 
   return (
     <div
