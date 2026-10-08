@@ -61,8 +61,11 @@ const toFormValues = (application: PreschoolApplication): FormValues => ({
   erityisenTuenTarve: application.erityisenTuenTarve,
   laakehoidonTarve: application.laakehoidonTarve,
   h1Sahkoposti: application.h1Sahkoposti,
+  // Confirm fields aren't persisted; a saved email has already been confirmed.
+  h1SahkopostiConfirm: application.h1Sahkoposti ?? undefined,
   h1Puhelinnumero: application.h1Puhelinnumero,
   h2Sahkoposti: application.h2Sahkoposti,
+  h2SahkopostiConfirm: application.h2Sahkoposti ?? undefined,
   h2Puhelinnumero: application.h2Puhelinnumero,
   status: application.status,
 });
@@ -158,7 +161,14 @@ export const Application = ({}) => {
     {
       id: 'yhteystiedot',
       label: t('stepper.yhteystiedot'),
-      fields: ['h1Sahkoposti', 'h2Sahkoposti'],
+      fields: [
+        'h1Sahkoposti',
+        'h1SahkopostiConfirm',
+        'h1Puhelinnumero',
+        'h2Sahkoposti',
+        'h2SahkopostiConfirm',
+        'h2Puhelinnumero',
+      ],
       component: Yhteystiedot,
       isFilled: (v) => !!v.h1Sahkoposti,
     },
