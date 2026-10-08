@@ -91,7 +91,10 @@ export const TaydentavaLisatiedot = ({}) => {
             data-testid="group-hoidon-tarve"
             errorText={fieldState.error?.message}
           >
-            <div className={styles['selection-group-item']}>
+            <div
+              id="paiva-aikainen-item"
+              className={styles['selection-group-item']}
+            >
               <RadioButton
                 id="paiva-aikainen"
                 data-testid="rb-paivaaikainen_varhaiskasvatus"
@@ -104,7 +107,10 @@ export const TaydentavaLisatiedot = ({}) => {
                 disabled={field.disabled}
               />
             </div>
-            <div className={styles['selection-group-item']}>
+            <div
+              id="paiva-ja-ilta-item"
+              className={styles['selection-group-item']}
+            >
               <RadioButton
                 id="paiva-ja-ilta"
                 data-testid="rb-paiva_ja_ilta_aikainen_varhaiskasvatus_arkisin"
@@ -120,7 +126,10 @@ export const TaydentavaLisatiedot = ({}) => {
                 disabled={field.disabled}
               />
             </div>
-            <div className={styles['selection-group-item']}>
+            <div
+              id="ymparivuorokautinen-item"
+              className={styles['selection-group-item']}
+            >
               <RadioButton
                 id="ymparivuorokautinen"
                 data-testid="rb-ymparivuorokautinen_varhaiskasvatus"

@@ -26,7 +26,10 @@ export const TukiJaLaakehoito = ({}) => {
           name="erityisenTuenTarve"
           control={control}
           render={({ field, fieldState }) => (
-            <div className={styles['selection-group-item']}>
+            <div
+              id="erityisen-tuen-tarve-item"
+              className={styles['selection-group-item']}
+            >
               <Checkbox
                 id="erityisen-tuen-tarve"
                 data-testid="cb-erityinen-tuki"
@@ -46,7 +49,10 @@ export const TukiJaLaakehoito = ({}) => {
           name="laakehoidonTarve"
           control={control}
           render={({ field, fieldState }) => (
-            <div className={styles['selection-group-item']}>
+            <div
+              id="laakehoidon-tarve-item"
+              className={styles['selection-group-item']}
+            >
               <Checkbox
                 id="laakehoidon-tarve"
                 data-testid="cb-laakehoidon-tarve"

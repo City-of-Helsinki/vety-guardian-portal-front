@@ -4,6 +4,10 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-locize-backend';
 import { config } from '../config';
 
+i18n.on('languageChanged', (lng) => {
+  document.documentElement.lang = lng;
+});
+
 i18n
   .use(Backend)
   .use(LanguageDetector)
@@ -15,6 +19,16 @@ i18n
     ns: ['etusivu', 'lomake'],
     interpolation: {
       escapeValue: false,
+    },
+    detection: {
+      order: [
+        'querystring',
+        'cookie',
+        'localStorage',
+        'sessionStorage',
+        'navigator',
+      ],
+      convertDetectedLanguage: (lng) => lng.split('-')[0],
     },
     backend: {
       projectId: config.locizeProjectId,
