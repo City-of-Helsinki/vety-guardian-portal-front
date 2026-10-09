@@ -24,6 +24,11 @@ const filledStepIds = (steps: FormStep[], values: FormValues) => {
   return new Set(steps.slice(0, lastFilled + 1).map((step) => step.id));
 };
 
+const skippedStepIds = (steps: FormStep[], values: FormValues) =>
+  new Set(
+    steps.filter((step) => step.isSkipped?.(values)).map((step) => step.id),
+  );
+
 interface ApplicationFormStepsProps {
   steps: FormStep[];
   onStepSave: (
@@ -53,20 +58,35 @@ export const ApplicationFormSteps = ({
     filledStepIds(steps, application),
   );
 
-  // A step can be opened once every step before it has been completed.
-  const isReachable = (index: number, done = completed) =>
-    steps.slice(0, index).every((step) => done.has(step.id));
+  const [skipped, setSkipped] = useState<Set<string>>(() =>
+    skippedStepIds(steps, application),
+  );
+
+  // A step can be opened once every step before it has been completed or skipped.
+  const isReachable = (index: number, done = completed, skip = skipped) =>
+    !skip.has(steps[index].id) &&
+    steps
+      .slice(0, index)
+      .every((step) => done.has(step.id) || skip.has(step.id));
+
+  const nearestNotSkipped = (index: number, dir: 1 | -1, skip = skipped) => {
+    let i = index;
+    while (i > 0 && i < steps.length - 1 && skip.has(steps[i].id)) i += dir;
+    return i;
+  };
 
   const stepperSteps = steps.map((step, i) => ({
     label: step.label,
     state:
       i === current
         ? StepState.available
-        : completed.has(step.id)
-          ? StepState.completed
-          : isReachable(i)
-            ? StepState.available
-            : StepState.disabled,
+        : skipped.has(step.id)
+          ? StepState.disabled
+          : completed.has(step.id)
+            ? StepState.completed
+            : isReachable(i)
+              ? StepState.available
+              : StepState.disabled,
   }));
 
   // Validates and saves the current step, then moves to the target step, or to the first
@@ -84,16 +104,26 @@ export const ApplicationFormSteps = ({
         done.delete(step.id);
       }
     });
+    const skip = skippedStepIds(steps, values);
     setCompleted(done);
-    const firstUnreachable = steps.findIndex((_, i) => !isReachable(i, done));
+    setSkipped(skip);
+    const target = nearestNotSkipped(index, index < current ? -1 : 1, skip);
+    const firstUnreachable = steps.findIndex(
+      (step, i) => !skip.has(step.id) && !isReachable(i, done, skip),
+    );
     setCurrent(
-      firstUnreachable === -1 ? index : Math.min(index, firstUnreachable - 1),
+      firstUnreachable === -1
+        ? target
+        : Math.min(target, nearestNotSkipped(firstUnreachable - 1, -1, skip)),
     );
   };
 
   const next = () => saveAndGoTo(current + 1);
 
+  const previous = () => setCurrent(nearestNotSkipped(current - 1, -1));
+
   const goTo = (_e: React.MouseEvent<HTMLButtonElement>, index: number) => {
+    if (skipped.has(steps[index].id)) return;
     if (index < current) {
       setCurrent(index);
       return;
@@ -146,11 +176,7 @@ export const ApplicationFormSteps = ({
           <Button
             variant={ButtonVariant.Secondary}
             data-testid="btn-previous"
-            onClick={
-              current === 0
-                ? () => navigate('/')
-                : () => setCurrent((i) => i - 1)
-            }
+            onClick={current === 0 ? () => navigate('/') : previous}
             style={{ height: 'fit-content', width: 'fit-content' }}
           >
             {t('previousPage')}
