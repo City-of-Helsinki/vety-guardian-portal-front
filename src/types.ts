@@ -24,4 +24,5 @@ export type FormStep = {
   // Whether saved values show the step has been filled in. Steps without it count as
   // filled when a later step is (e.g. their fields have defaults or are optional).
   isFilled?: (values: FormValues) => boolean;
+  isSkipped?: (values: FormValues) => boolean;
 };

@@ -144,6 +144,7 @@ export const Application = ({}) => {
       label: t('stepper.taydentavaLisatiedot'),
       fields: ['taydentavaVarhaiskasvatusAloitus', 'hoidonTarve'],
       component: TaydentavaLisatiedot,
+      isSkipped: (v) => v.taydentavaVarhaiskasvatus === false,
       isFilled: (v) =>
         v.taydentavaVarhaiskasvatus === false ||
         (!!v.taydentavaVarhaiskasvatusAloitus && !!v.hoidonTarve),
@@ -153,6 +154,7 @@ export const Application = ({}) => {
       label: t('stepper.varhaiskasvatuksenLaajuus'),
       fields: ['palvelunTarve', 'arkipoissaolotLkm'],
       component: VarhaiskasvatuksenLaajuus,
+      isSkipped: (v) => v.taydentavaVarhaiskasvatus === false,
       isFilled: (v) =>
         v.taydentavaVarhaiskasvatus === false ||
         (!!v.palvelunTarve && v.arkipoissaolotLkm != null),
