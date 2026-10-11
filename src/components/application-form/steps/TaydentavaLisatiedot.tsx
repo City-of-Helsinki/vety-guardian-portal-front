@@ -8,7 +8,6 @@ import {
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';
-import { useEffect } from 'react';
 import {
   DISPLAY_DATE_FORMAT,
   dateToIso,
@@ -21,20 +20,13 @@ import { MarkdownContent } from '../../markdown-content';
 import { toLanguage } from '../../../i18n/i18n';
 
 export const TaydentavaLisatiedot = ({}) => {
-  const { control, watch, resetField } = useFormContext<FormValues>();
+  const { control, watch } = useFormContext<FormValues>();
   const { t, i18n } = useTranslation('lomake');
 
   const taydentavaVarhaiskasvatus = useWatch({
     control,
     name: 'taydentavaVarhaiskasvatus',
   });
-
-  useEffect(() => {
-    if (!taydentavaVarhaiskasvatus) {
-      resetField('taydentavaVarhaiskasvatusAloitus');
-      resetField('hoidonTarve');
-    }
-  }, [taydentavaVarhaiskasvatus, resetField]);
 
   return (
     <ApplicationFormStep

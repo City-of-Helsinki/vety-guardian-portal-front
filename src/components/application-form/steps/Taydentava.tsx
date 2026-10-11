@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { MarkdownContent } from '../../markdown-content';
 
 export const Taydentava = ({}) => {
-  const { control } = useFormContext<FormValues>();
+  const { control, setValue } = useFormContext<FormValues>();
   const { t } = useTranslation('lomake');
 
   return (
@@ -58,7 +58,14 @@ export const Taydentava = ({}) => {
                 name={field.name}
                 label={t('taydentava.doesntNeedExtendedCare')}
                 checked={field.value === false}
-                onChange={() => field.onChange(false)}
+                onChange={() => {
+                  field.onChange(false);
+                  // Clear the extended care details (steps 4 and 5), which may not be mounted.
+                  setValue('taydentavaVarhaiskasvatusAloitus', null);
+                  setValue('hoidonTarve', null);
+                  setValue('palvelunTarve', null);
+                  setValue('arkipoissaolotLkm', null);
+                }}
                 onBlur={field.onBlur}
               />
             </div>

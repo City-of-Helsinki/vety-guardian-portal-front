@@ -66,8 +66,11 @@ const toFormValues = (application: PreschoolApplication): FormValues => ({
   erityisenTuenTarve: application.erityisenTuenTarve,
   laakehoidonTarve: application.laakehoidonTarve,
   h1Sahkoposti: application.h1Sahkoposti,
+  // Confirm fields aren't persisted; a saved email has already been confirmed.
+  h1SahkopostiConfirm: application.h1Sahkoposti ?? undefined,
   h1Puhelinnumero: application.h1Puhelinnumero,
   h2Sahkoposti: application.h2Sahkoposti,
+  h2SahkopostiConfirm: application.h2Sahkoposti ?? undefined,
   h2Puhelinnumero: application.h2Puhelinnumero,
   status: application.status,
 });
@@ -120,30 +123,39 @@ export const Application = ({}) => {
       label: t('stepper.alku'),
       fields: ['hakenutEnsisijaisestiYksityiseen'],
       component: Alku,
+      isFilled: (v) => v.hakenutEnsisijaisestiYksityiseen != null,
     },
     {
       id: 'kieli',
       label: t('stepper.kieli'),
       fields: ['kieli'],
       component: Kieli,
+      isFilled: (v) => !!v.kieli,
     },
     {
       id: 'taydentava',
       label: t('stepper.taydentava'),
       fields: ['taydentavaVarhaiskasvatus'],
       component: Taydentava,
+      isFilled: (v) => typeof v.taydentavaVarhaiskasvatus === 'boolean',
     },
     {
       id: 'hoidon-tarve',
       label: t('stepper.taydentavaLisatiedot'),
       fields: ['taydentavaVarhaiskasvatusAloitus', 'hoidonTarve'],
       component: TaydentavaLisatiedot,
+      isFilled: (v) =>
+        v.taydentavaVarhaiskasvatus === false ||
+        (!!v.taydentavaVarhaiskasvatusAloitus && !!v.hoidonTarve),
     },
     {
       id: 'varhaiskasvatuksen-laajuus',
       label: t('stepper.varhaiskasvatuksenLaajuus'),
       fields: ['palvelunTarve', 'arkipoissaolotLkm'],
       component: VarhaiskasvatuksenLaajuus,
+      isFilled: (v) =>
+        v.taydentavaVarhaiskasvatus === false ||
+        (!!v.palvelunTarve && v.arkipoissaolotLkm != null),
     },
     {
       id: 'tuki-ja-laakehoito',
@@ -154,8 +166,16 @@ export const Application = ({}) => {
     {
       id: 'yhteystiedot',
       label: t('stepper.yhteystiedot'),
-      fields: ['h1Sahkoposti', 'h2Sahkoposti'],
+      fields: [
+        'h1Sahkoposti',
+        'h1SahkopostiConfirm',
+        'h1Puhelinnumero',
+        'h2Sahkoposti',
+        'h2SahkopostiConfirm',
+        'h2Puhelinnumero',
+      ],
       component: Yhteystiedot,
+      isFilled: (v) => !!v.h1Sahkoposti,
     },
     {
       id: 'esikatselu',
