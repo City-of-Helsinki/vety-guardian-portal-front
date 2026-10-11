@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponses, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateErrors, PreschoolApplicationFormForDependantCreateResponses, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponses, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponses, SchemaRetrieveData, SchemaRetrieveResponses, VtjDependantsRetrieveData, VtjDependantsRetrieveErrors, VtjDependantsRetrieveResponses, VtjGuardiansRetrieveData, VtjGuardiansRetrieveErrors, VtjGuardiansRetrieveResponses, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveErrors, VtjIsProtectedFamilyRetrieveResponses } from './types.gen';
+import type { AuthIdentityCreateData, AuthIdentityCreateErrors, AuthIdentityCreateResponses, PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponses, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateErrors, PreschoolApplicationFormForDependantCreateResponses, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponses, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponses, SchemaRetrieveData, SchemaRetrieveResponses, VtjDependantsRetrieveData, VtjDependantsRetrieveErrors, VtjDependantsRetrieveResponses, VtjGuardiansRetrieveData, VtjGuardiansRetrieveErrors, VtjGuardiansRetrieveResponses, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveErrors, VtjIsProtectedFamilyRetrieveResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -19,16 +19,28 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 };
 
 /**
+ * POST /auth/identity/
+ *
+ * Reads the logged-in user's henkilötunnus from Helsinki-profiili and stores it on the user.
+ * The frontend calls this after login; the VTJ and application endpoints need it.
+ */
+export const authIdentityCreate = <ThrowOnError extends boolean = false>(options: Options<AuthIdentityCreateData, ThrowOnError>) => (options.client ?? client).post<AuthIdentityCreateResponses, AuthIdentityCreateErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/auth/identity/',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
  * POST /preschool-application-form/
  *
  * Create a new application in "draft" status.
  */
 export const preschoolApplicationFormCreate = <ThrowOnError extends boolean = false>(options?: Options<PreschoolApplicationFormCreateData, ThrowOnError>) => (options?.client ?? client).post<PreschoolApplicationFormCreateResponses, unknown, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'sessionid',
-            type: 'apiKey'
-        }, { scheme: 'basic', type: 'http' }],
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/preschool-application-form/',
     ...options,
     headers: {
@@ -47,11 +59,7 @@ export const preschoolApplicationFormCreate = <ThrowOnError extends boolean = fa
  * Submitted applications cannot be modified.
  */
 export const preschoolApplicationFormRetrieve = <ThrowOnError extends boolean = false>(options: Options<PreschoolApplicationFormRetrieveData, ThrowOnError>) => (options.client ?? client).get<PreschoolApplicationFormRetrieveResponses, unknown, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'sessionid',
-            type: 'apiKey'
-        }, { scheme: 'basic', type: 'http' }],
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/preschool-application-form/{uuid}/',
     ...options
 });
@@ -66,11 +74,7 @@ export const preschoolApplicationFormRetrieve = <ThrowOnError extends boolean = 
  * Submitted applications cannot be modified.
  */
 export const preschoolApplicationFormUpdate = <ThrowOnError extends boolean = false>(options: Options<PreschoolApplicationFormUpdateData, ThrowOnError>) => (options.client ?? client).put<PreschoolApplicationFormUpdateResponses, unknown, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'sessionid',
-            type: 'apiKey'
-        }, { scheme: 'basic', type: 'http' }],
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/preschool-application-form/{uuid}/',
     ...options,
     headers: {
@@ -80,18 +84,14 @@ export const preschoolApplicationFormUpdate = <ThrowOnError extends boolean = fa
 });
 
 /**
- * POST /preschool-application-form/for-dependant/<uuid:dependant_id>/?ssn=<guardian_ssn>
+ * POST /preschool-application-form/for-dependant/<uuid:dependant_id>/
  *
  * Returns the dependant's existing application (200), or creates a new draft (201)
  * prefilled with the child's and guardians' VTJ data.
  * Refused (403) when the family has an active Turvakielto.
  */
 export const preschoolApplicationFormForDependantCreate = <ThrowOnError extends boolean = false>(options: Options<PreschoolApplicationFormForDependantCreateData, ThrowOnError>) => (options.client ?? client).post<PreschoolApplicationFormForDependantCreateResponses, PreschoolApplicationFormForDependantCreateErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'sessionid',
-            type: 'apiKey'
-        }, { scheme: 'basic', type: 'http' }],
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/preschool-application-form/for-dependant/{dependant_id}/',
     ...options
 });
@@ -103,25 +103,17 @@ export const preschoolApplicationFormForDependantCreate = <ThrowOnError extends 
  * - JSON: application/vnd.oai.openapi+json
  */
 export const schemaRetrieve = <ThrowOnError extends boolean = false>(options?: Options<SchemaRetrieveData, ThrowOnError>) => (options?.client ?? client).get<SchemaRetrieveResponses, unknown, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'sessionid',
-            type: 'apiKey'
-        }, { scheme: 'basic', type: 'http' }],
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/schema/',
     ...options
 });
 
 /**
- * GET /dependants/?ssn=<guardian_ssn>
- * - that guardian's own dependants.
+ * GET /dependants/
+ * - the logged-in guardian's own dependants.
  */
-export const vtjDependantsRetrieve = <ThrowOnError extends boolean = false>(options: Options<VtjDependantsRetrieveData, ThrowOnError>) => (options.client ?? client).get<VtjDependantsRetrieveResponses, VtjDependantsRetrieveErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'sessionid',
-            type: 'apiKey'
-        }, { scheme: 'basic', type: 'http' }],
+export const vtjDependantsRetrieve = <ThrowOnError extends boolean = false>(options?: Options<VtjDependantsRetrieveData, ThrowOnError>) => (options?.client ?? client).get<VtjDependantsRetrieveResponses, VtjDependantsRetrieveErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/vtj/dependants/',
     ...options
 });
@@ -133,25 +125,17 @@ export const vtjDependantsRetrieve = <ThrowOnError extends boolean = false>(opti
  * `dependant_id` is the  DATABASE id from a prior /dependants/ response's "id" field
  */
 export const vtjGuardiansRetrieve = <ThrowOnError extends boolean = false>(options: Options<VtjGuardiansRetrieveData, ThrowOnError>) => (options.client ?? client).get<VtjGuardiansRetrieveResponses, VtjGuardiansRetrieveErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'sessionid',
-            type: 'apiKey'
-        }, { scheme: 'basic', type: 'http' }],
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/vtj/guardians/{dependant_id}/',
     ...options
 });
 
 /**
- * GET /is_protected_family/?ssn=<guardian_ssn>&end_user=<end_user>
- * - fetches and persists the guardian's whole family
+ * GET /is_protected_family/
+ * - fetches and persists the logged-in guardian's whole family
  */
-export const vtjIsProtectedFamilyRetrieve = <ThrowOnError extends boolean = false>(options: Options<VtjIsProtectedFamilyRetrieveData, ThrowOnError>) => (options.client ?? client).get<VtjIsProtectedFamilyRetrieveResponses, VtjIsProtectedFamilyRetrieveErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'sessionid',
-            type: 'apiKey'
-        }, { scheme: 'basic', type: 'http' }],
+export const vtjIsProtectedFamilyRetrieve = <ThrowOnError extends boolean = false>(options?: Options<VtjIsProtectedFamilyRetrieveData, ThrowOnError>) => (options?.client ?? client).get<VtjIsProtectedFamilyRetrieveResponses, VtjIsProtectedFamilyRetrieveErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
     url: '/vtj/is_protected_family/',
     ...options
 });

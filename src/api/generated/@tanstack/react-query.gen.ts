@@ -3,8 +3,28 @@
 import { type DefaultError, queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { type Options, preschoolApplicationFormCreate, preschoolApplicationFormForDependantCreate, preschoolApplicationFormRetrieve, preschoolApplicationFormUpdate, schemaRetrieve, vtjDependantsRetrieve, vtjGuardiansRetrieve, vtjIsProtectedFamilyRetrieve } from '../sdk.gen';
-import type { PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponse, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateError, PreschoolApplicationFormForDependantCreateResponse, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponse, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponse, SchemaRetrieveData, SchemaRetrieveResponse, VtjDependantsRetrieveData, VtjDependantsRetrieveError, VtjDependantsRetrieveResponse, VtjGuardiansRetrieveData, VtjGuardiansRetrieveError, VtjGuardiansRetrieveResponse, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveError, VtjIsProtectedFamilyRetrieveResponse } from '../types.gen';
+import { authIdentityCreate, type Options, preschoolApplicationFormCreate, preschoolApplicationFormForDependantCreate, preschoolApplicationFormRetrieve, preschoolApplicationFormUpdate, schemaRetrieve, vtjDependantsRetrieve, vtjGuardiansRetrieve, vtjIsProtectedFamilyRetrieve } from '../sdk.gen';
+import type { AuthIdentityCreateData, AuthIdentityCreateError, AuthIdentityCreateResponse, PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponse, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateError, PreschoolApplicationFormForDependantCreateResponse, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponse, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponse, SchemaRetrieveData, SchemaRetrieveResponse, VtjDependantsRetrieveData, VtjDependantsRetrieveError, VtjDependantsRetrieveResponse, VtjGuardiansRetrieveData, VtjGuardiansRetrieveError, VtjGuardiansRetrieveResponse, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveError, VtjIsProtectedFamilyRetrieveResponse } from '../types.gen';
+
+/**
+ * POST /auth/identity/
+ *
+ * Reads the logged-in user's henkilötunnus from Helsinki-profiili and stores it on the user.
+ * The frontend calls this after login; the VTJ and application endpoints need it.
+ */
+export const authIdentityCreateMutation = (options?: Partial<Options<AuthIdentityCreateData>>): UseMutationOptions<AuthIdentityCreateResponse, AuthIdentityCreateError, Options<AuthIdentityCreateData>> => {
+    const mutationOptions: UseMutationOptions<AuthIdentityCreateResponse, AuthIdentityCreateError, Options<AuthIdentityCreateData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await authIdentityCreate({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
 
 /**
  * POST /preschool-application-form/
@@ -106,7 +126,7 @@ export const preschoolApplicationFormUpdateMutation = (options?: Partial<Options
 };
 
 /**
- * POST /preschool-application-form/for-dependant/<uuid:dependant_id>/?ssn=<guardian_ssn>
+ * POST /preschool-application-form/for-dependant/<uuid:dependant_id>/
  *
  * Returns the dependant's existing application (200), or creates a new draft (201)
  * prefilled with the child's and guardians' VTJ data.
@@ -147,13 +167,13 @@ export const schemaRetrieveOptions = (options?: Options<SchemaRetrieveData>) => 
     queryKey: schemaRetrieveQueryKey(options)
 });
 
-export const vtjDependantsRetrieveQueryKey = (options: Options<VtjDependantsRetrieveData>) => createQueryKey('vtjDependantsRetrieve', options);
+export const vtjDependantsRetrieveQueryKey = (options?: Options<VtjDependantsRetrieveData>) => createQueryKey('vtjDependantsRetrieve', options);
 
 /**
- * GET /dependants/?ssn=<guardian_ssn>
- * - that guardian's own dependants.
+ * GET /dependants/
+ * - the logged-in guardian's own dependants.
  */
-export const vtjDependantsRetrieveOptions = (options: Options<VtjDependantsRetrieveData>) => queryOptions<VtjDependantsRetrieveResponse, VtjDependantsRetrieveError, VtjDependantsRetrieveResponse, ReturnType<typeof vtjDependantsRetrieveQueryKey>>({
+export const vtjDependantsRetrieveOptions = (options?: Options<VtjDependantsRetrieveData>) => queryOptions<VtjDependantsRetrieveResponse, VtjDependantsRetrieveError, VtjDependantsRetrieveResponse, ReturnType<typeof vtjDependantsRetrieveQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
         const { data } = await vtjDependantsRetrieve({
             ...options,
@@ -187,13 +207,13 @@ export const vtjGuardiansRetrieveOptions = (options: Options<VtjGuardiansRetriev
     queryKey: vtjGuardiansRetrieveQueryKey(options)
 });
 
-export const vtjIsProtectedFamilyRetrieveQueryKey = (options: Options<VtjIsProtectedFamilyRetrieveData>) => createQueryKey('vtjIsProtectedFamilyRetrieve', options);
+export const vtjIsProtectedFamilyRetrieveQueryKey = (options?: Options<VtjIsProtectedFamilyRetrieveData>) => createQueryKey('vtjIsProtectedFamilyRetrieve', options);
 
 /**
- * GET /is_protected_family/?ssn=<guardian_ssn>&end_user=<end_user>
- * - fetches and persists the guardian's whole family
+ * GET /is_protected_family/
+ * - fetches and persists the logged-in guardian's whole family
  */
-export const vtjIsProtectedFamilyRetrieveOptions = (options: Options<VtjIsProtectedFamilyRetrieveData>) => queryOptions<VtjIsProtectedFamilyRetrieveResponse, VtjIsProtectedFamilyRetrieveError, VtjIsProtectedFamilyRetrieveResponse, ReturnType<typeof vtjIsProtectedFamilyRetrieveQueryKey>>({
+export const vtjIsProtectedFamilyRetrieveOptions = (options?: Options<VtjIsProtectedFamilyRetrieveData>) => queryOptions<VtjIsProtectedFamilyRetrieveResponse, VtjIsProtectedFamilyRetrieveError, VtjIsProtectedFamilyRetrieveResponse, ReturnType<typeof vtjIsProtectedFamilyRetrieveQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
         const { data } = await vtjIsProtectedFamilyRetrieve({
             ...options,

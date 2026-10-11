@@ -12,14 +12,12 @@ interface DependantItemProps {
   item: Dependant;
   // Position in the dependant list, used only for data-testids.
   index: number;
-  guardianSsn: string;
   canApply: boolean;
 }
 
 export const DependantItem = ({
   item,
   index,
-  guardianSsn,
   canApply,
 }: DependantItemProps) => {
   const { t } = useTranslation();
@@ -72,10 +70,7 @@ export const DependantItem = ({
               data-testid={`btn-open-application-${index}`}
               disabled={openApplication.isPending}
               onClick={() =>
-                openApplication.mutate({
-                  path: { dependant_id: item.id },
-                  query: { ssn: guardianSsn },
-                })
+                openApplication.mutate({ path: { dependant_id: item.id } })
               }
             >
               {t('landing.applicationLink')}

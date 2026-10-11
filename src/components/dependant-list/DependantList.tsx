@@ -10,38 +10,27 @@ import {
   vtjDependantsRetrieveOptions,
 } from '../../api/generated/@tanstack/react-query.gen';
 
-// Fetches the family from VTJ and saves it to the backend DB, so it is not refetched automatically.
-function useFamilyProtectionStatus(guardianSsn: string) {
+// Fetches the logged-in guardian's family from VTJ and saves it to the backend DB, so it is not refetched automatically.
+function useFamilyProtectionStatus() {
   return useQuery({
-    ...vtjIsProtectedFamilyRetrieveOptions({
-      query: { ssn: guardianSsn },
-    }),
+    ...vtjIsProtectedFamilyRetrieveOptions(),
     staleTime: Infinity,
   });
 }
 
 // Reads the dependants saved by the family sync above, so it must run after it.
-function useGuardianDependants(guardianSsn: string, enabled: boolean) {
+function useGuardianDependants(enabled: boolean) {
   return useQuery({
-    ...vtjDependantsRetrieveOptions({
-      query: { ssn: guardianSsn },
-    }),
+    ...vtjDependantsRetrieveOptions(),
     enabled,
   });
 }
 
-interface DependantListProps {
-  guardianSsn: string;
-}
-
-export const DependantList = ({ guardianSsn }: DependantListProps) => {
+export const DependantList = () => {
   const { t } = useTranslation();
 
-  const familyProtection = useFamilyProtectionStatus(guardianSsn);
-  const dependants = useGuardianDependants(
-    guardianSsn,
-    familyProtection.data !== undefined,
-  );
+  const familyProtection = useFamilyProtectionStatus();
+  const dependants = useGuardianDependants(familyProtection.data !== undefined);
 
   if (familyProtection.isError || dependants.isError) {
     return (
@@ -81,7 +70,6 @@ export const DependantList = ({ guardianSsn }: DependantListProps) => {
           key={item.id}
           item={item}
           index={index}
-          guardianSsn={guardianSsn}
           canApply={!isProtectedFamily}
         />
       ))}

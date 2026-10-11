@@ -5,7 +5,9 @@
 write_env_config() {
   local name value
   printf 'window.__ENV__ = {\n'
-  for name in VITE_API_BASE_URL VITE_LOCIZE_PROJECT_ID; do
+  for name in VITE_API_BASE_URL VITE_LOCIZE_PROJECT_ID VITE_OIDC_AUTHORITY \
+    VITE_OIDC_CLIENT_ID VITE_OIDC_SCOPE VITE_OIDC_API_AUDIENCE \
+    VITE_OIDC_PROFILE_API_AUDIENCE; do
     if [ -n "${!name:-}" ]; then
       value=$(printf '%s' "${!name}" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')
       printf '  %s: "%s",\n' "$name" "$value"
