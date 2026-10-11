@@ -20,10 +20,10 @@ export const Esikatselu = ({}) => {
 
   const laajuus = [];
   if (values.hoidonTarve) {
-    laajuus.push(t(`taydentava.options.${values.hoidonTarve}`));
+    laajuus.push(t(`vakaOptions.${values.hoidonTarve}`));
   }
   if (values.palvelunTarve) {
-    laajuus.push(t(`taydentava.options.${values.palvelunTarve}`));
+    laajuus.push(t(`vakaOptions.${values.palvelunTarve}`));
   }
 
   return (
