@@ -2,9 +2,11 @@ import './App.css';
 import { useTranslation } from 'react-i18next';
 import { Footer, Header, Logo, logoFi, logoSv } from 'hds-react';
 import { Outlet } from 'react-router';
+import { toLanguage } from './i18n/i18n';
 
 function App() {
   const { i18n } = useTranslation();
+  const language = toLanguage(i18n.resolvedLanguage);
 
   const changeLanguage = (lang: string) => {
     i18n.changeLanguage(lang);
@@ -21,7 +23,7 @@ function App() {
       <Header
         languages={languages}
         onDidChangeLanguage={(newLanguage) => changeLanguage(newLanguage)}
-        defaultLanguage={i18n.language}
+        defaultLanguage={language}
       >
         <Header.ActionBar
           className=""
@@ -29,9 +31,7 @@ function App() {
           title="test"
           titleHref="/"
           logoHref="/"
-          logo={
-            <Logo src={i18n.language === 'sv' ? logoSv : logoFi} alt="asd" />
-          }
+          logo={<Logo src={language === 'sv' ? logoSv : logoFi} alt="asd" />}
         >
           <Header.LanguageSelector />
         </Header.ActionBar>

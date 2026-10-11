@@ -25,10 +25,16 @@ const VUOROHOITO_OPTIONS: PalvelunTarveEnum[] = [
   'esiopetus_4h_101_160h_vuoroh',
   'esiopetus_4h_160h_vuoroh',
 ];
+const ARKIPOISSAOLOT_MIN = 0;
+const ARKIPOISSAOLOT_MAX = 30;
 
 export const VarhaiskasvatuksenLaajuus = ({}) => {
   const { control, watch } = useFormContext<FormValues>();
   const { t } = useTranslation('lomake');
+  const arkipoissaolotRangeError = t('errors.arkipoissaolotRange', {
+    min: ARKIPOISSAOLOT_MIN,
+    max: ARKIPOISSAOLOT_MAX,
+  });
 
   const taydentavaVarhaiskasvatus = useWatch({
     control,
@@ -109,16 +115,33 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
             required: taydentavaVarhaiskasvatus
               ? 'Syötä poissaolojen määrä'
               : false,
+            min: {
+              value: ARKIPOISSAOLOT_MIN,
+              message: arkipoissaolotRangeError,
+            },
+            max: {
+              value: ARKIPOISSAOLOT_MAX,
+              message: arkipoissaolotRangeError,
+            },
+            validate: (value) =>
+              value == null ||
+              Number.isInteger(value) ||
+              t('errors.arkipoissaolotInteger'),
           }}
           render={({ field, fieldState }) => (
             <NumberInput
               id="arki-poissaolot"
               data-testid="input-arki-poissaolot"
               label={t('varhaiskasvatuksenLaajuus.arkipoissaolotLabel')}
-              min={0}
-              max={30}
+              min={ARKIPOISSAOLOT_MIN}
+              max={ARKIPOISSAOLOT_MAX}
               step={1}
-              onChange={field.onChange}
+              value={field.value ?? ''}
+              onChange={(e) =>
+                field.onChange(
+                  e.target.value === '' ? null : Number(e.target.value),
+                )
+              }
               onBlur={field.onBlur}
               disabled={field.disabled}
               invalid={!!fieldState.error}

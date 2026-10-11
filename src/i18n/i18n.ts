@@ -4,6 +4,12 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-locize-backend';
 import { config } from '../config';
 
+export const SUPPORTED_LANGUAGES = ['fi', 'en', 'sv'] as const;
+export type Language = (typeof SUPPORTED_LANGUAGES)[number];
+
+export const toLanguage = (lng?: string): Language =>
+  SUPPORTED_LANGUAGES.find((supported) => supported === lng) ?? 'fi';
+
 i18n
   .use(Backend)
   .use(LanguageDetector)
@@ -11,7 +17,7 @@ i18n
   .init({
     debug: true,
     fallbackLng: 'fi',
-    supportedLngs: ['fi', 'en', 'sv'],
+    supportedLngs: [...SUPPORTED_LANGUAGES],
     ns: ['etusivu', 'lomake'],
     interpolation: {
       escapeValue: false,
