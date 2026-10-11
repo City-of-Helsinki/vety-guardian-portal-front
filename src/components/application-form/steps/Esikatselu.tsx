@@ -210,6 +210,13 @@ export const Esikatselu = ({}) => {
               label={t('esikatselu.osoite')}
               value={application.h2Osoite}
             />
+          </LabelValueWrapper>
+          <LabelValueWrapper>
+            <LabelValue
+              data-testid="summary-h2-puhelinnumero"
+              label={t('esikatselu.puhelinnumero')}
+              value={values.h2Puhelinnumero}
+            />
             <LabelValue
               data-testid="summary-h2-sahkoposti"
               label={t('esikatselu.sahkoposti')}
