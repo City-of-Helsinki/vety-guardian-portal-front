@@ -8,6 +8,7 @@ import { type FormValues, type FormStep } from '../../types';
 import styles from './ApplicationForm.module.css';
 import { useNavigate } from 'react-router';
 import { StepsContextProvider } from './StepsContext';
+import { toLanguage } from '../../i18n/i18n';
 import { useApplicationData } from './ApplicationDataContext';
 
 // Steps are filled up to the last one whose saved values say so, stopping at the first
@@ -129,7 +130,7 @@ export const ApplicationFormSteps = ({
         <Stepper
           data-testid="stepper"
           steps={stepperSteps}
-          language={i18n.language}
+          language={toLanguage(i18n.resolvedLanguage)}
           selectedStep={current}
           onStepClick={goTo}
         />
