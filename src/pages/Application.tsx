@@ -38,12 +38,17 @@ const omitFields = ['h1SahkopostiConfirm', 'h2SahkopostiConfirm'];
 const toBody = (
   values: FormValues,
   status: StatusEnum,
-): PreschoolApplicationWritable => ({
-  ...Object.fromEntries(
-    Object.entries(values).filter(([k]) => !omitFields.includes(k)),
-  ),
-  status,
-});
+): PreschoolApplicationWritable => {
+  const omit = values.taydentavaVarhaiskasvatus
+    ? omitFields
+    : [...omitFields, 'arkipoissaolotLkm'];
+  return {
+    ...Object.fromEntries(
+      Object.entries(values).filter(([k]) => !omit.includes(k)),
+    ),
+    status,
+  };
+};
 
 // Only the editable fields go into the form; the read-only VTJ data is shown via ApplicationDataContext.
 const toFormValues = (application: PreschoolApplication): FormValues => ({
@@ -57,12 +62,15 @@ const toFormValues = (application: PreschoolApplication): FormValues => ({
     application.taydentavaVarhaiskasvatusAloitus,
   hoidonTarve: application.hoidonTarve,
   palvelunTarve: application.palvelunTarve,
-  arkipoissaolotLkm: application.arkipoissaolotLkm,
+  arkipoissaolotLkm: application.arkipoissaolotLkm ?? 0,
   erityisenTuenTarve: application.erityisenTuenTarve,
   laakehoidonTarve: application.laakehoidonTarve,
   h1Sahkoposti: application.h1Sahkoposti,
+  // Confirm fields aren't persisted; a saved email has already been confirmed.
+  h1SahkopostiConfirm: application.h1Sahkoposti ?? undefined,
   h1Puhelinnumero: application.h1Puhelinnumero,
   h2Sahkoposti: application.h2Sahkoposti,
+  h2SahkopostiConfirm: application.h2Sahkoposti ?? undefined,
   h2Puhelinnumero: application.h2Puhelinnumero,
   status: application.status,
 });
@@ -136,6 +144,7 @@ export const Application = ({}) => {
       label: t('stepper.taydentavaLisatiedot'),
       fields: ['taydentavaVarhaiskasvatusAloitus', 'hoidonTarve'],
       component: TaydentavaLisatiedot,
+      isSkipped: (v) => v.taydentavaVarhaiskasvatus === false,
       isFilled: (v) =>
         v.taydentavaVarhaiskasvatus === false ||
         (!!v.taydentavaVarhaiskasvatusAloitus && !!v.hoidonTarve),
@@ -145,6 +154,7 @@ export const Application = ({}) => {
       label: t('stepper.varhaiskasvatuksenLaajuus'),
       fields: ['palvelunTarve', 'arkipoissaolotLkm'],
       component: VarhaiskasvatuksenLaajuus,
+      isSkipped: (v) => v.taydentavaVarhaiskasvatus === false,
       isFilled: (v) =>
         v.taydentavaVarhaiskasvatus === false ||
         (!!v.palvelunTarve && v.arkipoissaolotLkm != null),
@@ -158,7 +168,14 @@ export const Application = ({}) => {
     {
       id: 'yhteystiedot',
       label: t('stepper.yhteystiedot'),
-      fields: ['h1Sahkoposti', 'h2Sahkoposti'],
+      fields: [
+        'h1Sahkoposti',
+        'h1SahkopostiConfirm',
+        'h1Puhelinnumero',
+        'h2Sahkoposti',
+        'h2SahkopostiConfirm',
+        'h2Puhelinnumero',
+      ],
       component: Yhteystiedot,
       isFilled: (v) => !!v.h1Sahkoposti,
     },

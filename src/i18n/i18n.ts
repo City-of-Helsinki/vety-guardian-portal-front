@@ -7,6 +7,11 @@ import { config } from '../config';
 i18n.on('languageChanged', (lng) => {
   document.documentElement.lang = lng;
 });
+export const SUPPORTED_LANGUAGES = ['fi', 'en', 'sv'] as const;
+export type Language = (typeof SUPPORTED_LANGUAGES)[number];
+
+export const toLanguage = (lng?: string): Language =>
+  SUPPORTED_LANGUAGES.find((supported) => supported === lng) ?? 'fi';
 
 i18n
   .use(Backend)
@@ -15,7 +20,7 @@ i18n
   .init({
     debug: true,
     fallbackLng: 'fi',
-    supportedLngs: ['fi', 'en', 'sv'],
+    supportedLngs: [...SUPPORTED_LANGUAGES],
     ns: ['etusivu', 'lomake'],
     interpolation: {
       escapeValue: false,

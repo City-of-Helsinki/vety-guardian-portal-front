@@ -20,10 +20,10 @@ export const Esikatselu = ({}) => {
 
   const laajuus = [];
   if (values.hoidonTarve) {
-    laajuus.push(t(`taydentava.options.${values.hoidonTarve}`));
+    laajuus.push(t(`vakaOptions.${values.hoidonTarve}`));
   }
   if (values.palvelunTarve) {
-    laajuus.push(t(`taydentava.options.${values.palvelunTarve}`));
+    laajuus.push(t(`vakaOptions.${values.palvelunTarve}`));
   }
 
   return (
@@ -159,6 +159,17 @@ export const Esikatselu = ({}) => {
             value={laajuus}
           />
         </LabelValueWrapper>
+        <LabelValueWrapper>
+          <LabelValue
+            data-testid="summary-arkipoissaolot"
+            label={t('esikatselu.arkipoissaolot')}
+            value={
+              values.taydentavaVarhaiskasvatus
+                ? values.arkipoissaolotLkm?.toString()
+                : null
+            }
+          />
+        </LabelValueWrapper>
       </SummarySection>
       <SummarySection
         data-testid="section-huoltajan-tiedot"
@@ -212,6 +223,13 @@ export const Esikatselu = ({}) => {
               data-testid="summary-h2-osoite"
               label={t('esikatselu.osoite')}
               value={application.h2Osoite}
+            />
+          </LabelValueWrapper>
+          <LabelValueWrapper>
+            <LabelValue
+              data-testid="summary-h2-puhelinnumero"
+              label={t('esikatselu.puhelinnumero')}
+              value={values.h2Puhelinnumero}
             />
             <LabelValue
               data-testid="summary-h2-sahkoposti"

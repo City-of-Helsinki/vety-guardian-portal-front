@@ -8,18 +8,44 @@ import {
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';
+import type { PalvelunTarveEnum } from '../../../api/generated/types.gen';
 import styles from '../ApplicationForm.module.css';
 import { useTranslation } from 'react-i18next';
 import { MarkdownContent } from '../../markdown-content';
 
+const VAKA_OPTIONS: PalvelunTarveEnum[] = [
+  'esiopetus_4h_1h_vaka',
+  'esiopetus_4h_1_3h_vaka',
+  'esiopetus_4h_3_4h_vaka',
+  'esiopetus_4h_4_6h_vaka',
+];
+
+const VUOROHOITO_OPTIONS: PalvelunTarveEnum[] = [
+  'esiopetus_4h_61_100h_vuoroh',
+  'esiopetus_4h_101_160h_vuoroh',
+  'esiopetus_4h_160h_vuoroh',
+];
+const ARKIPOISSAOLOT_MIN = 0;
+const ARKIPOISSAOLOT_MAX = 30;
+
 export const VarhaiskasvatuksenLaajuus = ({}) => {
   const { control, watch } = useFormContext<FormValues>();
   const { t } = useTranslation('lomake');
+  const arkipoissaolotRangeError = t('errors.arkipoissaolotRange', {
+    min: ARKIPOISSAOLOT_MIN,
+    max: ARKIPOISSAOLOT_MAX,
+  });
 
   const taydentavaVarhaiskasvatus = useWatch({
     control,
     name: 'taydentavaVarhaiskasvatus',
   });
+  const hoidonTarve = useWatch({ control, name: 'hoidonTarve' });
+
+  const palvelunTarveOptions =
+    hoidonTarve === 'vuorohoito_varhaiskasvatus'
+      ? VUOROHOITO_OPTIONS
+      : VAKA_OPTIONS;
 
   return (
     <ApplicationFormStep
@@ -55,70 +81,25 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
               data-testid="group-palvelun-tarve"
               errorText={fieldState.error?.message}
             >
-              <div
-                id="4h_1h_vaka-item"
-                className={styles['selection-group-item']}
-              >
-                <RadioButton
-                  id="4h_1h_vaka"
-                  data-testid="rb-esiopetus_4h_1h_vaka"
-                  name={field.name}
-                  value="esiopetus_4h_1h_vaka"
-                  label="Esiopetus 4 tuntia, jonka lisäksi enintään tunti täydentävää varhaiskasvatusta"
-                  checked={field.value === 'esiopetus_4h_1h_vaka'}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  disabled={field.disabled}
-                />
-              </div>
-              <div
-                id="4h_1_3h_vaka-item"
-                className={styles['selection-group-item']}
-              >
-                <RadioButton
-                  id="4h_1_3h_vaka"
-                  data-testid="rb-esiopetus_4h_1_3h_vaka"
-                  name={field.name}
-                  value="esiopetus_4h_1_3h_vaka"
-                  label="Esiopetus 4 tuntia, jonka lisäksi 1-3 tuntia täydentävää varhaiskasvatusta"
-                  checked={field.value === 'esiopetus_4h_1_3h_vaka'}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  disabled={field.disabled}
-                />
-              </div>
-              <div
-                id="4h_3_4h_vaka-item"
-                className={styles['selection-group-item']}
-              >
-                <RadioButton
-                  id="4h_3_4h_vaka"
-                  data-testid="rb-esiopetus_4h_3_4h_vaka"
-                  name={field.name}
-                  value="esiopetus_4h_3_4h_vaka"
-                  label="Esiopetus 4 tuntia, jonka lisäksi 3-4 tuntia täydentävää varhaiskasvatusta"
-                  checked={field.value === 'esiopetus_4h_3_4h_vaka'}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  disabled={field.disabled}
-                />
-              </div>
-              <div
-                id="4h_4_6h_vaka-item"
-                className={styles['selection-group-item']}
-              >
-                <RadioButton
-                  id="4h_4_6h_vaka"
-                  data-testid="rb-esiopetus_4h_4_6h_vaka"
-                  name={field.name}
-                  value="esiopetus_4h_4_6h_vaka"
-                  label="Esiopetus 4 tuntia, jonka lisäksi 4-6 tuntia täydentävää varhaiskasvatusta"
-                  checked={field.value === 'esiopetus_4h_4_6h_vaka'}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  disabled={field.disabled}
-                />
-              </div>
+              {palvelunTarveOptions.map((value) => (
+                <div
+                  key={value}
+                  id={`${value}-item`}
+                  className={styles['selection-group-item']}
+                >
+                  <RadioButton
+                    id={value.replace('esiopetus_', '')}
+                    data-testid={`rb-${value}`}
+                    name={field.name}
+                    value={value}
+                    label={t(`vakaOptions.${value}`)}
+                    checked={field.value === value}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    disabled={field.disabled}
+                  />
+                </div>
+              ))}
             </SelectionGroup>
           )}
         />
@@ -138,16 +119,33 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
             required: taydentavaVarhaiskasvatus
               ? 'Syötä poissaolojen määrä'
               : false,
+            min: {
+              value: ARKIPOISSAOLOT_MIN,
+              message: arkipoissaolotRangeError,
+            },
+            max: {
+              value: ARKIPOISSAOLOT_MAX,
+              message: arkipoissaolotRangeError,
+            },
+            validate: (value) =>
+              value == null ||
+              Number.isInteger(value) ||
+              t('errors.arkipoissaolotInteger'),
           }}
           render={({ field, fieldState }) => (
             <NumberInput
               id="arki-poissaolot"
               data-testid="input-arki-poissaolot"
               label={t('varhaiskasvatuksenLaajuus.arkipoissaolotLabel')}
-              min={0}
-              max={30}
+              min={ARKIPOISSAOLOT_MIN}
+              max={ARKIPOISSAOLOT_MAX}
               step={1}
-              onChange={field.onChange}
+              value={field.value ?? ''}
+              onChange={(e) =>
+                field.onChange(
+                  e.target.value === '' ? null : Number(e.target.value),
+                )
+              }
               onBlur={field.onBlur}
               disabled={field.disabled}
               invalid={!!fieldState.error}
