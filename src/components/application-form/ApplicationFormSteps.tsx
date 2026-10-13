@@ -94,7 +94,7 @@ export const ApplicationFormSteps = ({
   // step that still needs filling if the change made later steps incomplete
   // (e.g. selecting extended care after it was previously declined).
   const saveAndGoTo = async (index: number) => {
-    const valid = await trigger(steps[current].fields);
+    const valid = await trigger(steps[current].fields, { shouldTouch: true });
     if (!valid) return;
     const values = getValues();
     const saved = await onStepSave(values, form);
