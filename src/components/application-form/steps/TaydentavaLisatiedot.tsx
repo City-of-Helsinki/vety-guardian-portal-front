@@ -124,8 +124,8 @@ export const TaydentavaLisatiedot = ({}) => {
               className={styles['selection-group-item']}
             >
               <RadioButton
-                id="ymparivuorokautinen"
-                data-testid="rb-ymparivuorokautinen_varhaiskasvatus"
+                id="vuorohoito"
+                data-testid="rb-vuorohoito_varhaiskasvatus"
                 name={field.name}
                 checked={field.value === 'vuorohoito_varhaiskasvatus'}
                 value="vuorohoito_varhaiskasvatus"
