@@ -82,7 +82,11 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
               errorText={fieldState.error?.message}
             >
               {palvelunTarveOptions.map((value) => (
-                <div key={value} className={styles['selection-group-item']}>
+                <div
+                  key={value}
+                  id={`${value}-item`}
+                  className={styles['selection-group-item']}
+                >
                   <RadioButton
                     id={value.replace('esiopetus_', '')}
                     data-testid={`rb-${value}`}

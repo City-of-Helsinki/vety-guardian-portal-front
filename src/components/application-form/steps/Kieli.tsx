@@ -22,7 +22,10 @@ export const Kieli = ({}) => {
             data-testid="group-kieli"
             errorText={fieldState.error?.message}
           >
-            <div className={styles['selection-group-item']}>
+            <div
+              id="esiopetuksen-kieli-fi-item"
+              className={styles['selection-group-item']}
+            >
               <RadioButton
                 id="esiopetuksen-kieli-fi"
                 data-testid="rb-eo-kieli-fi"
@@ -34,7 +37,10 @@ export const Kieli = ({}) => {
                 onBlur={field.onBlur}
               />
             </div>
-            <div className={styles['selection-group-item']}>
+            <div
+              id="esiopetuksen-kieli-sv-item"
+              className={styles['selection-group-item']}
+            >
               <RadioButton
                 id="esiopetuksen-kieli-sv"
                 data-testid="rb-eo-kieli-sv"

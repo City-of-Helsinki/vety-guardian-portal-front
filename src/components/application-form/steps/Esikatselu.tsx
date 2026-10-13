@@ -94,6 +94,7 @@ export const Esikatselu = ({}) => {
             <TextButton
               data-testid="go-to-kieli"
               label={t('edit')}
+              aria-label={`${t('edit')}: ${t('esikatselu.kieli')}`}
               onClick={() => goToStep('kieli')}
             />
           ) : null
@@ -109,6 +110,7 @@ export const Esikatselu = ({}) => {
             <TextButton
               data-testid="go-to-tuki-ja-laakehoito"
               label={t('edit')}
+              aria-label={`${t('edit')}: ${t('esikatselu.tukiJaLaakehoito')}`}
               onClick={() => goToStep('tuki-ja-laakehoito')}
             />
           ) : null
@@ -139,6 +141,7 @@ export const Esikatselu = ({}) => {
             <TextButton
               data-testid="go-to-taydentava"
               label={t('edit')}
+              aria-label={`${t('edit')}: ${t('esikatselu.varhaiskasvatus')}`}
               onClick={() => goToStep('taydentava')}
             />
           ) : null
