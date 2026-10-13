@@ -50,8 +50,11 @@ export const ApplicationFormSteps = ({
   const {
     trigger,
     getValues,
+    setValue,
+    clearErrors,
     formState: { errors },
   } = form;
+  const [savedValues, setSavedValues] = useState(() => getValues());
   const application = useApplicationData();
   const [current, setCurrent] = useState(0);
   // Restore progress from the saved draft, so that e.g. the summary is reachable after logging in again.
@@ -99,6 +102,7 @@ export const ApplicationFormSteps = ({
     const values = getValues();
     const saved = await onStepSave(values, form);
     if (!saved) return;
+    setSavedValues(values);
     const done = new Set(completed).add(steps[current].id);
     steps.forEach((step, i) => {
       if (i !== current && step.isFilled && !step.isFilled(values)) {
@@ -119,14 +123,25 @@ export const ApplicationFormSteps = ({
     );
   };
 
+  const goBackTo = async (index: number) => {
+    const fields = steps[current].fields;
+    if (!(await trigger(fields))) {
+      // Set field values to saved values when going back, because values aren't saved when going backwards
+      // and fields might have invalid values
+      fields.forEach((field) => setValue(field, get(savedValues, field)));
+      clearErrors(fields);
+    }
+    setCurrent(index);
+  };
+
   const next = () => saveAndGoTo(current + 1);
 
-  const previous = () => setCurrent(nearestNotSkipped(current - 1, -1));
+  const previous = () => goBackTo(nearestNotSkipped(current - 1, -1));
 
   const goTo = (_e: React.MouseEvent<HTMLButtonElement>, index: number) => {
     if (skipped.has(steps[index].id)) return;
     if (index < current) {
-      setCurrent(index);
+      void goBackTo(index);
       return;
     }
     if (index > current && isReachable(index)) void saveAndGoTo(index);
@@ -136,7 +151,7 @@ export const ApplicationFormSteps = ({
     const index = steps.findIndex((s) => s.id === id);
     // allow only backwards
     if (index === -1 || index > current) return;
-    setCurrent(index);
+    void goBackTo(index);
   };
 
   // If the backend returns field errors upon submission, then navigate to the first page containing errors.
