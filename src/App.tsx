@@ -10,6 +10,7 @@ import {
   logoSv,
   SessionEndedHandler,
   useAuthenticatedUser,
+  useOidcClientTracking,
   WithAuthenticatedUser,
   WithoutAuthenticatedUser,
 } from 'hds-react';
@@ -19,6 +20,9 @@ import { toLanguage } from './i18n/i18n';
 function App() {
   const { t, i18n } = useTranslation();
   const language = toLanguage(i18n.resolvedLanguage);
+  // useAuthenticatedUser() and With(out)AuthenticatedUser only read the current user;
+  // useOidcClientTracking re-renders the header when the login state changes (e.g. right after the login callback).
+  useOidcClientTracking();
   const user = useAuthenticatedUser();
 
   const changeLanguage = (lang: string) => {
