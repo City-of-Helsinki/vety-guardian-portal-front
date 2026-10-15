@@ -103,7 +103,10 @@ export const TaydentavaLisatiedot = ({}) => {
             data-testid="group-hoidon-tarve"
             errorText={fieldState.error?.message}
           >
-            <div className={styles['selection-group-item']}>
+            <div
+              id="paiva-aikainen-item"
+              className={styles['selection-group-item']}
+            >
               <RadioButton
                 id="paiva-aikainen"
                 data-testid="rb-paivaaikainen_varhaiskasvatus"
@@ -116,14 +119,17 @@ export const TaydentavaLisatiedot = ({}) => {
                 disabled={field.disabled}
               />
             </div>
-            <div className={styles['selection-group-item']}>
+            <div
+              id="ymparivuorokautinen-item"
+              className={styles['selection-group-item']}
+            >
               <RadioButton
                 id="vuorohoito"
                 data-testid="rb-vuorohoito_varhaiskasvatus"
                 name={field.name}
+                checked={field.value === 'vuorohoito_varhaiskasvatus'}
                 value="vuorohoito_varhaiskasvatus"
                 label={t('vakaOptions.vuorohoito_varhaiskasvatus')}
-                checked={field.value === 'vuorohoito_varhaiskasvatus'}
                 onChange={onHoidonTarveChange(field.onChange)}
                 onBlur={field.onBlur}
                 disabled={field.disabled}
