@@ -15,6 +15,8 @@ function useFamilyProtectionStatus() {
   return useQuery({
     ...vtjIsProtectedFamilyRetrieveOptions(),
     staleTime: Infinity,
+    // Every VTJ query is logged. A failure is shown instead of retried.
+    retry: false,
   });
 }
 
@@ -33,13 +35,19 @@ export const DependantList = () => {
   const dependants = useGuardianDependants(familyProtection.data !== undefined);
 
   if (familyProtection.isError || dependants.isError) {
+    // The backend's `code` (e.g. "vtj_person_not_found") is translated in Locize; `error` is only for developers.
+    const code = (familyProtection.error ?? dependants.error)?.code;
+    const unknownError = t(
+      'errors.unknown',
+      'Tapahtui virhe. Yritä myöhemmin uudelleen.',
+    );
     return (
       <Notification
         type="error"
         label={t('landing.error')}
         data-testid="notification-landing-error"
       >
-        {String((familyProtection.error ?? dependants.error)?.error ?? '')}
+        {code ? t(`errors.${code}`, unknownError) : unknownError}
       </Notification>
     );
   }

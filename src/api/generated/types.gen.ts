@@ -54,10 +54,11 @@ export type DependantsResponse = {
 };
 
 /**
- * Schema-only: the `{"error": "..."}` body every error response uses.
+ * Schema-only: the `{"error": "...", "code": "..."}` body every error response uses.
  */
 export type ErrorResponse = {
     error: string;
+    code?: string;
 };
 
 export type Guardian = {
@@ -501,6 +502,7 @@ export type VtjIsProtectedFamilyRetrieveData = {
 };
 
 export type VtjIsProtectedFamilyRetrieveErrors = {
+    404: ErrorResponse;
     502: ErrorResponse;
     503: ErrorResponse;
 };
