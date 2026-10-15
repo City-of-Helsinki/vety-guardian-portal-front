@@ -1,39 +1,26 @@
-import { Button, ButtonVariant } from 'hds-react';
+import { LoginButton, useAuthenticatedUser } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
-import { MOCK_GUARDIANS, useGuardian } from '../auth/guardianContext';
+import { Navigate } from 'react-router';
 
 export const Home = ({}) => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { login } = useGuardian();
+  const { t, i18n } = useTranslation();
+  const user = useAuthenticatedUser();
 
-  const loginAs = (ssn: string) => {
-    login(ssn);
-    navigate('/landing');
-  };
+  if (user) {
+    return <Navigate to="/landing" replace />;
+  }
 
   return (
     <>
       <h1 data-testid="title-home">{t('title')}</h1>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-        {MOCK_GUARDIANS.map((guardian) => (
-          <Button
-            key={guardian.ssn}
-            data-testid={`btn-login-${guardian.ssn}`}
-            variant={ButtonVariant.Primary}
-            onClick={() => loginAs(guardian.ssn)}
-          >
-            {`Login: ${guardian.label} (${guardian.ssn})`}
-            {/*
-            {t('login.asGuardian', {
-              name: guardian.label,
-              ssn: guardian.ssn,
-            })}
-            */}
-          </Button>
-        ))}
-      </div>
+      <LoginButton
+        data-testid="btn-login"
+        errorText={t('login.error', 'Kirjautuminen epäonnistui')}
+        loggingInText={t('login.loggingIn', 'Kirjaudutaan sisään')}
+        redirectionProps={{ language: i18n.resolvedLanguage }}
+      >
+        {t('login.button', 'Kirjaudu sisään')}
+      </LoginButton>
     </>
   );
 };

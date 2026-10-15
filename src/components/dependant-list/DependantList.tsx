@@ -10,47 +10,44 @@ import {
   vtjDependantsRetrieveOptions,
 } from '../../api/generated/@tanstack/react-query.gen';
 
-// Fetches the family from VTJ and saves it to the backend DB, so it is not refetched automatically.
-function useFamilyProtectionStatus(guardianSsn: string) {
+// Fetches the logged-in guardian's family from VTJ and saves it to the backend DB, so it is not refetched automatically.
+function useFamilyProtectionStatus() {
   return useQuery({
-    ...vtjIsProtectedFamilyRetrieveOptions({
-      query: { ssn: guardianSsn },
-    }),
+    ...vtjIsProtectedFamilyRetrieveOptions(),
     staleTime: Infinity,
+    // Every VTJ query is logged. A failure is shown instead of retried.
+    retry: false,
   });
 }
 
 // Reads the dependants saved by the family sync above, so it must run after it.
-function useGuardianDependants(guardianSsn: string, enabled: boolean) {
+function useGuardianDependants(enabled: boolean) {
   return useQuery({
-    ...vtjDependantsRetrieveOptions({
-      query: { ssn: guardianSsn },
-    }),
+    ...vtjDependantsRetrieveOptions(),
     enabled,
   });
 }
 
-interface DependantListProps {
-  guardianSsn: string;
-}
-
-export const DependantList = ({ guardianSsn }: DependantListProps) => {
+export const DependantList = () => {
   const { t } = useTranslation();
 
-  const familyProtection = useFamilyProtectionStatus(guardianSsn);
-  const dependants = useGuardianDependants(
-    guardianSsn,
-    familyProtection.data !== undefined,
-  );
+  const familyProtection = useFamilyProtectionStatus();
+  const dependants = useGuardianDependants(familyProtection.data !== undefined);
 
   if (familyProtection.isError || dependants.isError) {
+    // The backend's `code` (e.g. "vtj_person_not_found") is translated in Locize; `error` is only for developers.
+    const code = (familyProtection.error ?? dependants.error)?.code;
+    const unknownError = t(
+      'errors.unknown',
+      'Tapahtui virhe. Yritä myöhemmin uudelleen.',
+    );
     return (
       <Notification
         type="error"
         label={t('landing.error')}
         data-testid="notification-landing-error"
       >
-        {String((familyProtection.error ?? dependants.error)?.error ?? '')}
+        {code ? t(`errors.${code}`, unknownError) : unknownError}
       </Notification>
     );
   }
@@ -81,7 +78,6 @@ export const DependantList = ({ guardianSsn }: DependantListProps) => {
           key={item.id}
           item={item}
           index={index}
-          guardianSsn={guardianSsn}
           canApply={!isProtectedFamily}
         />
       ))}
