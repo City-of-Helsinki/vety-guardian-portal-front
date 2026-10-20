@@ -18,20 +18,11 @@ export const Taydentava = ({}) => {
       <MarkdownContent data-testid="text-taydentava">
         {t('taydentava.taydentavaText')}
       </MarkdownContent>
-      <Link
-        data-testid="link-vk-maksut"
-        external
-        href="https://www.hel.fi/fi/kasvatus-ja-koulutus/varhaiskasvatus/varhaiskasvatusmaksut"
-      >
-        {t('varhaiskasvatusmaksutAnchor')}
-      </Link>
       <Controller
         name="taydentavaVarhaiskasvatus"
         control={control}
         rules={{
-          validate: (v) =>
-            typeof v === 'boolean' ||
-            'Valitse täydentävän varhaiskasvatuksen tarve',
+          validate: (v) => typeof v === 'boolean' || t('errors.required'),
         }}
         render={({ field, fieldState }) => (
           <SelectionGroup

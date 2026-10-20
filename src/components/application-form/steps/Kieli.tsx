@@ -15,7 +15,7 @@ export const Kieli = ({}) => {
       <Controller
         name="kieli"
         control={control}
-        rules={{ required: 'Valitse esiopetuksen kieli' }}
+        rules={{ required: t('errors.required') }}
         render={({ field, fieldState }) => (
           <SelectionGroup
             className={styles['selection-group']}

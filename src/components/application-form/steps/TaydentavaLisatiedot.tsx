@@ -46,13 +46,6 @@ export const TaydentavaLisatiedot = ({}) => {
       <MarkdownContent data-testid="text-taydentava-lisatiedot">
         {t('taydentavaLisatiedot.taydentavaLisatiedotText')}
       </MarkdownContent>
-      <Link
-        data-testid="link-vk-maksut"
-        external
-        href="https://www.hel.fi/fi/kasvatus-ja-koulutus/varhaiskasvatus/varhaiskasvatusmaksut"
-      >
-        {t('varhaiskasvatusmaksutAnchor')}
-      </Link>
       <h3 data-testid="title-taydentava-lisatiedot-fields">
         {t('taydentavaLisatiedot.fieldsTitle')}
       </h3>
@@ -65,9 +58,7 @@ export const TaydentavaLisatiedot = ({}) => {
           control={control}
           disabled={!watch('taydentavaVarhaiskasvatus')}
           rules={{
-            required: taydentavaVarhaiskasvatus
-              ? 'Anna aloituspäivämäärä'
-              : false,
+            required: taydentavaVarhaiskasvatus ? t('errors.required') : false,
           }}
           render={({ field, fieldState }) => (
             <DateInput
@@ -95,7 +86,7 @@ export const TaydentavaLisatiedot = ({}) => {
         control={control}
         disabled={!watch('taydentavaVarhaiskasvatus')}
         rules={{
-          required: taydentavaVarhaiskasvatus ? 'Valitse hoidon tarve' : false,
+          required: taydentavaVarhaiskasvatus ? t('errors.required') : false,
         }}
         render={({ field, fieldState }) => (
           <SelectionGroup
