@@ -16,9 +16,9 @@ export const Alku = ({}) => {
         {t('alku.introText')}
       </MarkdownContent>
       <Divider />
-      <p data-testid="text-yksityinen-description">
+      <MarkdownContent data-testid="text-yksityinen-description">
         {t('alku.yksityinenDescription')}
-      </p>
+      </MarkdownContent>
       <Controller
         name="hakenutEnsisijaisestiYksityiseen"
         control={control}
