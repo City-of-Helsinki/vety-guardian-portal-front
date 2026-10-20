@@ -122,12 +122,12 @@ export const Esikatselu = ({}) => {
           <div>
             {values.erityisenTuenTarve && (
               <p data-testid="summary-erityinen-tuki">
-                {t('tukiJaLaakehoito.laakehoitoLabel')}
+                {t('tukiJaLaakehoito.erityinenTukiLabel')}
               </p>
             )}
             {values.laakehoidonTarve && (
               <p data-testid="summary-laakehoito">
-                {t('tukiJaLaakehoito.erityinenTukiLabel')}
+                {t('tukiJaLaakehoito.laakehoitoLabel')}
               </p>
             )}
           </div>

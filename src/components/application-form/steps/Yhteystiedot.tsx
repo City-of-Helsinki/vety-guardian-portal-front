@@ -29,7 +29,7 @@ export const Yhteystiedot = ({}) => {
           label={t('yhteystiedot.emailLabel')}
           type="email"
           {...register('h1Sahkoposti', {
-            required: t('errors.emailRequired'),
+            required: t('errors.required'),
             pattern: {
               value: EMAIL_PATTERN,
               message: t('errors.emailInvalid'),
@@ -45,7 +45,7 @@ export const Yhteystiedot = ({}) => {
           label={t('yhteystiedot.emailConfirmLabel')}
           type="email"
           {...register('h1SahkopostiConfirm', {
-            required: t('errors.emailRequired'),
+            required: t('errors.required'),
             validate: (value, values) =>
               value === values.h1Sahkoposti || t('errors.emailNotMatching'),
           })}
@@ -58,7 +58,7 @@ export const Yhteystiedot = ({}) => {
           label={t('yhteystiedot.phoneLabel')}
           type="tel"
           {...register('h1Puhelinnumero', {
-            required: t('errors.phoneRequired'),
+            required: t('errors.required'),
             pattern: {
               value: PHONE_PATTERN,
               message: t('errors.phoneInvalid'),

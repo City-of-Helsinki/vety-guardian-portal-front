@@ -55,13 +55,6 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
       <MarkdownContent data-testid="text-varhaiskasvatuksen-laajuus">
         {t('varhaiskasvatuksenLaajuus.varhaiskasvatuksenLaajuusText')}
       </MarkdownContent>
-      <Link
-        data-testid="link-vk-maksut"
-        external
-        href="https://www.hel.fi/fi/kasvatus-ja-koulutus/varhaiskasvatus/varhaiskasvatusmaksut"
-      >
-        {t('varhaiskasvatusmaksutAnchor')}
-      </Link>
       <Fieldset
         heading={t('varhaiskasvatuksenLaajuus.selectionGroupLabel')}
         data-testid="fieldset-palvelun-tarve"
@@ -71,9 +64,7 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
           control={control}
           disabled={!watch('taydentavaVarhaiskasvatus')}
           rules={{
-            required: taydentavaVarhaiskasvatus
-              ? 'Valitse hoidon tarve'
-              : false,
+            required: taydentavaVarhaiskasvatus ? t('errors.required') : false,
           }}
           render={({ field, fieldState }) => (
             <SelectionGroup
@@ -116,9 +107,7 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
           control={control}
           disabled={!watch('taydentavaVarhaiskasvatus')}
           rules={{
-            required: taydentavaVarhaiskasvatus
-              ? 'Syötä poissaolojen määrä'
-              : false,
+            required: taydentavaVarhaiskasvatus ? t('errors.required') : false,
             min: {
               value: ARKIPOISSAOLOT_MIN,
               message: arkipoissaolotRangeError,
