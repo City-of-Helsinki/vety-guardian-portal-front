@@ -11,8 +11,15 @@ export const Yhteystiedot = ({}) => {
   const { t } = useTranslation('lomake');
   const {
     register,
+    trigger,
+    getFieldState,
     formState: { errors },
   } = useFormContext<FormValues>();
+
+  const validateConfirm =
+    (field: 'h1SahkopostiConfirm' | 'h2SahkopostiConfirm') => () => {
+      if (getFieldState(field).isTouched) trigger(field);
+    };
 
   return (
     <ApplicationFormStep
@@ -34,7 +41,7 @@ export const Yhteystiedot = ({}) => {
               value: EMAIL_PATTERN,
               message: t('errors.emailInvalid'),
             },
-            deps: ['h1SahkopostiConfirm'],
+            onChange: validateConfirm('h1SahkopostiConfirm'),
           })}
           invalid={!!errors.h1Sahkoposti}
           errorText={errors.h1Sahkoposti?.message}
@@ -82,7 +89,7 @@ export const Yhteystiedot = ({}) => {
               value: EMAIL_PATTERN,
               message: t('errors.emailInvalid'),
             },
-            deps: ['h2SahkopostiConfirm'],
+            onChange: validateConfirm('h2SahkopostiConfirm'),
           })}
           invalid={!!errors.h2Sahkoposti}
           errorText={errors.h2Sahkoposti?.message}
