@@ -1,4 +1,4 @@
-import { SelectionGroup, RadioButton, Link } from 'hds-react';
+import { SelectionGroup, RadioButton } from 'hds-react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';

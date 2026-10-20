@@ -3,7 +3,6 @@ import {
   RadioButton,
   DateInput,
   Fieldset,
-  Link,
 } from 'hds-react';
 import type { ChangeEvent } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
