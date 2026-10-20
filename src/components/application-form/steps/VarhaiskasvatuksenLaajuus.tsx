@@ -3,7 +3,6 @@ import {
   RadioButton,
   NumberInput,
   Fieldset,
-  Link,
 } from 'hds-react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
