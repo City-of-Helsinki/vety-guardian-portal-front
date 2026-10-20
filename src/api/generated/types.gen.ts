@@ -54,10 +54,11 @@ export type DependantsResponse = {
 };
 
 /**
- * Schema-only: the `{"error": "..."}` body every error response uses.
+ * Schema-only: the `{"error": "...", "code": "..."}` body every error response uses.
  */
 export type ErrorResponse = {
     error: string;
+    code?: string;
 };
 
 export type Guardian = {
@@ -113,6 +114,18 @@ export type GuardiansResponse = {
  * * `vuorohoito_varhaiskasvatus` - Esiopetus 4 tuntia arkisin, jonka lisäksi vuorohoidon tarve varhaiskasvatuksessa
  */
 export type HoidonTarveEnum = 'paivaaikainen_varhaiskasvatus' | 'vuorohoito_varhaiskasvatus';
+
+export type IdentityRequest = {
+    /**
+     * Helsinki-profiili API token of the logged-in user.
+     */
+    profileApiToken: string;
+};
+
+export type IdentityResponse = {
+    firstName: string;
+    lastName: string;
+};
 
 /**
  * Schema-only: the `GET /is_protected_family/` response envelope.
@@ -330,6 +343,27 @@ export type PreschoolApplicationWritable = {
     h2Puhelinnumero?: string | null;
 };
 
+export type AuthIdentityCreateData = {
+    body: IdentityRequest;
+    path?: never;
+    query?: never;
+    url: '/auth/identity/';
+};
+
+export type AuthIdentityCreateErrors = {
+    400: ErrorResponse;
+    403: ErrorResponse;
+    502: ErrorResponse;
+};
+
+export type AuthIdentityCreateError = AuthIdentityCreateErrors[keyof AuthIdentityCreateErrors];
+
+export type AuthIdentityCreateResponses = {
+    200: IdentityResponse;
+};
+
+export type AuthIdentityCreateResponse = AuthIdentityCreateResponses[keyof AuthIdentityCreateResponses];
+
 export type PreschoolApplicationFormCreateData = {
     body?: PreschoolApplicationWritable;
     path?: never;
@@ -381,17 +415,11 @@ export type PreschoolApplicationFormForDependantCreateData = {
          */
         dependant_id: string;
     };
-    query: {
-        /**
-         * Finnish personal identity code (Henkilotunnus) of the guardian whose family this is.
-         */
-        ssn: string;
-    };
+    query?: never;
     url: '/preschool-application-form/for-dependant/{dependant_id}/';
 };
 
 export type PreschoolApplicationFormForDependantCreateErrors = {
-    400: ErrorResponse;
     403: ErrorResponse;
     404: ErrorResponse;
 };
@@ -426,17 +454,11 @@ export type SchemaRetrieveResponse = SchemaRetrieveResponses[keyof SchemaRetriev
 export type VtjDependantsRetrieveData = {
     body?: never;
     path?: never;
-    query: {
-        /**
-         * Finnish personal identity code (Henkilotunnus) of the guardian whose family this is.
-         */
-        ssn: string;
-    };
+    query?: never;
     url: '/vtj/dependants/';
 };
 
 export type VtjDependantsRetrieveErrors = {
-    400: ErrorResponse;
     404: ErrorResponse;
 };
 
@@ -475,17 +497,12 @@ export type VtjGuardiansRetrieveResponse = VtjGuardiansRetrieveResponses[keyof V
 export type VtjIsProtectedFamilyRetrieveData = {
     body?: never;
     path?: never;
-    query: {
-        /**
-         * Finnish personal identity code (Henkilotunnus) of the guardian whose family this is.
-         */
-        ssn: string;
-    };
+    query?: never;
     url: '/vtj/is_protected_family/';
 };
 
 export type VtjIsProtectedFamilyRetrieveErrors = {
-    400: ErrorResponse;
+    404: ErrorResponse;
     502: ErrorResponse;
     503: ErrorResponse;
 };
