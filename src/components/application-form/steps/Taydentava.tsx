@@ -61,7 +61,7 @@ export const Taydentava = ({}) => {
                   setValue('taydentavaVarhaiskasvatusAloitus', null);
                   setValue('hoidonTarve', null);
                   setValue('palvelunTarve', null);
-                  setValue('arkipoissaolotLkm', null);
+                  setValue('arkipoissaolotLkm', 0);
                 }}
                 onBlur={field.onBlur}
               />
