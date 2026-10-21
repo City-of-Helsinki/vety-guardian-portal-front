@@ -20,7 +20,7 @@ export const DependantItem = ({
   index,
   canApply,
 }: DependantItemProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('landing');
   const navigate = useNavigate();
 
   const openApplication = useMutation({
@@ -60,10 +60,10 @@ export const DependantItem = ({
         <div className={styles['application-card']}>
           <div className={styles['application-card-content']}>
             <h3 data-testid={`dependant-application-title-${index}`}>
-              {t('landing.applicationTitle')}
+              {t('applicationTitle')}
             </h3>
             <p data-testid={`dependant-application-text-${index}`}>
-              {t('landing.applicationDescription')}
+              {t('applicationDescription')}
             </p>
             <Button
               variant={ButtonVariant.Primary}
@@ -73,7 +73,7 @@ export const DependantItem = ({
                 openApplication.mutate({ path: { dependant_id: item.id } })
               }
             >
-              {t('landing.applicationLink')}
+              {t('applicationLink')}
             </Button>
             {openApplication.isError && (
               <p
