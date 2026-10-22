@@ -39,13 +39,16 @@ const toBody = (
   values: FormValues,
   status: StatusEnum,
 ): PreschoolApplicationWritable => {
-  const omit = values.taydentavaVarhaiskasvatus
-    ? omitFields
-    : [...omitFields, 'arkipoissaolotLkm'];
   return {
     ...Object.fromEntries(
-      Object.entries(values).filter(([k]) => !omit.includes(k)),
+      Object.entries(values).filter(([k]) => !omitFields.includes(k)),
     ),
+    ...(values.taydentavaVarhaiskasvatus === false && {
+      taydentavaVarhaiskasvatusAloitus: null,
+      hoidonTarve: null,
+      palvelunTarve: null,
+      arkipoissaolotLkm: null,
+    }),
     status,
   };
 };
