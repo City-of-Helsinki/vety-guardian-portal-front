@@ -1,9 +1,13 @@
-import type { Dependant } from '../../api/generated';
-import { preschoolApplicationFormForDependantCreateMutation } from '../../api/generated/@tanstack/react-query.gen';
+import type {
+  Dependant,
+  PreschoolApplicationFormForDependantCreateError,
+  PreschoolApplicationFormForDependantCreateResponse,
+} from '../../api/generated';
+import { preschoolApplicationFormForDependantCreate } from '../../api/generated';
 import { DependantIcon } from '../dependant-icon';
 import styles from './DependantItem.module.css';
 import { Button, ButtonVariant } from 'hds-react';
-import { useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { ageFromIso, isoToDisplay } from '../../utils/date';
@@ -23,10 +27,23 @@ export const DependantItem = ({
   const { t } = useTranslation('landing');
   const navigate = useNavigate();
 
-  const openApplication = useMutation({
-    ...preschoolApplicationFormForDependantCreateMutation(),
-    onSuccess: (application) => navigate(`/application/${application.id}`),
+  const application = useQuery<
+    PreschoolApplicationFormForDependantCreateResponse,
+    PreschoolApplicationFormForDependantCreateError
+  >({
+    queryKey: ['preschoolApplicationFormForDependant', item.id],
+    queryFn: async () => {
+      const { data } = await preschoolApplicationFormForDependantCreate({
+        path: { dependant_id: item.id },
+        throwOnError: true,
+      });
+      return data;
+    },
+    enabled: canApply,
+    retry: false,
   });
+
+  const isSubmitted = application.data?.status === 'submitted';
 
   const age = ageFromIso(item.dateOfBirth);
 
@@ -68,19 +85,20 @@ export const DependantItem = ({
             <Button
               variant={ButtonVariant.Primary}
               data-testid={`btn-open-application-${index}`}
-              disabled={openApplication.isPending}
+              disabled={!application.isSuccess}
               onClick={() =>
-                openApplication.mutate({ path: { dependant_id: item.id } })
+                application.data &&
+                navigate(`/application/${application.data.id}`)
               }
             >
-              {t('applicationLink')}
+              {isSubmitted ? t('applicationProcessing') : t('applicationLink')}
             </Button>
-            {openApplication.isError && (
+            {application.isError && (
               <p
                 role="alert"
                 data-testid={`dependant-application-error-${index}`}
               >
-                {openApplication.error.error}
+                {application.error.error}
               </p>
             )}
           </div>

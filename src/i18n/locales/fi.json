@@ -4,7 +4,8 @@
     "title": "Etusivu",
     "applicationTitle": "Esiopetukseen ilmoittautuminen",
     "applicationDescription": "Tästä voi ilmoittautua esiopetukseen.",
-    "applicationLink": "Ilmoittaudu"
+    "applicationLink": "Ilmoittaudu",
+    "applicationProcessing": "Ilmoittautuminen käsittelyssä"
   },
   "application": {
     "title": "Esiopetukseen ilmoittautuminen"

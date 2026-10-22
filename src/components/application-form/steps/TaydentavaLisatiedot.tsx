@@ -43,6 +43,9 @@ export const TaydentavaLisatiedot = ({}) => {
       <h3 data-testid="title-taydentava-lisatiedot-fields">
         {t('taydentavaLisatiedot.fieldsTitle')}
       </h3>
+      <MarkdownContent>
+        {t('taydentavaLisatiedot.fieldsDescription')}
+      </MarkdownContent>
       <Fieldset
         heading={t('taydentavaLisatiedot.aloitusPvmTitle')}
         data-testid="fieldset-aloitus-pvm"
