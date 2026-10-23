@@ -1,9 +1,4 @@
-import {
-  SelectionGroup,
-  RadioButton,
-  NumberInput,
-  Fieldset,
-} from 'hds-react';
+import { SelectionGroup, RadioButton, NumberInput, Fieldset } from 'hds-react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import type { FormValues } from '../../../types';
@@ -25,7 +20,7 @@ const VUOROHOITO_OPTIONS: PalvelunTarveEnum[] = [
   'esiopetus_4h_160h_vuoroh',
 ];
 const ARKIPOISSAOLOT_MIN = 0;
-const ARKIPOISSAOLOT_MAX = 30;
+const ARKIPOISSAOLOT_MAX = 12;
 
 export const VarhaiskasvatuksenLaajuus = ({}) => {
   const { control, watch } = useFormContext<FormValues>();
@@ -106,14 +101,16 @@ export const VarhaiskasvatuksenLaajuus = ({}) => {
           control={control}
           disabled={!watch('taydentavaVarhaiskasvatus')}
           rules={{
-            required: taydentavaVarhaiskasvatus ? t('errors.required') : false,
+            required: taydentavaVarhaiskasvatus
+              ? t('varhaiskasvatuksenLaajuus.arkipoissaolotRequired')
+              : false,
             min: {
               value: ARKIPOISSAOLOT_MIN,
-              message: arkipoissaolotRangeError,
+              message: t('varhaiskasvatuksenLaajuus.arkipoissaolotMin'),
             },
             max: {
               value: ARKIPOISSAOLOT_MAX,
-              message: arkipoissaolotRangeError,
+              message: t('varhaiskasvatuksenLaajuus.arkipoissaolotMax'),
             },
             validate: (value) =>
               value == null ||

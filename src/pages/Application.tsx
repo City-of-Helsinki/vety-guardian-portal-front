@@ -244,6 +244,8 @@ export const Application = ({}) => {
     const isSubmitted = application.data.status === 'submitted';
     return (
       <ApplicationDataContext.Provider value={application.data}>
+        <h2 style={{ textAlign: 'left' }}>{application.data.nimi}</h2>
+        <Divider />
         <ApplicationForm
           defaultValues={toFormValues(application.data)}
           onSubmit={onSubmit}
@@ -269,7 +271,6 @@ export const Application = ({}) => {
   return (
     <>
       <h1 data-testid="title-application">{t('title')}</h1>
-      <Divider />
       {renderContent()}
     </>
   );

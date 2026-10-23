@@ -1,9 +1,4 @@
-import {
-  SelectionGroup,
-  RadioButton,
-  DateInput,
-  Fieldset,
-} from 'hds-react';
+import { SelectionGroup, RadioButton, DateInput, Fieldset } from 'hds-react';
 import type { ChangeEvent } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
@@ -48,6 +43,9 @@ export const TaydentavaLisatiedot = ({}) => {
       <h3 data-testid="title-taydentava-lisatiedot-fields">
         {t('taydentavaLisatiedot.fieldsTitle')}
       </h3>
+      <MarkdownContent>
+        {t('taydentavaLisatiedot.fieldsDescription')}
+      </MarkdownContent>
       <Fieldset
         heading={t('taydentavaLisatiedot.aloitusPvmTitle')}
         data-testid="fieldset-aloitus-pvm"
@@ -108,6 +106,9 @@ export const TaydentavaLisatiedot = ({}) => {
                 onBlur={field.onBlur}
                 disabled={field.disabled}
               />
+              <MarkdownContent>
+                {t('vakaOptions.paivaaikainen_varhaiskasvatus_description')}
+              </MarkdownContent>
             </div>
             <div
               id="ymparivuorokautinen-item"
@@ -124,6 +125,9 @@ export const TaydentavaLisatiedot = ({}) => {
                 onBlur={field.onBlur}
                 disabled={field.disabled}
               />
+              <MarkdownContent>
+                {t('vakaOptions.vuorohoito_varhaiskasvatus_description')}
+              </MarkdownContent>
             </div>
           </SelectionGroup>
         )}
