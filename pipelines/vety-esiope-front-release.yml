@@ -4,7 +4,7 @@ trigger:
   batch: true
   tags:
     include:
-      - vety-esiope-front-wordpress-theme-v*
+      - '*'
 
 # Pull request (PR) triggers cause a pipeline to run whenever a pull request is
 # opened with one of the specified target branches, or when updates are made to
@@ -39,6 +39,14 @@ extends:
     ## Staging definitions
     # buildArgsStage:
     #   DEBUG: 1
+    configMapTest: # pod environment variables
+      VITE_API_BASE_URL: "https://vety-esiope-test.dev-se.hel.ninja"
+      VITE_LOCIZE_PROJECT_ID: "8d851889-2950-437b-80e8-b4ef26317ff9"
+      VITE_OIDC_AUTHORITY: "https://tunnistus.test.hel.ninja/auth/realms/helsinki-tunnistus"
+      VITE_OIDC_CLIENT_ID: "vety-ui-dev"
+      VITE_OIDC_API_AUDIENCE: "vety-api-dev"
+      VITE_OIDC_PROFILE_API_AUDIENCE: "profile-api-test"
+
     configMapStage: # pod environment variables
       VITE_API_BASE_URL: TODO-staging-api-url
       VITE_LOCIZE_PROJECT_ID: 8d851889-2950-437b-80e8-b4ef26317ff9
