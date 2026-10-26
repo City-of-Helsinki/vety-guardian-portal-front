@@ -272,6 +272,14 @@ export type PreschoolApplication = {
      * Huoltaja 2 puhelinnumero
      */
     h2Puhelinnumero?: string | null;
+    /**
+     * Huoltaja 1 on tallentanut yhteystietonsa
+     */
+    readonly h1YhteystiedotTallennettu: boolean;
+    /**
+     * Huoltaja 2 on tallentanut yhteystietonsa
+     */
+    readonly h2YhteystiedotTallennettu: boolean;
     currentGuardian: CurrentGuardianEnum | NullEnum | null;
 };
 
