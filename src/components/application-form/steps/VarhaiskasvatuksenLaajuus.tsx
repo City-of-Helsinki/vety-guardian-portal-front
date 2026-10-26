@@ -25,10 +25,6 @@ const ARKIPOISSAOLOT_MAX = 12;
 export const VarhaiskasvatuksenLaajuus = ({}) => {
   const { control, watch } = useFormContext<FormValues>();
   const { t } = useTranslation('lomake');
-  const arkipoissaolotRangeError = t('errors.arkipoissaolotRange', {
-    min: ARKIPOISSAOLOT_MIN,
-    max: ARKIPOISSAOLOT_MAX,
-  });
 
   const taydentavaVarhaiskasvatus = useWatch({
     control,
