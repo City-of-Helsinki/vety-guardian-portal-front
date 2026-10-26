@@ -29,7 +29,7 @@ function useGuardianDependants(enabled: boolean) {
 }
 
 export const DependantList = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['landing', 'errors']);
 
   const familyProtection = useFamilyProtectionStatus();
   const dependants = useGuardianDependants(familyProtection.data !== undefined);
@@ -44,7 +44,7 @@ export const DependantList = () => {
     return (
       <Notification
         type="error"
-        label={t('landing.error')}
+        label={t('error')}
         data-testid="notification-landing-error"
       >
         {code ? t(`errors.${code}`, unknownError) : unknownError}
@@ -64,14 +64,14 @@ export const DependantList = () => {
       {isProtectedFamily && (
         <Notification
           type="alert"
-          label={t('landing.turvakieltoTitle')}
+          label={t('turvakieltoTitle')}
           data-testid="notification-turvakielto"
         >
-          {t('landing.turvakieltoText')}
+          {t('turvakieltoText')}
         </Notification>
       )}
       {items.length === 0 && (
-        <p data-testid="text-no-dependants">{t('landing.noDependants')}</p>
+        <p data-testid="text-no-dependants">{t('noDependants')}</p>
       )}
       {items.map((item, index) => (
         <DependantItem
