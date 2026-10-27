@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { get, useFormContext } from 'react-hook-form';
 import type { UseFormReturn } from 'react-hook-form';
 
-import { StepState, Stepper, Button, ButtonVariant } from 'hds-react';
+import { StepState, Stepper, Button, ButtonVariant, Dialog } from 'hds-react';
 import { type FormValues, type FormStep } from '../../types';
 import styles from './ApplicationForm.module.css';
 import { useNavigate } from 'react-router';
 import { StepsContextProvider } from './StepsContext';
 import { toLanguage } from '../../i18n/i18n';
 import { useApplicationData } from './ApplicationDataContext';
+import { APPLICATION_FORM_ID } from './ApplicationForm';
 
 // Steps are filled up to the last one whose saved values say so, stopping at the first
 // step that is known to be unfilled.
@@ -166,6 +167,24 @@ export const ApplicationFormSteps = ({
     }
   }
 
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const submitButtonRef = useRef<HTMLButtonElement>(null);
+
+  const openConfirm = async () => {
+    if (await trigger(steps[current].fields, { shouldTouch: true })) {
+      setIsConfirmOpen(true);
+    }
+  };
+
+  const closeConfirm = () => setIsConfirmOpen(false);
+
+  const confirmSubmit = () => {
+    closeConfirm();
+    (
+      document.getElementById(APPLICATION_FORM_ID) as HTMLFormElement | null
+    )?.requestSubmit();
+  };
+
   const ActiveStep = steps[current].component;
   const isLast = current === steps.length - 1;
 
@@ -199,8 +218,9 @@ export const ApplicationFormSteps = ({
           </Button>
           {isLast ? (
             <Button
+              ref={submitButtonRef}
               variant={ButtonVariant.Primary}
-              type="submit"
+              onClick={openConfirm}
               data-testid="btn-submit"
               disabled={isSaving}
               style={{ height: 'fit-content', width: 'fit-content' }}
@@ -219,6 +239,42 @@ export const ApplicationFormSteps = ({
             </Button>
           )}
         </div>
+
+        <Dialog
+          id="submit-confirm-dialog"
+          aria-labelledby="submit-confirm-dialog-title"
+          aria-describedby="submit-confirm-dialog-description"
+          isOpen={isConfirmOpen}
+          close={closeConfirm}
+          closeButtonLabelText={t('submitConfirmClose')}
+          focusAfterCloseRef={submitButtonRef as React.RefObject<HTMLElement>}
+        >
+          <Dialog.Header
+            id="submit-confirm-dialog-title"
+            title={t('submitConfirmTitle')}
+          />
+          <Dialog.Content>
+            <p id="submit-confirm-dialog-description">
+              {t('submitConfirmDescription')}
+            </p>
+          </Dialog.Content>
+          <Dialog.ActionButtons>
+            <Button
+              variant={ButtonVariant.Primary}
+              onClick={confirmSubmit}
+              data-testid="btn-submit-confirm"
+            >
+              {t('submitConfirmSend')}
+            </Button>
+            <Button
+              variant={ButtonVariant.Secondary}
+              onClick={closeConfirm}
+              data-testid="btn-submit-cancel"
+            >
+              {t('submitConfirmCancel')}
+            </Button>
+          </Dialog.ActionButtons>
+        </Dialog>
       </StepsContextProvider>
     </div>
   );

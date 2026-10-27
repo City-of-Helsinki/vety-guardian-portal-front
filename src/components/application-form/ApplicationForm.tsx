@@ -4,6 +4,8 @@ import type { UseFormReturn } from 'react-hook-form';
 import type React from 'react';
 import type { FormValues } from '../../types';
 
+export const APPLICATION_FORM_ID = 'application-form';
+
 interface ApplicationFormProps {
   defaultValues: FormValues;
   onSubmit: (values: FormValues, form: UseFormReturn<FormValues>) => void;
@@ -21,6 +23,7 @@ export const ApplicationForm = ({
     <div className={styles.container}>
       <FormProvider {...methods}>
         <form
+          id={APPLICATION_FORM_ID}
           onSubmit={methods.handleSubmit((values) => onSubmit(values, methods))}
           className={styles.form}
           noValidate
