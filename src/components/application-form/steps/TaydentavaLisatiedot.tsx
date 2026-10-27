@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { MarkdownContent } from '../../markdown-content';
 import { toLanguage } from '../../../i18n/i18n';
 
-export const TaydentavaLisatiedot = ({}) => {
+export const TaydentavaLisatiedot = () => {
   const { control, watch, setValue } = useFormContext<FormValues>();
   const { t, i18n } = useTranslation('lomake');
 

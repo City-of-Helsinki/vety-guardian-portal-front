@@ -11,7 +11,7 @@ import { MarkdownContent } from '../../markdown-content';
 import { useSteps } from '../StepsContext';
 import { isoToDisplay } from '../../../utils/date';
 
-export const Esikatselu = ({}) => {
+export const Esikatselu = () => {
   const { t } = useTranslation('lomake');
   const application = useApplicationData();
   const values = useFormContext<FormValues>().getValues();

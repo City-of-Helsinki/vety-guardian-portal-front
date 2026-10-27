@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^\+?[0-9\s\-()]{5,20}$/;
 
-export const Yhteystiedot = ({}) => {
+export const Yhteystiedot = () => {
   const { t } = useTranslation('lomake');
   const {
     register,

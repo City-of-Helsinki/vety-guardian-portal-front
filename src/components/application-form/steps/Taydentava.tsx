@@ -6,7 +6,7 @@ import styles from '../ApplicationForm.module.css';
 import { useTranslation } from 'react-i18next';
 import { MarkdownContent } from '../../markdown-content';
 
-export const Taydentava = ({}) => {
+export const Taydentava = () => {
   const { control, setValue } = useFormContext<FormValues>();
   const { t } = useTranslation('lomake');
 
