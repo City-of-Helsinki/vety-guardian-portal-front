@@ -6,6 +6,12 @@ export type ClientOptions = {
 
 export type BlankEnum = '';
 
+/**
+ * * `h1` - h1
+ * * `h2` - h2
+ */
+export type CurrentGuardianEnum = 'h1' | 'h2';
+
 export type Dependant = {
     readonly id: string;
     /**
@@ -125,6 +131,8 @@ export type IdentityRequest = {
 export type IdentityResponse = {
     firstName: string;
     lastName: string;
+    email: string;
+    phone: string;
 };
 
 /**
@@ -233,6 +241,10 @@ export type PreschoolApplication = {
      */
     readonly h1Osoite: string;
     /**
+     * Huoltaja 1 henkilötunnus
+     */
+    readonly h1Henkilotunnus: string;
+    /**
      * Huoltaja 1 sähköposti
      */
     h1Sahkoposti?: string | string | null;
@@ -249,6 +261,10 @@ export type PreschoolApplication = {
      */
     readonly h2Osoite: string;
     /**
+     * Huoltaja 2 henkilötunnus
+     */
+    readonly h2Henkilotunnus: string;
+    /**
      * Huoltaja 2 sähköposti
      */
     h2Sahkoposti?: string | string | null;
@@ -256,6 +272,15 @@ export type PreschoolApplication = {
      * Huoltaja 2 puhelinnumero
      */
     h2Puhelinnumero?: string | null;
+    /**
+     * Huoltaja 1 on tallentanut yhteystietonsa
+     */
+    readonly h1YhteystiedotTallennettu: boolean;
+    /**
+     * Huoltaja 2 on tallentanut yhteystietonsa
+     */
+    readonly h2YhteystiedotTallennettu: boolean;
+    currentGuardian: CurrentGuardianEnum | NullEnum | null;
 };
 
 /**
