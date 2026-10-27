@@ -55,7 +55,7 @@ const saveFile = (blob: Blob, filename: string) => {
 
 // The PDF version of this view is rendered by the backend:
 // vety-guardian-portal-back/guardian/templates/guardian/application_pdf.html — keep in sync.
-export const Esikatselu = ({}) => {
+export const Esikatselu = () => {
   const { t, i18n } = useTranslation('lomake');
   const application = useApplicationData();
   const values = useFormContext<FormValues>().getValues();
@@ -258,6 +258,11 @@ export const Esikatselu = ({}) => {
             label={t('esikatselu.huoltajanNimi')}
             value={application.h1Nimi}
           />
+          <LabelValue
+            data-testid="summary-h1-henkilotunnus"
+            label={t('esikatselu.henkilotunnus')}
+            value={application.h1Henkilotunnus}
+          />
         </LabelValueWrapper>
         <LabelValueWrapper>
           <LabelValue
@@ -293,6 +298,11 @@ export const Esikatselu = ({}) => {
               data-testid="summary-h2-nimi"
               label={t('esikatselu.huoltajanNimi')}
               value={[application.h2Nimi]}
+            />
+            <LabelValue
+              data-testid="summary-h2-henkilotunnus"
+              label={t('esikatselu.henkilotunnus')}
+              value={application.h2Henkilotunnus}
             />
           </LabelValueWrapper>
           <LabelValueWrapper>

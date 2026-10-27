@@ -22,7 +22,7 @@ export type MarkdownContentProps = {
   'data-testid'?: string;
 };
 
-export const defaultAllowedElements = [
+const defaultAllowedElements = [
   'br',
   'em',
   'h1',

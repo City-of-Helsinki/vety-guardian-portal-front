@@ -2,7 +2,7 @@ import { LoginButton, useAuthenticatedUser } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router';
 
-export const Home = ({}) => {
+export const Home = () => {
   const { t, i18n } = useTranslation();
   const user = useAuthenticatedUser();
 

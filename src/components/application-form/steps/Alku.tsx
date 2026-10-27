@@ -3,7 +3,7 @@ import { Divider } from '../../divider';
 import { useTranslation } from 'react-i18next';
 import { MarkdownContent } from '../../markdown-content';
 
-export const Alku = ({}) => {
+export const Alku = () => {
   const { t } = useTranslation('lomake');
 
   return (

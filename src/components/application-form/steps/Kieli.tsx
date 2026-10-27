@@ -5,7 +5,7 @@ import type { FormValues } from '../../../types';
 import styles from '../ApplicationForm.module.css';
 import { useTranslation } from 'react-i18next';
 
-export const Kieli = ({}) => {
+export const Kieli = () => {
   const { control } = useFormContext<FormValues>();
   const { t } = useTranslation('lomake');
 
