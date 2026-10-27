@@ -10,11 +10,39 @@ import { TextButton } from '../../text-button';
 import type { FormValues } from '../../../types';
 import { MarkdownContent } from '../../markdown-content';
 import { useSteps } from '../StepsContext';
-import { isoToDisplay } from '../../../utils/date';
+import { isoToDisplay, isoToHelsinkiIsoDate } from '../../../utils/date';
 import { preschoolApplicationFormPdfRetrieve } from '../../../api/generated';
+import type { PreschoolApplication } from '../../../api/generated';
 import { toLanguage } from '../../../i18n/i18n';
 
-const PDF_FILENAME = 'esiopetusilmoittautuminen.pdf';
+// Max length of the file name without ".pdf", in characters (Unicode code points, not UTF-16 units).
+const FILENAME_MAX_LENGTH = 100;
+
+// Control characters (tab, newline...) count as spaces, invisible format characters (bidi overrides,
+// zero-width characters...) and characters not allowed in file names are dropped, spaces become underscores.
+const filenamePart = (text: string) =>
+  text
+    .replace(/\p{Cc}/gu, ' ')
+    .replace(/\p{Cf}/gu, '')
+    .replace(/[\\/:*?"<>|]/g, '')
+    .split(/\s+/)
+    .filter(Boolean)
+    .join('_');
+
+// E.g. "esiopetusilmoittautuminen_2026-10-20_Testi_Lapsi.pdf": the submission date in Helsinki time and the child's name,
+// cut to FILENAME_MAX_LENGTH characters before ".pdf".
+// Keep in sync with application_pdf_filename in vety-guardian-portal-back/guardian/pdf.py
+const pdfFilename = (application: PreschoolApplication) => {
+  const filename = [
+    'esiopetusilmoittautuminen',
+    isoToHelsinkiIsoDate(application.submittedAt),
+    filenamePart(application.nimi),
+  ]
+    .filter(Boolean)
+    .join('_');
+  // Array.from splits by code point, so an emoji isn't cut in half.
+  return `${Array.from(filename).slice(0, FILENAME_MAX_LENGTH).join('').replace(/_+$/, '')}.pdf`;
+};
 
 const saveFile = (blob: Blob, filename: string) => {
   const url = URL.createObjectURL(blob);
@@ -42,7 +70,7 @@ export const Esikatselu = ({}) => {
         parseAs: 'blob',
         throwOnError: true,
       });
-      saveFile(data, PDF_FILENAME);
+      saveFile(data, pdfFilename(application));
     },
   });
 
