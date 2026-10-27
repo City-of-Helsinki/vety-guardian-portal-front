@@ -2,77 +2,24 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import { useApplicationData } from '../ApplicationDataContext';
-import { Button, ButtonVariant, IconDownload, Notification } from 'hds-react';
-import { useMutation } from '@tanstack/react-query';
+import { Notification } from 'hds-react';
 import { Divider } from '../../divider';
 import { LabelValue, LabelValueWrapper, SummarySection } from '../../summary';
 import { TextButton } from '../../text-button';
 import type { FormValues } from '../../../types';
 import { MarkdownContent } from '../../markdown-content';
 import { useSteps } from '../StepsContext';
-import { isoToDisplay, isoToHelsinkiIsoDate } from '../../../utils/date';
-import { preschoolApplicationFormPdfRetrieve } from '../../../api/generated';
-import type { PreschoolApplication } from '../../../api/generated';
-import { toLanguage } from '../../../i18n/i18n';
-
-// Max length of the file name without ".pdf", in characters (Unicode code points, not UTF-16 units).
-const FILENAME_MAX_LENGTH = 100;
-
-// Control characters (tab, newline...) count as spaces, invisible format characters (bidi overrides,
-// zero-width characters...) and characters not allowed in file names are dropped, spaces become underscores.
-const filenamePart = (text: string) =>
-  text
-    .replace(/\p{Cc}/gu, ' ')
-    .replace(/\p{Cf}/gu, '')
-    .replace(/[\\/:*?"<>|]/g, '')
-    .split(/\s+/)
-    .filter(Boolean)
-    .join('_');
-
-// E.g. "esiopetusilmoittautuminen_2026-10-20_Testi_Lapsi.pdf": the submission date in Helsinki time and the child's name,
-// cut to FILENAME_MAX_LENGTH characters before ".pdf".
-// Keep in sync with application_pdf_filename in vety-guardian-portal-back/guardian/pdf.py
-const pdfFilename = (application: PreschoolApplication) => {
-  const filename = [
-    'esiopetusilmoittautuminen',
-    isoToHelsinkiIsoDate(application.submittedAt),
-    filenamePart(application.nimi),
-  ]
-    .filter(Boolean)
-    .join('_');
-  // Array.from splits by code point, so an emoji isn't cut in half.
-  return `${Array.from(filename).slice(0, FILENAME_MAX_LENGTH).join('').replace(/_+$/, '')}.pdf`;
-};
-
-const saveFile = (blob: Blob, filename: string) => {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
-};
+import { isoToDisplay } from '../../../utils/date';
+import { PdfDownloadButton } from '../../pdf-download-button';
 
 // The PDF version of this view is rendered by the backend:
 // vety-guardian-portal-back/guardian/templates/guardian/application_pdf.html — keep in sync.
 export const Esikatselu = () => {
-  const { t, i18n } = useTranslation('lomake');
+  const { t } = useTranslation('lomake');
   const application = useApplicationData();
   const values = useFormContext<FormValues>().getValues();
 
   const { goToStep } = useSteps();
-
-  const downloadPdf = useMutation({
-    mutationFn: async () => {
-      const { data } = await preschoolApplicationFormPdfRetrieve({
-        path: { uuid: application.id },
-        query: { lang: toLanguage(i18n.resolvedLanguage) },
-        parseAs: 'blob',
-        throwOnError: true,
-      });
-      saveFile(data, pdfFilename(application));
-    },
-  });
 
   const laajuus = [];
   if (values.hoidonTarve) {
@@ -94,25 +41,12 @@ export const Esikatselu = () => {
             label={t('esikatselu.alreadySubmitted')}
             data-testid="notification-already-submitted"
           />
-          <Button
-            type="button"
-            variant={ButtonVariant.Secondary}
-            iconStart={<IconDownload />}
-            data-testid="button-lataa-pdf"
-            disabled={downloadPdf.isPending}
-            onClick={() => downloadPdf.mutate()}
-            style={{ marginTop: '1rem', width: 'fit-content' }}
-          >
-            {t('esikatselu.lataaPdf')}
-          </Button>
-          {downloadPdf.isError && (
-            <Notification
-              type="error"
-              label={t('esikatselu.pdfError')}
-              data-testid="notification-pdf-error"
-              style={{ marginTop: '1rem' }}
+          <div style={{ marginTop: '1rem' }}>
+            <PdfDownloadButton
+              application={application}
+              data-testid="button-lataa-pdf"
             />
-          )}
+          </div>
         </>
       )}
       <Divider />
