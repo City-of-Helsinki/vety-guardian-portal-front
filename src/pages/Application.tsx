@@ -81,15 +81,15 @@ const toFormValues = (
     status: application.status,
   };
 
-  // The logged-in guardian's contact details from Helsinki-profiili are only defaults:
-  // values already saved to the application take precedence.
+  // The logged-in guardian's contact details found in Helsinki-profiili aren't editable
+  // in the form, so they replace any values saved to the application earlier.
   const guardian = application.currentGuardian;
   if (guardian && identity && application.status !== 'submitted') {
-    if (identity.email && !values[`${guardian}Sahkoposti`]) {
+    if (identity.email) {
       values[`${guardian}Sahkoposti`] = identity.email;
       values[`${guardian}SahkopostiConfirm`] = identity.email;
     }
-    if (identity.phone && !values[`${guardian}Puhelinnumero`]) {
+    if (identity.phone) {
       values[`${guardian}Puhelinnumero`] = identity.phone;
     }
   }
