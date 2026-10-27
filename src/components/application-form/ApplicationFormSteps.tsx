@@ -173,6 +173,7 @@ export const ApplicationFormSteps = ({
     <div>
       <StepsContextProvider value={{ goToStep, currentId: steps[current].id }}>
         <Stepper
+          className={styles.stepper}
           data-testid="stepper"
           steps={stepperSteps}
           language={toLanguage(i18n.resolvedLanguage)}
