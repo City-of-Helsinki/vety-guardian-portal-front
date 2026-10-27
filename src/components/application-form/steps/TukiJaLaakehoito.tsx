@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import styles from '../ApplicationForm.module.css';
 import { MarkdownContent } from '../../markdown-content';
 
-export const TukiJaLaakehoito = ({}) => {
+export const TukiJaLaakehoito = () => {
   const { control } = useFormContext<FormValues>();
   const { t } = useTranslation('lomake');
 

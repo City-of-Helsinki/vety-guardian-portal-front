@@ -11,7 +11,7 @@ import { MarkdownContent } from '../../markdown-content';
 import { useSteps } from '../StepsContext';
 import { isoToDisplay } from '../../../utils/date';
 
-export const Esikatselu = ({}) => {
+export const Esikatselu = () => {
   const { t } = useTranslation('lomake');
   const application = useApplicationData();
   const values = useFormContext<FormValues>().getValues();
@@ -181,6 +181,11 @@ export const Esikatselu = ({}) => {
             label={t('esikatselu.huoltajanNimi')}
             value={application.h1Nimi}
           />
+          <LabelValue
+            data-testid="summary-h1-henkilotunnus"
+            label={t('esikatselu.henkilotunnus')}
+            value={application.h1Henkilotunnus}
+          />
         </LabelValueWrapper>
         <LabelValueWrapper>
           <LabelValue
@@ -216,6 +221,11 @@ export const Esikatselu = ({}) => {
               data-testid="summary-h2-nimi"
               label={t('esikatselu.huoltajanNimi')}
               value={[application.h2Nimi]}
+            />
+            <LabelValue
+              data-testid="summary-h2-henkilotunnus"
+              label={t('esikatselu.henkilotunnus')}
+              value={application.h2Henkilotunnus}
             />
           </LabelValueWrapper>
           <LabelValueWrapper>
