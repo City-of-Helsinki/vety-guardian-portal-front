@@ -102,7 +102,7 @@ const applyServerErrors = (
   });
 };
 
-export const Application = ({}) => {
+export const Application = () => {
   const { t } = useTranslation('lomake');
 
   const navigate = useNavigate();
