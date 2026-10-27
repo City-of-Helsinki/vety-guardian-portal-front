@@ -2,7 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
 import { useApplicationData } from '../ApplicationDataContext';
-import { Notification } from 'hds-react';
+import { Button, ButtonVariant, IconDownload, Notification } from 'hds-react';
+import { useMutation } from '@tanstack/react-query';
 import { Divider } from '../../divider';
 import { LabelValue, LabelValueWrapper, SummarySection } from '../../summary';
 import { TextButton } from '../../text-button';
@@ -10,13 +11,40 @@ import type { FormValues } from '../../../types';
 import { MarkdownContent } from '../../markdown-content';
 import { useSteps } from '../StepsContext';
 import { isoToDisplay } from '../../../utils/date';
+import { preschoolApplicationFormPdfRetrieve } from '../../../api/generated';
+import { toLanguage } from '../../../i18n/i18n';
 
+const PDF_FILENAME = 'esiopetusilmoittautuminen.pdf';
+
+const saveFile = (blob: Blob, filename: string) => {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+};
+
+// The PDF version of this view is rendered by the backend:
+// vety-guardian-portal-back/guardian/templates/guardian/application_pdf.html — keep in sync.
 export const Esikatselu = ({}) => {
-  const { t } = useTranslation('lomake');
+  const { t, i18n } = useTranslation('lomake');
   const application = useApplicationData();
   const values = useFormContext<FormValues>().getValues();
 
   const { goToStep } = useSteps();
+
+  const downloadPdf = useMutation({
+    mutationFn: async () => {
+      const { data } = await preschoolApplicationFormPdfRetrieve({
+        path: { uuid: application.id },
+        query: { lang: toLanguage(i18n.resolvedLanguage) },
+        parseAs: 'blob',
+        throwOnError: true,
+      });
+      saveFile(data, PDF_FILENAME);
+    },
+  });
 
   const laajuus = [];
   if (values.hoidonTarve) {
@@ -32,11 +60,32 @@ export const Esikatselu = ({}) => {
       title={t('esikatselu.title')}
     >
       {application.status === 'submitted' && (
-        <Notification
-          type="info"
-          label={t('esikatselu.alreadySubmitted')}
-          data-testid="notification-already-submitted"
-        />
+        <>
+          <Notification
+            type="info"
+            label={t('esikatselu.alreadySubmitted')}
+            data-testid="notification-already-submitted"
+          />
+          <Button
+            type="button"
+            variant={ButtonVariant.Secondary}
+            iconStart={<IconDownload />}
+            data-testid="button-lataa-pdf"
+            disabled={downloadPdf.isPending}
+            onClick={() => downloadPdf.mutate()}
+            style={{ marginTop: '1rem', width: 'fit-content' }}
+          >
+            {t('esikatselu.lataaPdf')}
+          </Button>
+          {downloadPdf.isError && (
+            <Notification
+              type="error"
+              label={t('esikatselu.pdfError')}
+              data-testid="notification-pdf-error"
+              style={{ marginTop: '1rem' }}
+            />
+          )}
+        </>
       )}
       <Divider />
       <SummarySection
