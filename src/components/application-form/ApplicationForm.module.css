@@ -12,7 +12,8 @@
   }
 }
 
-/* Long words, e.g. "Varhaiskasvatuksen", don't fit the fixed step label width. */
+/* Long words, e.g. "Varhaiskasvatuksen", don't fit the fixed step label width.
+   Finnish and Swedish labels get soft hyphens in code (utils/hyphenate.ts). */
 .stepper p {
   hyphens: auto;
   overflow-wrap: anywhere;
