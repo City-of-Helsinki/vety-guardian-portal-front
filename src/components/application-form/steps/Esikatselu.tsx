@@ -224,9 +224,9 @@ export const Esikatselu = () => {
           data-testid="section-muut-huoltajat"
           title={t('esikatselu.muutHuoltajatTitle')}
         >
-          <p data-testid="text-muut-huoltajat">
+          <MarkdownContent data-testid="text-muut-huoltajat">
             {t('esikatselu.muutHuoltajatText')}
-          </p>
+          </MarkdownContent>
           <LabelValueWrapper>
             <LabelValue
               data-testid="summary-h2-nimi"

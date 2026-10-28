@@ -12,6 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { ageFromIso, isoToDisplay } from '../../utils/date';
+import { MarkdownContent } from '../markdown-content';
 
 interface DependantItemProps {
   item: Dependant;
@@ -80,9 +81,11 @@ export const DependantItem = ({
             <h3 data-testid={`dependant-application-title-${index}`}>
               {t('applicationTitle')}
             </h3>
-            <p data-testid={`dependant-application-text-${index}`}>
+            <MarkdownContent
+              data-testid={`dependant-application-text-${index}`}
+            >
               {t('applicationDescription')}
-            </p>
+            </MarkdownContent>
             <Button
               variant={ButtonVariant.Primary}
               data-testid={`btn-open-application-${index}`}
