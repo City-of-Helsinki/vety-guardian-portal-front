@@ -48,10 +48,18 @@ extends:
       VITE_OIDC_PROFILE_API_AUDIENCE: "profile-api-test"
 
     configMapStage: # pod environment variables
-      VITE_API_BASE_URL: TODO-staging-api-url
-      VITE_LOCIZE_PROJECT_ID: 8d851889-2950-437b-80e8-b4ef26317ff9
+      VITE_API_BASE_URL: "https://vety-esiope-staging.dev-se.hel.ninja"
+      VITE_LOCIZE_PROJECT_ID: "8d851889-2950-437b-80e8-b4ef26317ff9"
+      VITE_OIDC_AUTHORITY: "https://tunnistus.stage.hel.ninja/auth/realms/helsinki-tunnistus"
+      VITE_OIDC_CLIENT_ID: "vety-ui-dev"
+      VITE_OIDC_API_AUDIENCE: "vety-api-dev"
+      VITE_OIDC_PROFILE_API_AUDIENCE: "profile-api-stage"
     ## Production definitions
     ## Production is using staging image
     configMap: # pod environment variables
-      VITE_API_BASE_URL: TODO-production-api-url
-      VITE_LOCIZE_PROJECT_ID: 8d851889-2950-437b-80e8-b4ef26317ff9
+      VITE_API_BASE_URL: "https://vety-esiope-prod.dev-se.hel.ninja"
+      VITE_LOCIZE_PROJECT_ID: "8d851889-2950-437b-80e8-b4ef26317ff9"
+      VITE_OIDC_AUTHORITY: "https://tunnistus.hel.ninja/auth/realms/helsinki-tunnistus"
+      VITE_OIDC_CLIENT_ID: "vety-ui-dev"
+      VITE_OIDC_API_AUDIENCE: "vety-api-dev"
+      VITE_OIDC_PROFILE_API_AUDIENCE: "profile-api"
