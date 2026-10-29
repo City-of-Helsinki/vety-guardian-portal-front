@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router';
 import { StepsContextProvider } from './StepsContext';
 import { toLanguage } from '../../i18n/i18n';
 import { useApplicationData } from './ApplicationDataContext';
+import { hyphenate } from '../../utils/hyphenate';
 
 // Steps are filled up to the last one whose saved values say so, stopping at the first
 // step that is known to be unfilled.
@@ -79,8 +80,9 @@ export const ApplicationFormSteps = ({
     return i;
   };
 
+  const language = toLanguage(i18n.resolvedLanguage);
   const stepperSteps = steps.map((step, i) => ({
-    label: step.label,
+    label: hyphenate(step.label, language),
     state:
       i === current
         ? StepState.available
@@ -173,9 +175,10 @@ export const ApplicationFormSteps = ({
     <div>
       <StepsContextProvider value={{ goToStep, currentId: steps[current].id }}>
         <Stepper
+          className={styles.stepper}
           data-testid="stepper"
           steps={stepperSteps}
-          language={toLanguage(i18n.resolvedLanguage)}
+          language={language}
           selectedStep={current}
           onStepClick={goTo}
         />
