@@ -37,6 +37,9 @@ i18n
     },
     backend: {
       projectId: config.locizeProjectId,
+      // Must match the project's CDN type in Locize: 'standard' loads from https://api.lite.locize.app,
+      // 'pro' from https://api.locize.app. If you change it, change LOCIZE_CDN_URL in
+      // vety-guardian-portal-back too (it reads the same translations for the application PDF).
       cdnType: 'standard',
     },
   });

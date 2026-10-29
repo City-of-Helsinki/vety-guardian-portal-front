@@ -5,6 +5,7 @@ import type {
 } from '../../api/generated';
 import { preschoolApplicationFormForDependantCreate } from '../../api/generated';
 import { DependantIcon } from '../dependant-icon';
+import { PdfDownloadButton } from '../pdf-download-button';
 import styles from './DependantItem.module.css';
 import { Button, ButtonVariant } from 'hds-react';
 import { useQuery } from '@tanstack/react-query';
@@ -96,6 +97,14 @@ export const DependantItem = ({
             >
               {isSubmitted ? t('applicationProcessing') : t('applicationLink')}
             </Button>
+            {isSubmitted && application.data && (
+              <div className={styles['pdf-download']}>
+                <PdfDownloadButton
+                  application={application.data}
+                  data-testid={`btn-download-pdf-${index}`}
+                />
+              </div>
+            )}
             {application.isError && (
               <p
                 role="alert"

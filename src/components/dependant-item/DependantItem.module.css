@@ -51,6 +51,10 @@
   }
 }
 
+.pdf-download {
+  margin-top: 1rem;
+}
+
 .age-text {
   color: #0072c6;
   font-weight: 500;

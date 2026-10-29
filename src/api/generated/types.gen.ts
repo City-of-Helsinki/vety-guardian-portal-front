@@ -432,6 +432,37 @@ export type PreschoolApplicationFormUpdateResponses = {
 
 export type PreschoolApplicationFormUpdateResponse = PreschoolApplicationFormUpdateResponses[keyof PreschoolApplicationFormUpdateResponses];
 
+export type PreschoolApplicationFormPdfRetrieveData = {
+    body?: never;
+    path: {
+        uuid: string;
+    };
+    query?: {
+        /**
+         * Language of the PDF texts.
+         */
+        lang?: 'en' | 'fi' | 'sv';
+    };
+    url: '/preschool-application-form/{uuid}/pdf/';
+};
+
+export type PreschoolApplicationFormPdfRetrieveErrors = {
+    400: ErrorResponse;
+    404: ErrorResponse;
+    503: ErrorResponse;
+};
+
+export type PreschoolApplicationFormPdfRetrieveError = PreschoolApplicationFormPdfRetrieveErrors[keyof PreschoolApplicationFormPdfRetrieveErrors];
+
+export type PreschoolApplicationFormPdfRetrieveResponses = {
+    /**
+     * The application as a PDF file.
+     */
+    200: Blob | File;
+};
+
+export type PreschoolApplicationFormPdfRetrieveResponse = PreschoolApplicationFormPdfRetrieveResponses[keyof PreschoolApplicationFormPdfRetrieveResponses];
+
 export type PreschoolApplicationFormForDependantCreateData = {
     body?: never;
     path: {

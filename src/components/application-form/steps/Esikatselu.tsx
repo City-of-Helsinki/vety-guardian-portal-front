@@ -10,7 +10,10 @@ import type { FormValues } from '../../../types';
 import { MarkdownContent } from '../../markdown-content';
 import { useSteps } from '../StepsContext';
 import { isoToDisplay } from '../../../utils/date';
+import { PdfDownloadButton } from '../../pdf-download-button';
 
+// The PDF version of this view is rendered by the backend:
+// vety-guardian-portal-back/guardian/templates/guardian/application_pdf.html — keep in sync.
 export const Esikatselu = () => {
   const { t } = useTranslation('lomake');
   const application = useApplicationData();
@@ -32,11 +35,19 @@ export const Esikatselu = () => {
       title={t('esikatselu.title')}
     >
       {application.status === 'submitted' && (
-        <Notification
-          type="info"
-          label={t('esikatselu.alreadySubmitted')}
-          data-testid="notification-already-submitted"
-        />
+        <>
+          <Notification
+            type="info"
+            label={t('esikatselu.alreadySubmitted')}
+            data-testid="notification-already-submitted"
+          />
+          <div style={{ marginTop: '1rem' }}>
+            <PdfDownloadButton
+              application={application}
+              data-testid="button-lataa-pdf"
+            />
+          </div>
+        </>
       )}
       <Divider />
       <SummarySection
