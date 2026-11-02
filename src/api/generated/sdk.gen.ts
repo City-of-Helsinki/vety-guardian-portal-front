@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AuthIdentityCreateData, AuthIdentityCreateErrors, AuthIdentityCreateResponses, PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponses, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateErrors, PreschoolApplicationFormForDependantCreateResponses, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponses, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponses, SchemaRetrieveData, SchemaRetrieveResponses, VtjDependantsRetrieveData, VtjDependantsRetrieveErrors, VtjDependantsRetrieveResponses, VtjGuardiansRetrieveData, VtjGuardiansRetrieveErrors, VtjGuardiansRetrieveResponses, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveErrors, VtjIsProtectedFamilyRetrieveResponses } from './types.gen';
+import type { AuthIdentityCreateData, AuthIdentityCreateErrors, AuthIdentityCreateResponses, PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponses, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateErrors, PreschoolApplicationFormForDependantCreateResponses, PreschoolApplicationFormPdfRetrieveData, PreschoolApplicationFormPdfRetrieveErrors, PreschoolApplicationFormPdfRetrieveResponses, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponses, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponses, SchemaRetrieveData, SchemaRetrieveResponses, VtjDependantsRetrieveData, VtjDependantsRetrieveErrors, VtjDependantsRetrieveResponses, VtjGuardiansRetrieveData, VtjGuardiansRetrieveErrors, VtjGuardiansRetrieveResponses, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveErrors, VtjIsProtectedFamilyRetrieveResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -81,6 +81,18 @@ export const preschoolApplicationFormUpdate = <ThrowOnError extends boolean = fa
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+/**
+ * GET /preschool-application-form/<uuid:uuid>/pdf/?lang=fi
+ *
+ * Download the submitted application as a PDF, laid out like the Esikatselu step.
+ * Drafts look nonexistent (404).
+ */
+export const preschoolApplicationFormPdfRetrieve = <ThrowOnError extends boolean = false>(options: Options<PreschoolApplicationFormPdfRetrieveData, ThrowOnError>) => (options.client ?? client).get<PreschoolApplicationFormPdfRetrieveResponses, PreschoolApplicationFormPdfRetrieveErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/preschool-application-form/{uuid}/pdf/',
+    ...options
 });
 
 /**

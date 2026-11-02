@@ -25,11 +25,13 @@ import {
   preschoolApplicationFormUpdateMutation,
 } from '../api/generated/@tanstack/react-query.gen';
 import type {
+  IdentityResponse,
   PreschoolApplication,
   PreschoolApplicationWritable,
   StatusEnum,
 } from '../api/generated';
 import { StepsContextProvider } from '../components/application-form/StepsContext';
+import { useGuardianIdentity } from '../auth/useGuardianIdentity';
 
 type DrfFieldErrors = Record<string, string | string[]>;
 
@@ -54,29 +56,48 @@ const toBody = (
 };
 
 // Only the editable fields go into the form; the read-only VTJ data is shown via ApplicationDataContext.
-const toFormValues = (application: PreschoolApplication): FormValues => ({
-  // Fields with default values.
-  hakenutEnsisijaisestiYksityiseen:
-    application.hakenutEnsisijaisestiYksityiseen ?? false,
-  kieli: application.kieli || 'fi',
-  // No default value. Can have "null" value.
-  taydentavaVarhaiskasvatus: application.taydentavaVarhaiskasvatus,
-  taydentavaVarhaiskasvatusAloitus:
-    application.taydentavaVarhaiskasvatusAloitus,
-  hoidonTarve: application.hoidonTarve,
-  palvelunTarve: application.palvelunTarve,
-  arkipoissaolotLkm: application.arkipoissaolotLkm ?? 0,
-  erityisenTuenTarve: application.erityisenTuenTarve,
-  laakehoidonTarve: application.laakehoidonTarve,
-  h1Sahkoposti: application.h1Sahkoposti,
-  // Confirm fields aren't persisted; a saved email has already been confirmed.
-  h1SahkopostiConfirm: application.h1Sahkoposti ?? undefined,
-  h1Puhelinnumero: application.h1Puhelinnumero,
-  h2Sahkoposti: application.h2Sahkoposti,
-  h2SahkopostiConfirm: application.h2Sahkoposti ?? undefined,
-  h2Puhelinnumero: application.h2Puhelinnumero,
-  status: application.status,
-});
+const toFormValues = (
+  application: PreschoolApplication,
+  identity?: IdentityResponse,
+): FormValues => {
+  const values: FormValues = {
+    // Fields with default values.
+    hakenutEnsisijaisestiYksityiseen:
+      application.hakenutEnsisijaisestiYksityiseen ?? false,
+    kieli: application.kieli || 'fi',
+    // No default value. Can have "null" value.
+    taydentavaVarhaiskasvatus: application.taydentavaVarhaiskasvatus,
+    taydentavaVarhaiskasvatusAloitus:
+      application.taydentavaVarhaiskasvatusAloitus,
+    hoidonTarve: application.hoidonTarve,
+    palvelunTarve: application.palvelunTarve,
+    arkipoissaolotLkm: application.arkipoissaolotLkm ?? 0,
+    erityisenTuenTarve: application.erityisenTuenTarve,
+    laakehoidonTarve: application.laakehoidonTarve,
+    h1Sahkoposti: application.h1Sahkoposti,
+    // Confirm fields aren't persisted; a saved email has already been confirmed.
+    h1SahkopostiConfirm: application.h1Sahkoposti ?? undefined,
+    h1Puhelinnumero: application.h1Puhelinnumero,
+    h2Sahkoposti: application.h2Sahkoposti,
+    h2SahkopostiConfirm: application.h2Sahkoposti ?? undefined,
+    h2Puhelinnumero: application.h2Puhelinnumero,
+    status: application.status,
+  };
+
+  // The logged-in guardian's contact details found in Helsinki-profiili aren't editable
+  // in the form, so they replace any values saved to the application earlier.
+  const guardian = application.currentGuardian;
+  if (guardian && identity && application.status !== 'submitted') {
+    if (identity.email) {
+      values[`${guardian}Sahkoposti`] = identity.email;
+      values[`${guardian}SahkopostiConfirm`] = identity.email;
+    }
+    if (identity.phone) {
+      values[`${guardian}Puhelinnumero`] = identity.phone;
+    }
+  }
+  return values;
+};
 
 const applyServerErrors = (
   error: unknown,
@@ -102,11 +123,12 @@ const applyServerErrors = (
   });
 };
 
-export const Application = ({}) => {
+export const Application = () => {
   const { t } = useTranslation('lomake');
 
   const navigate = useNavigate();
   const { applicationId = '' } = useParams();
+  const { identity } = useGuardianIdentity();
 
   // No cache: the form reads its defaultValues only on mount, so it must never start from stale data.
   const application = useQuery({
@@ -247,7 +269,7 @@ export const Application = ({}) => {
         <h2 style={{ textAlign: 'left' }}>{application.data.nimi}</h2>
         <Divider />
         <ApplicationForm
-          defaultValues={toFormValues(application.data)}
+          defaultValues={toFormValues(application.data, identity.data)}
           onSubmit={onSubmit}
         >
           {isSubmitted ? (

@@ -2,7 +2,7 @@ import { DependantList } from '../components/dependant-list';
 import { useTranslation } from 'react-i18next';
 import { Divider } from '../components/divider';
 
-export const Landing = ({}) => {
+export const Landing = () => {
   const { t } = useTranslation('landing');
 
   return (

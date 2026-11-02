@@ -3,8 +3,8 @@
 import { type DefaultError, queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { authIdentityCreate, type Options, preschoolApplicationFormCreate, preschoolApplicationFormForDependantCreate, preschoolApplicationFormRetrieve, preschoolApplicationFormUpdate, schemaRetrieve, vtjDependantsRetrieve, vtjGuardiansRetrieve, vtjIsProtectedFamilyRetrieve } from '../sdk.gen';
-import type { AuthIdentityCreateData, AuthIdentityCreateError, AuthIdentityCreateResponse, PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponse, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateError, PreschoolApplicationFormForDependantCreateResponse, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponse, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponse, SchemaRetrieveData, SchemaRetrieveResponse, VtjDependantsRetrieveData, VtjDependantsRetrieveError, VtjDependantsRetrieveResponse, VtjGuardiansRetrieveData, VtjGuardiansRetrieveError, VtjGuardiansRetrieveResponse, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveError, VtjIsProtectedFamilyRetrieveResponse } from '../types.gen';
+import { authIdentityCreate, type Options, preschoolApplicationFormCreate, preschoolApplicationFormForDependantCreate, preschoolApplicationFormPdfRetrieve, preschoolApplicationFormRetrieve, preschoolApplicationFormUpdate, schemaRetrieve, vtjDependantsRetrieve, vtjGuardiansRetrieve, vtjIsProtectedFamilyRetrieve } from '../sdk.gen';
+import type { AuthIdentityCreateData, AuthIdentityCreateError, AuthIdentityCreateResponse, PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponse, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateError, PreschoolApplicationFormForDependantCreateResponse, PreschoolApplicationFormPdfRetrieveData, PreschoolApplicationFormPdfRetrieveError, PreschoolApplicationFormPdfRetrieveResponse, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponse, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponse, SchemaRetrieveData, SchemaRetrieveResponse, VtjDependantsRetrieveData, VtjDependantsRetrieveError, VtjDependantsRetrieveResponse, VtjGuardiansRetrieveData, VtjGuardiansRetrieveError, VtjGuardiansRetrieveResponse, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveError, VtjIsProtectedFamilyRetrieveResponse } from '../types.gen';
 
 /**
  * POST /auth/identity/
@@ -124,6 +124,27 @@ export const preschoolApplicationFormUpdateMutation = (options?: Partial<Options
     };
     return mutationOptions;
 };
+
+export const preschoolApplicationFormPdfRetrieveQueryKey = (options: Options<PreschoolApplicationFormPdfRetrieveData>) => createQueryKey('preschoolApplicationFormPdfRetrieve', options);
+
+/**
+ * GET /preschool-application-form/<uuid:uuid>/pdf/?lang=fi
+ *
+ * Download the submitted application as a PDF, laid out like the Esikatselu step.
+ * Drafts look nonexistent (404).
+ */
+export const preschoolApplicationFormPdfRetrieveOptions = (options: Options<PreschoolApplicationFormPdfRetrieveData>) => queryOptions<PreschoolApplicationFormPdfRetrieveResponse, PreschoolApplicationFormPdfRetrieveError, PreschoolApplicationFormPdfRetrieveResponse, ReturnType<typeof preschoolApplicationFormPdfRetrieveQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await preschoolApplicationFormPdfRetrieve({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: preschoolApplicationFormPdfRetrieveQueryKey(options)
+});
 
 /**
  * POST /preschool-application-form/for-dependant/<uuid:dependant_id>/

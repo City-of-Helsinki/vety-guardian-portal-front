@@ -10,8 +10,11 @@ import type { FormValues } from '../../../types';
 import { MarkdownContent } from '../../markdown-content';
 import { useSteps } from '../StepsContext';
 import { isoToDisplay } from '../../../utils/date';
+import { PdfDownloadButton } from '../../pdf-download-button';
 
-export const Esikatselu = ({}) => {
+// The PDF version of this view is rendered by the backend:
+// vety-guardian-portal-back/guardian/templates/guardian/application_pdf.html — keep in sync.
+export const Esikatselu = () => {
   const { t } = useTranslation('lomake');
   const application = useApplicationData();
   const values = useFormContext<FormValues>().getValues();
@@ -32,11 +35,19 @@ export const Esikatselu = ({}) => {
       title={t('esikatselu.title')}
     >
       {application.status === 'submitted' && (
-        <Notification
-          type="info"
-          label={t('esikatselu.alreadySubmitted')}
-          data-testid="notification-already-submitted"
-        />
+        <>
+          <Notification
+            type="info"
+            label={t('esikatselu.alreadySubmitted')}
+            data-testid="notification-already-submitted"
+          />
+          <div style={{ marginTop: '1rem' }}>
+            <PdfDownloadButton
+              application={application}
+              data-testid="button-lataa-pdf"
+            />
+          </div>
+        </>
       )}
       <Divider />
       <SummarySection
@@ -181,6 +192,11 @@ export const Esikatselu = ({}) => {
             label={t('esikatselu.huoltajanNimi')}
             value={application.h1Nimi}
           />
+          <LabelValue
+            data-testid="summary-h1-henkilotunnus"
+            label={t('esikatselu.henkilotunnus')}
+            value={application.h1Henkilotunnus}
+          />
         </LabelValueWrapper>
         <LabelValueWrapper>
           <LabelValue
@@ -208,14 +224,19 @@ export const Esikatselu = ({}) => {
           data-testid="section-muut-huoltajat"
           title={t('esikatselu.muutHuoltajatTitle')}
         >
-          <p data-testid="text-muut-huoltajat">
+          <MarkdownContent data-testid="text-muut-huoltajat">
             {t('esikatselu.muutHuoltajatText')}
-          </p>
+          </MarkdownContent>
           <LabelValueWrapper>
             <LabelValue
               data-testid="summary-h2-nimi"
               label={t('esikatselu.huoltajanNimi')}
               value={[application.h2Nimi]}
+            />
+            <LabelValue
+              data-testid="summary-h2-henkilotunnus"
+              label={t('esikatselu.henkilotunnus')}
+              value={application.h2Henkilotunnus}
             />
           </LabelValueWrapper>
           <LabelValueWrapper>

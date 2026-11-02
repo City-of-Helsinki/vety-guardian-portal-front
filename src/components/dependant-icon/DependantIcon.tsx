@@ -1,4 +1,4 @@
-export const DependantIcon = ({}) => {
+export const DependantIcon = () => {
   return (
     <svg role="img" viewBox="0 0 46 34">
       <path

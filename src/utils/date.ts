@@ -19,6 +19,28 @@ export const isoToDisplay = (iso?: string | null): string => {
   return isValid(parsed) ? format(parsed, DISPLAY_DATE_FORMAT) : '';
 };
 
+const helsinkiDateFormat = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Europe/Helsinki',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+/** Date of an ISO timestamp in Helsinki time as "yyyy-MM-dd", e.g. "2026-10-20T22:30:00Z" -> "2026-10-21". */
+export const isoToHelsinkiIsoDate = (iso?: string | null): string => {
+  if (!iso) {
+    return '';
+  }
+  const parsed = parseISO(iso);
+  if (!isValid(parsed)) {
+    return '';
+  }
+  const parts = Object.fromEntries(
+    helsinkiDateFormat.formatToParts(parsed).map((p) => [p.type, p.value]),
+  );
+  return `${parts.year}-${parts.month}-${parts.day}`;
+};
+
 /** Age in full years and months, e.g. { years: 1, months: 8 }. Undefined for a missing or invalid date. */
 export const ageFromIso = (
   iso?: string | null,
