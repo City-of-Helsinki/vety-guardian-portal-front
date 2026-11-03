@@ -70,6 +70,15 @@ h2 {
     font-size: 20px;
   }
 }
+/* Not in the h1, h2 rule: section titles take their colour from the parent (.section-title in Summary.module.css). */
+h3 {
+  font-size: 20px;
+  line-height: 118%;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 18px;
+  }
+}
 p {
   margin: 0;
 }
