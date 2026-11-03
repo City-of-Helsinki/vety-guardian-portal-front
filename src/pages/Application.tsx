@@ -51,6 +51,9 @@ const toBody = (
       palvelunTarve: null,
       arkipoissaolotLkm: null,
     }),
+    ...(values.hoidonTarve === 'vuorohoito_varhaiskasvatus' && {
+      arkipoissaolotLkm: null,
+    }),
     status,
   };
 };
@@ -182,7 +185,9 @@ export const Application = () => {
       isSkipped: (v) => v.taydentavaVarhaiskasvatus === false,
       isFilled: (v) =>
         v.taydentavaVarhaiskasvatus === false ||
-        (!!v.palvelunTarve && v.arkipoissaolotLkm != null),
+        (!!v.palvelunTarve &&
+          (v.hoidonTarve === 'vuorohoito_varhaiskasvatus' ||
+            v.arkipoissaolotLkm != null)),
     },
     {
       id: 'tuki-ja-laakehoito',
