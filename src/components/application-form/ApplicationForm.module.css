@@ -19,6 +19,11 @@
   overflow-wrap: anywhere;
 }
 
+/* The global h3 has no top margin; the text above this title has padding, so margins don't collapse. */
+.fields-title {
+  margin-top: 1em;
+}
+
 .stepper-buttons {
   display: flex;
   justify-content: flex-end;

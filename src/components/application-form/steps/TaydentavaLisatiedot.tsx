@@ -40,7 +40,10 @@ export const TaydentavaLisatiedot = () => {
       <MarkdownContent data-testid="text-taydentava-lisatiedot">
         {t('taydentavaLisatiedot.taydentavaLisatiedotText')}
       </MarkdownContent>
-      <h3 data-testid="title-taydentava-lisatiedot-fields">
+      <h3
+        className={styles['fields-title']}
+        data-testid="title-taydentava-lisatiedot-fields"
+      >
         {t('taydentavaLisatiedot.fieldsTitle')}
       </h3>
       <MarkdownContent>
