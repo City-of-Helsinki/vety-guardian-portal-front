@@ -1,5 +1,5 @@
 .item {
-  border: 0.125rem solid #9fc9eb;
+  border: 0.125rem solid var(--color-blue-light);
   display: flex;
   flex-direction: column;
 }
@@ -7,17 +7,17 @@
 .dependant-card {
   display: flex;
   flex-direction: row;
-  background: #f2f8fd;
+  background: var(--color-blue-lighter);
 }
 
 .application-card {
   padding: 1.125rem 1.875rem;
-  background: #ffff;
+  background: var(--color-white);
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  border-top: 0.125rem solid #9fc9eb;
+  border-top: 0.125rem solid var(--color-blue-light);
 }
 
 .dependant-icon {
@@ -26,9 +26,9 @@
   margin: 1rem 1rem 1rem 2rem;
   display: flex;
   justify-content: center;
-  background-color: #ffff;
+  background-color: var(--color-white);
   border-radius: 50%;
-  color: #0072c6;
+  color: var(--color-blue);
 }
 
 .basic-info {
@@ -43,7 +43,7 @@
   padding: 1rem;
   text-align: start;
   & > h3 {
-    color: #0072c6;
+    color: var(--color-blue);
     margin: 0 0 1rem 0;
   }
   & > p {
@@ -56,11 +56,11 @@
 }
 
 .age-text {
-  color: #0072c6;
+  color: var(--color-blue);
   font-weight: 500;
 }
 
 .dependant-name {
   font-weight: bold;
-  color: #000000;
+  color: var(--color-black);
 }

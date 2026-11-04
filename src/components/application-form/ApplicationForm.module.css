@@ -19,6 +19,11 @@
   overflow-wrap: anywhere;
 }
 
+/* The global h3 has no top margin; the text above this title has padding, so margins don't collapse. */
+.fields-title {
+  margin-top: 1em;
+}
+
 .stepper-buttons {
   display: flex;
   justify-content: flex-end;
@@ -38,11 +43,11 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  border: 2px solid #4e4e4e;
+  border: 2px solid var(--color-grey-dark);
   padding: 2rem;
 }
 
 .selection-group-item:has(input:checked) {
-  background-color: #f2f8fd;
-  border-color: #9fc9eb;
+  background-color: var(--color-blue-lighter);
+  border-color: var(--color-blue-light);
 }

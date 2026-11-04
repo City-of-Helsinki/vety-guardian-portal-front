@@ -1,7 +1,15 @@
 :root {
-  --text: #6b6375;
+  --color-blue: #0072c6;
+  --color-blue-light: #9fc9eb;
+  --color-blue-lighter: #f2f8fd;
+  --color-grey: #6b6375;
+  --color-grey-dark: #4e4e4e;
+  --color-white: #fff;
+  --color-black: #000;
+
+  --text: var(--color-grey);
   --text-h: #08060d;
-  --bg: #fff;
+  --bg: var(--color-white);
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
   --accent: #aa3bff;
@@ -68,6 +76,16 @@ h2 {
   margin: 0 0 8px;
   @media (max-width: 1024px) {
     font-size: 20px;
+  }
+}
+/* Blue h3s set their colour where they're used (Summary.module.css, DependantItem.module.css). */
+h3 {
+  color: var(--color-grey);
+  font-size: 20px;
+  line-height: 118%;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 18px;
   }
 }
 p {
