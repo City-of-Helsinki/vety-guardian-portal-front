@@ -124,69 +124,71 @@ export const Yhteystiedot = () => {
           </>
         )}
       </Fieldset>
-      <Fieldset
-        heading={t('yhteystiedot.h2ContactsTitle')}
-        data-testid="fieldset-h2-yhteystiedot"
-      >
-        {isLocked('h2') ? (
-          renderLocked('h2')
-        ) : (
-          <>
-            {isFromProfile('h2', 'email') ? (
-              renderEmail('h2')
-            ) : (
-              <>
+      {application.h2Nimi && (
+        <Fieldset
+          heading={t('yhteystiedot.h2ContactsTitle')}
+          data-testid="fieldset-h2-yhteystiedot"
+        >
+          {isLocked('h2') ? (
+            renderLocked('h2')
+          ) : (
+            <>
+              {isFromProfile('h2', 'email') ? (
+                renderEmail('h2')
+              ) : (
+                <>
+                  <TextInput
+                    id="h2-sahkoposti"
+                    data-testid="input-h2-sahkoposti"
+                    label={t('yhteystiedot.emailLabel')}
+                    type="email"
+                    {...register('h2Sahkoposti', {
+                      pattern: {
+                        value: EMAIL_PATTERN,
+                        message: t('errors.emailInvalid'),
+                      },
+                      onChange: validateConfirm('h2SahkopostiConfirm'),
+                    })}
+                    invalid={!!errors.h2Sahkoposti}
+                    errorText={errors.h2Sahkoposti?.message}
+                  />
+                  <TextInput
+                    id="h2-sahkoposti-confirm"
+                    data-testid="input-h2-sahkoposti-confirm"
+                    label={t('yhteystiedot.emailConfirmLabel')}
+                    type="email"
+                    {...register('h2SahkopostiConfirm', {
+                      validate: (value, values) =>
+                        (value ?? '') === (values.h2Sahkoposti ?? '') ||
+                        t('errors.emailNotMatching'),
+                    })}
+                    invalid={!!errors.h2SahkopostiConfirm}
+                    errorText={errors.h2SahkopostiConfirm?.message}
+                  />
+                </>
+              )}
+              {isFromProfile('h2', 'phone') ? (
+                renderPhone('h2')
+              ) : (
                 <TextInput
-                  id="h2-sahkoposti"
-                  data-testid="input-h2-sahkoposti"
-                  label={t('yhteystiedot.emailLabel')}
-                  type="email"
-                  {...register('h2Sahkoposti', {
+                  id="h2-puhelinnumero"
+                  data-testid="input-h2-puhelinnumero"
+                  label={t('yhteystiedot.phoneLabel')}
+                  type="tel"
+                  {...register('h2Puhelinnumero', {
                     pattern: {
-                      value: EMAIL_PATTERN,
-                      message: t('errors.emailInvalid'),
+                      value: PHONE_PATTERN,
+                      message: t('errors.phoneInvalid'),
                     },
-                    onChange: validateConfirm('h2SahkopostiConfirm'),
                   })}
-                  invalid={!!errors.h2Sahkoposti}
-                  errorText={errors.h2Sahkoposti?.message}
+                  invalid={!!errors.h2Puhelinnumero}
+                  errorText={errors.h2Puhelinnumero?.message}
                 />
-                <TextInput
-                  id="h2-sahkoposti-confirm"
-                  data-testid="input-h2-sahkoposti-confirm"
-                  label={t('yhteystiedot.emailConfirmLabel')}
-                  type="email"
-                  {...register('h2SahkopostiConfirm', {
-                    validate: (value, values) =>
-                      (value ?? '') === (values.h2Sahkoposti ?? '') ||
-                      t('errors.emailNotMatching'),
-                  })}
-                  invalid={!!errors.h2SahkopostiConfirm}
-                  errorText={errors.h2SahkopostiConfirm?.message}
-                />
-              </>
-            )}
-            {isFromProfile('h2', 'phone') ? (
-              renderPhone('h2')
-            ) : (
-              <TextInput
-                id="h2-puhelinnumero"
-                data-testid="input-h2-puhelinnumero"
-                label={t('yhteystiedot.phoneLabel')}
-                type="tel"
-                {...register('h2Puhelinnumero', {
-                  pattern: {
-                    value: PHONE_PATTERN,
-                    message: t('errors.phoneInvalid'),
-                  },
-                })}
-                invalid={!!errors.h2Puhelinnumero}
-                errorText={errors.h2Puhelinnumero?.message}
-              />
-            )}
-          </>
-        )}
-      </Fieldset>
+              )}
+            </>
+          )}
+        </Fieldset>
+      )}
     </ApplicationFormStep>
   );
 };
