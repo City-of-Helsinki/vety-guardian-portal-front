@@ -3,7 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { get, useFormContext } from 'react-hook-form';
 import type { UseFormReturn } from 'react-hook-form';
 
-import { StepState, Stepper, Button, ButtonVariant, Dialog } from 'hds-react';
+import {
+  StepState,
+  Stepper,
+  Button,
+  ButtonVariant,
+  Dialog,
+  IconInfoCircle,
+  IconCheckCircle,
+  IconSize,
+} from 'hds-react';
 import { type FormValues, type FormStep } from '../../types';
 import styles from './ApplicationForm.module.css';
 import { useNavigate } from 'react-router';
@@ -39,12 +48,14 @@ interface ApplicationFormStepsProps {
     form: UseFormReturn<FormValues>,
   ) => Promise<boolean>;
   isSaving?: boolean;
+  isSent?: boolean;
 }
 
 export const ApplicationFormSteps = ({
   steps,
   onStepSave,
   isSaving = false,
+  isSent = false,
 }: ApplicationFormStepsProps) => {
   const { i18n, t } = useTranslation('lomake');
   const navigate = useNavigate();
@@ -54,7 +65,7 @@ export const ApplicationFormSteps = ({
     getValues,
     setValue,
     clearErrors,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = form;
   const [savedValues, setSavedValues] = useState(() => getValues());
   const application = useApplicationData();
@@ -180,8 +191,15 @@ export const ApplicationFormSteps = ({
 
   const closeConfirm = () => setIsConfirmOpen(false);
 
+  const [wasSubmitting, setWasSubmitting] = useState(false);
+  if (isSubmitting !== wasSubmitting) {
+    setWasSubmitting(isSubmitting);
+    if (!isSubmitting && !isSent) setIsConfirmOpen(false);
+  }
+
+  const goHome = () => navigate('/');
+
   const confirmSubmit = () => {
-    closeConfirm();
     (
       document.getElementById(APPLICATION_FORM_ID) as HTMLFormElement | null
     )?.requestSubmit();
@@ -248,34 +266,64 @@ export const ApplicationFormSteps = ({
           aria-labelledby="submit-confirm-dialog-title"
           aria-describedby="submit-confirm-dialog-description"
           isOpen={isConfirmOpen}
-          close={closeConfirm}
+          close={isSent ? goHome : closeConfirm}
           closeButtonLabelText={t('submitConfirmClose')}
           focusAfterCloseRef={submitButtonRef as React.RefObject<HTMLElement>}
         >
           <Dialog.Header
+            key={isSent ? 'sent' : 'confirm'}
             id="submit-confirm-dialog-title"
             title={t('submitConfirmTitle')}
+            iconStart={<IconInfoCircle />}
+            className={styles['confirm-header']}
           />
-          <Dialog.Content>
-            <p id="submit-confirm-dialog-description">
-              {t('submitConfirmDescription')}
-            </p>
+          <Dialog.Content
+            className={isSent ? styles['sent-confirmation'] : undefined}
+          >
+            {isSent ? (
+              <>
+                <IconCheckCircle size={IconSize.ExtraLarge} aria-hidden />
+                <p id="submit-confirm-dialog-description">
+                  {t('submitSentDescription')}
+                </p>
+              </>
+            ) : (
+              <p id="submit-confirm-dialog-description">
+                {t('submitConfirmDescription')}
+              </p>
+            )}
           </Dialog.Content>
-          <Dialog.ActionButtons>
-            <Button
-              variant={ButtonVariant.Primary}
-              onClick={confirmSubmit}
-              data-testid="btn-submit-confirm"
-            >
-              {t('submitConfirmSend')}
-            </Button>
-            <Button
-              variant={ButtonVariant.Secondary}
-              onClick={closeConfirm}
-              data-testid="btn-submit-cancel"
-            >
-              {t('submitConfirmCancel')}
-            </Button>
+          <Dialog.ActionButtons
+            className={isSent ? styles['sent-actions'] : undefined}
+          >
+            {isSent ? (
+              <Button
+                variant={ButtonVariant.Secondary}
+                onClick={goHome}
+                data-testid="btn-submit-sent-close"
+              >
+                {t('submitSentClose')}
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant={ButtonVariant.Primary}
+                  onClick={confirmSubmit}
+                  disabled={isSubmitting}
+                  data-testid="btn-submit-confirm"
+                >
+                  {t('submitConfirmSend')}
+                </Button>
+                <Button
+                  variant={ButtonVariant.Secondary}
+                  onClick={closeConfirm}
+                  disabled={isSubmitting}
+                  data-testid="btn-submit-cancel"
+                >
+                  {t('submitConfirmCancel')}
+                </Button>
+              </>
+            )}
           </Dialog.ActionButtons>
         </Dialog>
       </StepsContextProvider>
