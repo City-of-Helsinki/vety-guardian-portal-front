@@ -32,10 +32,8 @@ export const VarhaiskasvatuksenLaajuus = () => {
   });
   const hoidonTarve = useWatch({ control, name: 'hoidonTarve' });
 
-  const palvelunTarveOptions =
-    hoidonTarve === 'vuorohoito_varhaiskasvatus'
-      ? VUOROHOITO_OPTIONS
-      : VAKA_OPTIONS;
+  const isVuorohoito = hoidonTarve === 'vuorohoito_varhaiskasvatus';
+  const palvelunTarveOptions = isVuorohoito ? VUOROHOITO_OPTIONS : VAKA_OPTIONS;
 
   return (
     <ApplicationFormStep
@@ -85,56 +83,58 @@ export const VarhaiskasvatuksenLaajuus = () => {
           )}
         />
       </Fieldset>
-      <Fieldset
-        heading={t('varhaiskasvatuksenLaajuus.arkipoissaolotTitle')}
-        data-testid="fieldset-arkipoissaolot"
-      >
-        <p data-testid="text-arkipoissaolot">
-          {t('varhaiskasvatuksenLaajuus.arkipoissaolotText')}
-        </p>
-        <Controller
-          name="arkipoissaolotLkm"
-          control={control}
-          disabled={!watch('taydentavaVarhaiskasvatus')}
-          rules={{
-            required: taydentavaVarhaiskasvatus
-              ? t('varhaiskasvatuksenLaajuus.arkipoissaolotRequired')
-              : false,
-            min: {
-              value: ARKIPOISSAOLOT_MIN,
-              message: t('varhaiskasvatuksenLaajuus.arkipoissaolotMin'),
-            },
-            max: {
-              value: ARKIPOISSAOLOT_MAX,
-              message: t('varhaiskasvatuksenLaajuus.arkipoissaolotMax'),
-            },
-            validate: (value) =>
-              value == null ||
-              Number.isInteger(value) ||
-              t('errors.arkipoissaolotInteger'),
-          }}
-          render={({ field, fieldState }) => (
-            <NumberInput
-              id="arki-poissaolot"
-              data-testid="input-arki-poissaolot"
-              label={t('varhaiskasvatuksenLaajuus.arkipoissaolotLabel')}
-              min={ARKIPOISSAOLOT_MIN}
-              max={ARKIPOISSAOLOT_MAX}
-              step={1}
-              value={field.value ?? ''}
-              onChange={(e) =>
-                field.onChange(
-                  e.target.value === '' ? null : Number(e.target.value),
-                )
-              }
-              onBlur={field.onBlur}
-              disabled={field.disabled}
-              invalid={!!fieldState.error}
-              errorText={fieldState.error?.message}
-            />
-          )}
-        />
-      </Fieldset>
+      {!isVuorohoito && (
+        <Fieldset
+          heading={t('varhaiskasvatuksenLaajuus.arkipoissaolotTitle')}
+          data-testid="fieldset-arkipoissaolot"
+        >
+          <p data-testid="text-arkipoissaolot">
+            {t('varhaiskasvatuksenLaajuus.arkipoissaolotText')}
+          </p>
+          <Controller
+            name="arkipoissaolotLkm"
+            control={control}
+            disabled={!watch('taydentavaVarhaiskasvatus')}
+            rules={{
+              required: taydentavaVarhaiskasvatus
+                ? t('varhaiskasvatuksenLaajuus.arkipoissaolotRequired')
+                : false,
+              min: {
+                value: ARKIPOISSAOLOT_MIN,
+                message: t('varhaiskasvatuksenLaajuus.arkipoissaolotMin'),
+              },
+              max: {
+                value: ARKIPOISSAOLOT_MAX,
+                message: t('varhaiskasvatuksenLaajuus.arkipoissaolotMax'),
+              },
+              validate: (value) =>
+                value == null ||
+                Number.isInteger(value) ||
+                t('errors.arkipoissaolotInteger'),
+            }}
+            render={({ field, fieldState }) => (
+              <NumberInput
+                id="arki-poissaolot"
+                data-testid="input-arki-poissaolot"
+                label={t('varhaiskasvatuksenLaajuus.arkipoissaolotLabel')}
+                min={ARKIPOISSAOLOT_MIN}
+                max={ARKIPOISSAOLOT_MAX}
+                step={1}
+                value={field.value ?? ''}
+                onChange={(e) =>
+                  field.onChange(
+                    e.target.value === '' ? null : Number(e.target.value),
+                  )
+                }
+                onBlur={field.onBlur}
+                disabled={field.disabled}
+                invalid={!!fieldState.error}
+                errorText={fieldState.error?.message}
+              />
+            )}
+          />
+        </Fieldset>
+      )}
     </ApplicationFormStep>
   );
 };
