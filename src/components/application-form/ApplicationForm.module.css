@@ -51,3 +51,7 @@
   background-color: var(--color-blue-lighter);
   border-color: var(--color-blue-light);
 }
+
+.selection-group-item:has(input:not(:disabled)) {
+  cursor: pointer;
+}
