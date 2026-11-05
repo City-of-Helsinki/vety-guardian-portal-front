@@ -1,6 +1,7 @@
 import { SelectionGroup, RadioButton } from 'hds-react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
+import { SelectionGroupItem } from '../SelectionGroupItem';
 import type { FormValues } from '../../../types';
 import styles from '../ApplicationForm.module.css';
 import { useTranslation } from 'react-i18next';
@@ -22,10 +23,7 @@ export const Kieli = () => {
             data-testid="group-kieli"
             errorText={fieldState.error?.message}
           >
-            <div
-              id="esiopetuksen-kieli-fi-item"
-              className={styles['selection-group-item']}
-            >
+            <SelectionGroupItem id="esiopetuksen-kieli-fi-item">
               <RadioButton
                 id="esiopetuksen-kieli-fi"
                 data-testid="rb-eo-kieli-fi"
@@ -36,11 +34,8 @@ export const Kieli = () => {
                 onChange={field.onChange}
                 onBlur={field.onBlur}
               />
-            </div>
-            <div
-              id="esiopetuksen-kieli-sv-item"
-              className={styles['selection-group-item']}
-            >
+            </SelectionGroupItem>
+            <SelectionGroupItem id="esiopetuksen-kieli-sv-item">
               <RadioButton
                 id="esiopetuksen-kieli-sv"
                 data-testid="rb-eo-kieli-sv"
@@ -51,7 +46,7 @@ export const Kieli = () => {
                 onChange={field.onChange}
                 onBlur={field.onBlur}
               />
-            </div>
+            </SelectionGroupItem>
           </SelectionGroup>
         )}
       />
