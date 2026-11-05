@@ -30,6 +30,7 @@ export const SelectionGroupItem = ({
         .filter(Boolean)
         .join(' ')}
       onClick={handleClick}
+      role="presentation"
     />
   );
 };
