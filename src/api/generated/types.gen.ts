@@ -151,6 +151,7 @@ export type KieliEnum = 'fi' | 'sv';
 export type NullEnum = never;
 
 /**
+ * * `esiopetus_4h` - Esiopetus, 4t/pv
  * * `esiopetus_4h_1h_vaka` - Esiop +päiväh, yht 5t/pv
  * * `esiopetus_4h_1_3h_vaka` - Esiop+ päiväh, yht 5-7/pv
  * * `esiopetus_4h_3_4h_vaka` - Esiop +päiväh, yht 7-8/pv
@@ -159,7 +160,7 @@ export type NullEnum = never;
  * * `esiopetus_4h_101_160h_vuoroh` - Esiopetus + Vuorohoito 101-160h/kk
  * * `esiopetus_4h_160h_vuoroh` - Esiopetus + Vuorohoito yli 160h/kk
  */
-export type PalvelunTarveEnum = 'esiopetus_4h_1h_vaka' | 'esiopetus_4h_1_3h_vaka' | 'esiopetus_4h_3_4h_vaka' | 'esiopetus_4h_4_6h_vaka' | 'esiopetus_4h_61_100h_vuoroh' | 'esiopetus_4h_101_160h_vuoroh' | 'esiopetus_4h_160h_vuoroh';
+export type PalvelunTarveEnum = 'esiopetus_4h' | 'esiopetus_4h_1h_vaka' | 'esiopetus_4h_1_3h_vaka' | 'esiopetus_4h_3_4h_vaka' | 'esiopetus_4h_4_6h_vaka' | 'esiopetus_4h_61_100h_vuoroh' | 'esiopetus_4h_101_160h_vuoroh' | 'esiopetus_4h_160h_vuoroh';
 
 /**
  * Serializer for PreschoolApplication.
@@ -388,6 +389,40 @@ export type AuthIdentityCreateResponses = {
 };
 
 export type AuthIdentityCreateResponse = AuthIdentityCreateResponses[keyof AuthIdentityCreateResponses];
+
+export type GdprApiV1ProfilesDestroyData = {
+    body?: never;
+    path: {
+        uuid: string;
+    };
+    query?: never;
+    url: '/gdpr-api/v1/profiles/{uuid}';
+};
+
+export type GdprApiV1ProfilesDestroyResponses = {
+    /**
+     * No response body
+     */
+    204: void;
+};
+
+export type GdprApiV1ProfilesDestroyResponse = GdprApiV1ProfilesDestroyResponses[keyof GdprApiV1ProfilesDestroyResponses];
+
+export type GdprApiV1ProfilesRetrieveData = {
+    body?: never;
+    path: {
+        uuid: string;
+    };
+    query?: never;
+    url: '/gdpr-api/v1/profiles/{uuid}';
+};
+
+export type GdprApiV1ProfilesRetrieveResponses = {
+    /**
+     * No response body
+     */
+    200: unknown;
+};
 
 export type PreschoolApplicationFormCreateData = {
     body?: PreschoolApplicationWritable;
