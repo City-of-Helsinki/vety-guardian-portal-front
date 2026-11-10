@@ -56,6 +56,7 @@ function App() {
               id="action-bar-user"
               label={user?.profile.given_name}
               icon={<IconUser />}
+              dropdownClassName="user-menu-dropdown"
               fixedRightPosition
             >
               <Header.LogoutSubmenuButton

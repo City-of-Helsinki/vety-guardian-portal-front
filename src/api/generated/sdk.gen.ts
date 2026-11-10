@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AuthIdentityCreateData, AuthIdentityCreateErrors, AuthIdentityCreateResponses, PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponses, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateErrors, PreschoolApplicationFormForDependantCreateResponses, PreschoolApplicationFormPdfRetrieveData, PreschoolApplicationFormPdfRetrieveErrors, PreschoolApplicationFormPdfRetrieveResponses, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponses, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponses, SchemaRetrieveData, SchemaRetrieveResponses, VtjDependantsRetrieveData, VtjDependantsRetrieveErrors, VtjDependantsRetrieveResponses, VtjGuardiansRetrieveData, VtjGuardiansRetrieveErrors, VtjGuardiansRetrieveResponses, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveErrors, VtjIsProtectedFamilyRetrieveResponses } from './types.gen';
+import type { AuthIdentityCreateData, AuthIdentityCreateErrors, AuthIdentityCreateResponses, GdprApiV1ProfilesDestroyData, GdprApiV1ProfilesDestroyResponses, GdprApiV1ProfilesRetrieveData, GdprApiV1ProfilesRetrieveResponses, PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponses, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateErrors, PreschoolApplicationFormForDependantCreateResponses, PreschoolApplicationFormPdfRetrieveData, PreschoolApplicationFormPdfRetrieveErrors, PreschoolApplicationFormPdfRetrieveResponses, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponses, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponses, SchemaRetrieveData, SchemaRetrieveResponses, VtjDependantsRetrieveData, VtjDependantsRetrieveErrors, VtjDependantsRetrieveResponses, VtjGuardiansRetrieveData, VtjGuardiansRetrieveErrors, VtjGuardiansRetrieveResponses, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveErrors, VtjIsProtectedFamilyRetrieveResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -32,6 +32,32 @@ export const authIdentityCreate = <ThrowOnError extends boolean = false>(options
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+/**
+ * Delete all data related to the given profile.
+ *
+ * Deletes all data related to the given profile id, or just checks if the data
+ * can be deleted, depending on the `dry_run` parameter. Raises DeletionNotAllowed
+ * if the item
+ *
+ * Dry run delete is expected to always give the same end result as the proper
+ * delete i.e. if dry run indicated deleting is OK, the proper delete should be OK
+ * too.
+ */
+export const gdprApiV1ProfilesDestroy = <ThrowOnError extends boolean = false>(options: Options<GdprApiV1ProfilesDestroyData, ThrowOnError>) => (options.client ?? client).delete<GdprApiV1ProfilesDestroyResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/gdpr-api/v1/profiles/{uuid}',
+    ...options
+});
+
+/**
+ * Retrieve all profile data related to the given id.
+ */
+export const gdprApiV1ProfilesRetrieve = <ThrowOnError extends boolean = false>(options: Options<GdprApiV1ProfilesRetrieveData, ThrowOnError>) => (options.client ?? client).get<GdprApiV1ProfilesRetrieveResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/gdpr-api/v1/profiles/{uuid}',
+    ...options
 });
 
 /**

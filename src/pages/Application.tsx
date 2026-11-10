@@ -18,7 +18,8 @@ import {
 import type { FormStep, FormValues } from '../types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import type { UseFormReturn } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useState } from 'react';
 import { LoadingSpinner, Notification } from 'hds-react';
 import {
   preschoolApplicationFormRetrieveOptions,
@@ -49,6 +50,9 @@ const toBody = (
       taydentavaVarhaiskasvatusAloitus: null,
       hoidonTarve: null,
       palvelunTarve: null,
+      arkipoissaolotLkm: null,
+    }),
+    ...(values.hoidonTarve === 'vuorohoito_varhaiskasvatus' && {
       arkipoissaolotLkm: null,
     }),
     status,
@@ -126,7 +130,6 @@ const applyServerErrors = (
 export const Application = () => {
   const { t } = useTranslation('lomake');
 
-  const navigate = useNavigate();
   const { applicationId = '' } = useParams();
   const { identity } = useGuardianIdentity();
 
@@ -141,6 +144,8 @@ export const Application = () => {
     preschoolApplicationFormUpdateMutation(),
   );
   const isSaving = updateApplication.isPending;
+  // Sent in this session: the form stays mounted so the confirmation dialog can show the result.
+  const [isSentNow, setIsSentNow] = useState(false);
 
   const steps: FormStep[] = [
     {
@@ -182,7 +187,9 @@ export const Application = () => {
       isSkipped: (v) => v.taydentavaVarhaiskasvatus === false,
       isFilled: (v) =>
         v.taydentavaVarhaiskasvatus === false ||
-        (!!v.palvelunTarve && v.arkipoissaolotLkm != null),
+        (!!v.palvelunTarve &&
+          (v.hoidonTarve === 'vuorohoito_varhaiskasvatus' ||
+            v.arkipoissaolotLkm != null)),
     },
     {
       id: 'tuki-ja-laakehoito',
@@ -240,11 +247,7 @@ export const Application = () => {
     form: UseFormReturn<FormValues>,
   ) => {
     if (isSaving) return;
-    const submitted = await save(values, 'submitted', form);
-    if (submitted) {
-      // TODO: Show confirmation / redirect to the correct page
-      navigate('/');
-    }
+    if (await save(values, 'submitted', form)) setIsSentNow(true);
   };
 
   const renderContent = () => {
@@ -263,7 +266,7 @@ export const Application = () => {
       );
     }
     // A submitted application can't be edited: show only the sent information (Esikatselu step).
-    const isSubmitted = application.data.status === 'submitted';
+    const isSubmitted = application.data.status === 'submitted' && !isSentNow;
     return (
       <ApplicationDataContext.Provider value={application.data}>
         <h2 style={{ textAlign: 'left' }}>{application.data.nimi}</h2>
@@ -283,6 +286,7 @@ export const Application = () => {
               steps={steps}
               onStepSave={saveDraft}
               isSaving={isSaving}
+              isSent={isSentNow}
             />
           )}
         </ApplicationForm>

@@ -82,21 +82,20 @@ export const Esikatselu = () => {
           />
         </LabelValueWrapper>
       </SummarySection>
-      <h3 data-testid="title-ilmoittautuminen">
-        {t('esikatselu.ilmoittautuminenTitle')}
-      </h3>
-      <MarkdownContent data-testid="text-ilmoittautuminen">
-        {t('esikatselu.ilmoittautuminenText')}
-      </MarkdownContent>
-      <Divider />
-      <LabelValueWrapper>
-        <LabelValue
-          data-testid="summary-esiopetus-alkaa"
-          label={t('esikatselu.esiopetusAlkaa')}
-          value={t('esiopetusAlkaa')}
-        />
-      </LabelValueWrapper>
-      <Divider />
+      <SummarySection
+        data-testid="section-ilmoittautuminen"
+        title={t('esikatselu.ilmoittautuminenTitle')}
+      >
+        <MarkdownContent data-testid="text-ilmoittautuminen">
+          {t('esikatselu.ilmoittautuminenText')}
+        </MarkdownContent>
+      </SummarySection>
+      <SummarySection
+        data-testid="section-esiopetus-alkaa"
+        title={t('esikatselu.esiopetusAlkaa')}
+      >
+        {t('esiopetusAlkaa')}
+      </SummarySection>
       <SummarySection
         data-testid="section-kieli"
         title={t('esikatselu.kieli')}
@@ -170,17 +169,19 @@ export const Esikatselu = () => {
             value={laajuus}
           />
         </LabelValueWrapper>
-        <LabelValueWrapper>
-          <LabelValue
-            data-testid="summary-arkipoissaolot"
-            label={t('esikatselu.arkipoissaolot')}
-            value={
-              values.taydentavaVarhaiskasvatus
-                ? values.arkipoissaolotLkm?.toString()
-                : null
-            }
-          />
-        </LabelValueWrapper>
+        {values.hoidonTarve !== 'vuorohoito_varhaiskasvatus' && (
+          <LabelValueWrapper>
+            <LabelValue
+              data-testid="summary-arkipoissaolot"
+              label={t('esikatselu.arkipoissaolot')}
+              value={
+                values.taydentavaVarhaiskasvatus
+                  ? values.arkipoissaolotLkm?.toString()
+                  : null
+              }
+            />
+          </LabelValueWrapper>
+        )}
       </SummarySection>
       <SummarySection
         data-testid="section-huoltajan-tiedot"
