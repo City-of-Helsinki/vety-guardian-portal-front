@@ -52,6 +52,10 @@
   border-color: var(--color-blue-light);
 }
 
+.selection-group-item:has(input:not(:disabled)) {
+  cursor: pointer;
+}
+
 .sent-confirmation {
   display: flex;
   flex-direction: column;

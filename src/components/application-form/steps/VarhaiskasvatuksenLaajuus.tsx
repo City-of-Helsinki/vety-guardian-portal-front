@@ -1,6 +1,7 @@
 import { SelectionGroup, RadioButton, NumberInput, Fieldset } from 'hds-react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
+import { SelectionGroupItem } from '../SelectionGroupItem';
 import type { FormValues } from '../../../types';
 import type { PalvelunTarveEnum } from '../../../api/generated/types.gen';
 import styles from '../ApplicationForm.module.css';
@@ -61,11 +62,7 @@ export const VarhaiskasvatuksenLaajuus = () => {
               errorText={fieldState.error?.message}
             >
               {palvelunTarveOptions.map((value) => (
-                <div
-                  key={value}
-                  id={`${value}-item`}
-                  className={styles['selection-group-item']}
-                >
+                <SelectionGroupItem key={value} id={`${value}-item`}>
                   <RadioButton
                     id={value.replace('esiopetus_', '')}
                     data-testid={`rb-${value}`}
@@ -77,7 +74,7 @@ export const VarhaiskasvatuksenLaajuus = () => {
                     onBlur={field.onBlur}
                     disabled={field.disabled}
                   />
-                </div>
+                </SelectionGroupItem>
               ))}
             </SelectionGroup>
           )}

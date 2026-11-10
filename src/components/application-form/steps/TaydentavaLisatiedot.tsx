@@ -2,6 +2,7 @@ import { SelectionGroup, RadioButton, DateInput, Fieldset } from 'hds-react';
 import type { ChangeEvent } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
+import { SelectionGroupItem } from '../SelectionGroupItem';
 import type { FormValues } from '../../../types';
 import {
   DISPLAY_DATE_FORMAT,
@@ -94,10 +95,7 @@ export const TaydentavaLisatiedot = () => {
             data-testid="group-hoidon-tarve"
             errorText={fieldState.error?.message}
           >
-            <div
-              id="paiva-aikainen-item"
-              className={styles['selection-group-item']}
-            >
+            <SelectionGroupItem id="paiva-aikainen-item">
               <RadioButton
                 id="paiva-aikainen"
                 data-testid="rb-paivaaikainen_varhaiskasvatus"
@@ -112,11 +110,8 @@ export const TaydentavaLisatiedot = () => {
               <MarkdownContent>
                 {t('vakaOptions.paivaaikainen_varhaiskasvatus_description')}
               </MarkdownContent>
-            </div>
-            <div
-              id="ymparivuorokautinen-item"
-              className={styles['selection-group-item']}
-            >
+            </SelectionGroupItem>
+            <SelectionGroupItem id="ymparivuorokautinen-item">
               <RadioButton
                 id="vuorohoito"
                 data-testid="rb-vuorohoito_varhaiskasvatus"
@@ -131,7 +126,7 @@ export const TaydentavaLisatiedot = () => {
               <MarkdownContent>
                 {t('vakaOptions.vuorohoito_varhaiskasvatus_description')}
               </MarkdownContent>
-            </div>
+            </SelectionGroupItem>
           </SelectionGroup>
         )}
       />
