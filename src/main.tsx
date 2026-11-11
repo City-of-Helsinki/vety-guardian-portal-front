@@ -1,5 +1,7 @@
+import './instrument';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import * as Sentry from '@sentry/react';
 import { BrowserRouter, Navigate, Routes, Route } from 'react-router';
 import './index.css';
 import App from './App.tsx';
@@ -13,14 +15,22 @@ import { RequireGuardian } from './auth/RequireGuardian';
 
 const queryClient = new QueryClient();
 
-createRoot(document.getElementById('root')!).render(
+const SentryRoutes = Sentry.wrapReactRouterRouting(Routes);
+
+createRoot(document.getElementById('root')!, {
+  onUncaughtError: Sentry.reactErrorHandler((error, errorInfo) => {
+    console.warn('Uncaught error', error, errorInfo.componentStack);
+  }),
+  onCaughtError: Sentry.reactErrorHandler(),
+  onRecoverableError: Sentry.reactErrorHandler(),
+}).render(
   // LoginProvider stays outside StrictMode: StrictMode's double render in development
   // leaves its API tokens client disconnected, so the API tokens are never fetched.
   <LoginProvider {...loginProviderProps}>
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <Routes>
+          <SentryRoutes>
             <Route path="/" element={<App />}>
               <Route index element={<Home />} />
               <Route path="auth/helsinki/return" element={<LoginCallback />} />
@@ -37,7 +47,7 @@ createRoot(document.getElementById('root')!).render(
                 />
               </Route>
             </Route>
-          </Routes>
+          </SentryRoutes>
         </BrowserRouter>
       </QueryClientProvider>
     </StrictMode>

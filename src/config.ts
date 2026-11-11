@@ -6,7 +6,10 @@ type RuntimeEnvName =
   | 'VITE_OIDC_CLIENT_ID'
   | 'VITE_OIDC_SCOPE'
   | 'VITE_OIDC_API_AUDIENCE'
-  | 'VITE_OIDC_PROFILE_API_AUDIENCE';
+  | 'VITE_OIDC_PROFILE_API_AUDIENCE'
+  | 'VITE_SENTRY_DSN'
+  | 'VITE_SENTRY_ENVIRONMENT'
+  | 'VITE_SENTRY_TRACES_SAMPLE_RATE';
 
 type RuntimeEnv = Partial<Record<RuntimeEnvName, string>>;
 
@@ -23,6 +26,11 @@ const runtimeEnv = window.__ENV__ ?? {};
 const env = (name: RuntimeEnvName): string | undefined =>
   runtimeEnv[name] || import.meta.env[name];
 
+export const toSampleRate = (value: string | undefined, fallback: number) => {
+  const rate = value == null || value.trim() === '' ? NaN : Number(value);
+  return rate >= 0 && rate <= 1 ? rate : fallback;
+};
+
 export const config = {
   apiBaseUrl: env('VITE_API_BASE_URL') ?? 'http://localhost:8001',
   locizeProjectId: env('VITE_LOCIZE_PROJECT_ID'),
@@ -36,5 +44,10 @@ export const config = {
     apiAudience: env('VITE_OIDC_API_AUDIENCE') ?? '',
     // API token audience of Helsinki-profiili; the backend reads the henkilötunnus with it
     profileApiAudience: env('VITE_OIDC_PROFILE_API_AUDIENCE') ?? '',
+  },
+  sentry: {
+    dsn: env('VITE_SENTRY_DSN'),
+    environment: env('VITE_SENTRY_ENVIRONMENT') ?? 'local',
+    tracesSampleRate: toSampleRate(env('VITE_SENTRY_TRACES_SAMPLE_RATE'), 0),
   },
 };
