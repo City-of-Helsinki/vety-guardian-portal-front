@@ -39,7 +39,11 @@ export const VarhaiskasvatuksenLaajuus = () => {
   return (
     <ApplicationFormStep
       data-testid="step-varhaiskasvatuksen-laajuus"
-      title={t('varhaiskasvatuksenLaajuus.title')}
+      title={
+        isVuorohoito
+          ? t('varhaiskasvatuksenLaajuus.vuorohoitoTitle')
+          : t('varhaiskasvatuksenLaajuus.paivaAikainenTitle')
+      }
     >
       <MarkdownContent data-testid="text-varhaiskasvatuksen-laajuus">
         {t('varhaiskasvatuksenLaajuus.varhaiskasvatuksenLaajuusText')}
