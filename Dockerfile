@@ -3,7 +3,7 @@ FROM registry.access.redhat.com/ubi9/nodejs-24 AS build
 WORKDIR /opt/app-root/src
 
 COPY --chown=1001:0 package.json package-lock.json ./
-RUN npm ci --no-audit --no-fund
+RUN npm ci --no-audit --no-fund --ignore-scripts
 
 COPY --chown=1001:0 . .
 RUN npm run build
