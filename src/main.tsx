@@ -8,6 +8,7 @@ import './i18n/i18n';
 import './api/client.ts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LoginProvider } from 'hds-react';
+import './auth/dedupeSigninSilent';
 import { loginProviderProps } from './auth/loginProviderProps';
 import { RequireGuardian } from './auth/RequireGuardian';
 
