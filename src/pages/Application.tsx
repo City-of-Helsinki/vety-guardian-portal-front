@@ -1,5 +1,6 @@
 import { ApplicationForm } from '../components/application-form';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { Divider } from '../components/divider';
 import {
   Alku,
@@ -34,7 +35,10 @@ import type {
 import { StepsContextProvider } from '../components/application-form/StepsContext';
 import { useGuardianIdentity } from '../auth/useGuardianIdentity';
 
-type DrfFieldErrors = Record<string, string | string[]>;
+const UNKNOWN_ERROR = [
+  'errors.unknown',
+  'Tapahtui virhe. Yritä myöhemmin uudelleen.',
+] as const;
 
 const omitFields = ['h1SahkopostiConfirm', 'h2SahkopostiConfirm'];
 
@@ -107,24 +111,38 @@ const applyServerErrors = (
   error: unknown,
   form: UseFormReturn<FormValues>,
   fieldNames: string[],
+  t: TFunction<'lomake'>,
 ) => {
   console.error('Saving application failed:', error);
 
-  const fieldErrors = error as DrfFieldErrors | null;
-  if (!fieldErrors || typeof fieldErrors !== 'object') {
-    form.setError('root.server', { type: 'server', message: String(error) });
+  const unknownError = t(...UNKNOWN_ERROR);
+
+  if (!error || typeof error !== 'object' || Array.isArray(error)) {
+    form.setError('root.server', { type: 'server', message: unknownError });
     return;
   }
 
-  Object.entries(fieldErrors).forEach(([field, messages]) => {
-    const message = Array.isArray(messages) ? messages[0] : messages;
+  const rootMessages = new Set<string>();
+  Object.entries(error).forEach(([field, errors]) => {
+    const code: unknown = Array.isArray(errors) ? errors[0]?.code : undefined;
+    const message =
+      typeof code === 'string'
+        ? t([`errors.${field}.${code}`, `errors.${code}`], unknownError)
+        : unknownError;
+
     if (fieldNames.includes(field)) {
       form.setError(field as keyof FormValues, { type: 'server', message });
     } else {
       // nonFieldErrors, status (e.g. application has already been sent)
-      form.setError('root.server', { type: 'server', message });
+      rootMessages.add(message);
     }
   });
+  if (rootMessages.size > 0) {
+    form.setError('root.server', {
+      type: 'server',
+      message: [...rootMessages].join(' '),
+    });
+  }
 };
 
 export const Application = () => {
@@ -234,7 +252,7 @@ export const Application = () => {
       });
       return true;
     } catch (error) {
-      applyServerErrors(error, form, fieldNames);
+      applyServerErrors(error, form, fieldNames, t);
       return false;
     }
   };
@@ -261,7 +279,7 @@ export const Application = () => {
           label={t('loadError')}
           data-testid="notification-load-error"
         >
-          {String(application.error)}
+          {t(...UNKNOWN_ERROR)}
         </Notification>
       );
     }

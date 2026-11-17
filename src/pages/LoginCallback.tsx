@@ -11,7 +11,7 @@ import { Link, useNavigate } from 'react-router';
 
 // Helsinki-profiili redirects here after login (redirect_uri in src/auth/loginProviderProps.ts).
 export const LoginCallback = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
   const navigate = useNavigate();
   const [error, setError] = useState<OidcClientError>();
 
@@ -21,7 +21,9 @@ export const LoginCallback = () => {
       onError={(error) => {
         // LoginCallbackHandler handles the callback on every render; a re-render while
         // the first one is still in progress reports this error, which is not a failure.
-        if (error && !isHandlingLoginCallbackError(error)) setError(error);
+        if (error && !isHandlingLoginCallbackError(error)) {
+          setError(error);
+        }
       }}
     >
       {error ? (
@@ -30,7 +32,12 @@ export const LoginCallback = () => {
           label={t('login.error', 'Kirjautuminen epäonnistui')}
           data-testid="notification-login-error"
         >
-          <p>{error.message}</p>
+          <p>
+            {t(
+              'login.errorText',
+              'Kirjautuminen epäonnistui. Yritä myöhemmin uudelleen.',
+            )}
+          </p>
           <Link to="/">{t('login.backToHome', 'Palaa etusivulle')}</Link>
         </Notification>
       ) : (

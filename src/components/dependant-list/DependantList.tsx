@@ -29,7 +29,7 @@ function useGuardianDependants(enabled: boolean) {
 }
 
 export const DependantList = () => {
-  const { t } = useTranslation(['landing', 'errors']);
+  const { t } = useTranslation('landing');
 
   const familyProtection = useFamilyProtectionStatus();
   const dependants = useGuardianDependants(familyProtection.data !== undefined);
