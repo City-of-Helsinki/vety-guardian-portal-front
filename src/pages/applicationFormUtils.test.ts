@@ -1,3 +1,4 @@
+import type { TFunction } from 'i18next';
 import type { UseFormReturn } from 'react-hook-form';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { IdentityResponse, PreschoolApplication } from '../api/generated';
@@ -239,6 +240,18 @@ describe('toFormValues', () => {
 
 describe('applyServerErrors', () => {
   const fieldNames = ['kieli', 'h1Sahkoposti'];
+  const translations: Record<string, string> = {
+    'errors.unknown': 'Tuntematon virhe.',
+    'errors.h1Sahkoposti.invalid': 'Virheellinen sähköposti.',
+    'errors.invalid': 'Virheellinen arvo.',
+    'errors.already_submitted': 'Hakemus on jo lähetetty.',
+  };
+  const t = ((key: string | string[], defaultValue?: string) => {
+    const keys = Array.isArray(key) ? key : [key];
+    const found = keys.find((k) => k in translations);
+    return found ? translations[found] : defaultValue;
+  }) as unknown as TFunction<'lomake'>;
+
   let setError: ReturnType<typeof vi.fn>;
   let form: UseFormReturn<FormValues>;
 
@@ -248,18 +261,19 @@ describe('applyServerErrors', () => {
     form = { setError } as unknown as UseFormReturn<FormValues>;
   });
 
-  it('sets the first message of each known field on that field', () => {
+  it('translates the first error code of each known field, preferring field-specific keys', () => {
     applyServerErrors(
       {
-        kieli: ['Virheellinen kieli.', 'Toinen virhe.'],
-        h1Sahkoposti: 'Virheellinen sähköposti.',
+        kieli: [{ code: 'invalid' }, { code: 'other' }],
+        h1Sahkoposti: [{ code: 'invalid' }],
       },
       form,
       fieldNames,
+      t,
     );
     expect(setError).toHaveBeenCalledWith('kieli', {
       type: 'server',
-      message: 'Virheellinen kieli.',
+      message: 'Virheellinen arvo.',
     });
     expect(setError).toHaveBeenCalledWith('h1Sahkoposti', {
       type: 'server',
@@ -267,31 +281,48 @@ describe('applyServerErrors', () => {
     });
   });
 
-  it('shows errors for other fields as a form-level error', () => {
+  it('falls back to the unknown error for untranslated or missing codes', () => {
     applyServerErrors(
-      { nonFieldErrors: ['Hakemus on jo lähetetty.'] },
+      { kieli: [{ code: 'nope' }], h1Sahkoposti: 'Raw message' },
       form,
       fieldNames,
+      t,
+    );
+    expect(setError).toHaveBeenCalledWith('kieli', {
+      type: 'server',
+      message: 'Tuntematon virhe.',
+    });
+    expect(setError).toHaveBeenCalledWith('h1Sahkoposti', {
+      type: 'server',
+      message: 'Tuntematon virhe.',
+    });
+  });
+
+  it('combines errors for other fields into one form-level error', () => {
+    applyServerErrors(
+      {
+        nonFieldErrors: [{ code: 'already_submitted' }],
+        status: [{ code: 'already_submitted' }],
+        other: [{ code: 'invalid' }],
+      },
+      form,
+      fieldNames,
+      t,
     );
     expect(setError).toHaveBeenCalledExactlyOnceWith('root.server', {
       type: 'server',
-      message: 'Hakemus on jo lähetetty.',
+      message: 'Hakemus on jo lähetetty. Virheellinen arvo.',
     });
   });
 
-  it('shows a non-object error as a form-level error', () => {
-    applyServerErrors('Internal Server Error', form, fieldNames);
-    expect(setError).toHaveBeenCalledExactlyOnceWith('root.server', {
-      type: 'server',
-      message: 'Internal Server Error',
-    });
-  });
-
-  it('shows a missing error body as a form-level error', () => {
-    applyServerErrors(null, form, fieldNames);
-    expect(setError).toHaveBeenCalledExactlyOnceWith('root.server', {
-      type: 'server',
-      message: 'null',
-    });
-  });
+  it.each([['Internal Server Error'], [null], [[{ code: 'invalid' }]]])(
+    'shows the unknown error for a non-object error body (%j)',
+    (error) => {
+      applyServerErrors(error, form, fieldNames, t);
+      expect(setError).toHaveBeenCalledExactlyOnceWith('root.server', {
+        type: 'server',
+        message: 'Tuntematon virhe.',
+      });
+    },
+  );
 });

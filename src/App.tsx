@@ -18,7 +18,7 @@ import { Outlet } from 'react-router';
 import { toLanguage } from './i18n/i18n';
 
 function App() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('common');
   const language = toLanguage(i18n.resolvedLanguage);
   // useAuthenticatedUser() and With(out)AuthenticatedUser only read the current user;
   // useOidcClientTracking re-renders the header when the login state changes (e.g. right after the login callback).
@@ -71,7 +71,7 @@ function App() {
                   'login.logoutError',
                   'Uloskirjautuminen epäonnistui',
                 )}
-                errorCloseAriaLabel={t('common.close', 'Sulje')}
+                errorCloseAriaLabel={t('close', 'Sulje')}
                 loggingOutText={t('login.loggingOut', 'Kirjaudutaan ulos')}
                 redirectWithLanguage
               />
@@ -83,7 +83,7 @@ function App() {
               label={t('login.button', 'Kirjaudu sisään')}
               errorLabel={t('login.error', 'Kirjautuminen epäonnistui')}
               errorText={t('login.error', 'Kirjautuminen epäonnistui')}
-              errorCloseAriaLabel={t('common.close', 'Sulje')}
+              errorCloseAriaLabel={t('close', 'Sulje')}
               loggingInText={t('login.loggingIn', 'Kirjaudutaan sisään')}
               redirectWithLanguage
               fixedRightPosition
@@ -99,7 +99,7 @@ function App() {
             'Olet kirjautunut ulos. Kirjaudu uudelleen jatkaaksesi.',
           ),
           buttonText: t('login.logout', 'Kirjaudu ulos'),
-          closeButtonLabelText: t('common.close', 'Sulje'),
+          closeButtonLabelText: t('close', 'Sulje'),
         }}
       />
       <section className="main-container">

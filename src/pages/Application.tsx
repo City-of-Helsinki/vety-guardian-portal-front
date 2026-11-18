@@ -29,6 +29,7 @@ import type { StatusEnum } from '../api/generated';
 import { StepsContextProvider } from '../components/application-form/StepsContext';
 import { useGuardianIdentity } from '../auth/useGuardianIdentity';
 import {
+  UNKNOWN_ERROR,
   applyServerErrors,
   toBody,
   toFormValues,
@@ -141,7 +142,7 @@ export const Application = () => {
       });
       return true;
     } catch (error) {
-      applyServerErrors(error, form, fieldNames);
+      applyServerErrors(error, form, fieldNames, t);
       return false;
     }
   };
@@ -168,7 +169,7 @@ export const Application = () => {
           label={t('loadError')}
           data-testid="notification-load-error"
         >
-          {String(application.error)}
+          {t(...UNKNOWN_ERROR)}
         </Notification>
       );
     }

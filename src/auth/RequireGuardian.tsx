@@ -5,7 +5,7 @@ import { useGuardianIdentity } from './useGuardianIdentity';
 
 // Route element for the pages that need a logged-in guardian with a verified identity.
 export const RequireGuardian = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
   const user = useAuthenticatedUser();
   const { identity, apiTokensError } = useGuardianIdentity();
 
@@ -14,13 +14,18 @@ export const RequireGuardian = () => {
   }
 
   if (apiTokensError || identity.isError) {
+    const code = identity.error?.code;
+    const unknownError = t(
+      'errors.unknown',
+      'Tapahtui virhe. Yritä myöhemmin uudelleen.',
+    );
     return (
       <Notification
         type="error"
         label={t('login.identityError', 'Tunnistautuminen epäonnistui')}
         data-testid="notification-identity-error"
       >
-        {identity.error?.error ?? apiTokensError?.message}
+        {code ? t(`errors.${code}`, unknownError) : unknownError}
       </Notification>
     );
   }
