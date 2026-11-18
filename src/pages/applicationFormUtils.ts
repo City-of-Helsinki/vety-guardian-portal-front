@@ -9,7 +9,7 @@ import type { FormValues } from '../types';
 
 type DrfFieldErrors = Record<string, string | string[]>;
 
-const omitFields = ['h1SahkopostiConfirm', 'h2SahkopostiConfirm'];
+const omitFields = new Set(['h1SahkopostiConfirm', 'h2SahkopostiConfirm']);
 
 export const toBody = (
   values: FormValues,
@@ -17,7 +17,7 @@ export const toBody = (
 ): PreschoolApplicationWritable => {
   return {
     ...Object.fromEntries(
-      Object.entries(values).filter(([k]) => !omitFields.includes(k)),
+      Object.entries(values).filter(([k]) => !omitFields.has(k)),
     ),
     ...(values.taydentavaVarhaiskasvatus === false && {
       taydentavaVarhaiskasvatusAloitus: null,
