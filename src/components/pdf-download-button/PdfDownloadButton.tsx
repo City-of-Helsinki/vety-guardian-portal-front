@@ -33,7 +33,9 @@ const pdfFilename = (application: PreschoolApplication) => {
     .filter(Boolean)
     .join('_');
   // Array.from splits by code point, so an emoji isn't cut in half.
-  return `${Array.from(filename).slice(0, FILENAME_MAX_LENGTH).join('').replace(/_+$/, '')}.pdf`;
+  const chars = Array.from(filename).slice(0, FILENAME_MAX_LENGTH);
+  while (chars.at(-1) === '_') chars.pop();
+  return `${chars.join('')}.pdf`;
 };
 
 const saveFile = (blob: Blob, filename: string) => {
