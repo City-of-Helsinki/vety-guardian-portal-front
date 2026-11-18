@@ -73,6 +73,7 @@ export const Yhteystiedot = () => {
                 <TextInput
                   id="h1-sahkoposti"
                   data-testid="input-h1-sahkoposti"
+                  required
                   label={t('yhteystiedot.emailLabel')}
                   type="email"
                   {...register('h1Sahkoposti', {
@@ -89,6 +90,7 @@ export const Yhteystiedot = () => {
                 <TextInput
                   id="h1-sahkoposti-confirm"
                   data-testid="input-h1-sahkoposti-confirm"
+                  required
                   label={t('yhteystiedot.emailConfirmLabel')}
                   type="email"
                   {...register('h1SahkopostiConfirm', {
@@ -108,6 +110,7 @@ export const Yhteystiedot = () => {
               <TextInput
                 id="h1-puhelinnumero"
                 data-testid="input-h1-puhelinnumero"
+                required
                 label={t('yhteystiedot.phoneLabel')}
                 type="tel"
                 {...register('h1Puhelinnumero', {

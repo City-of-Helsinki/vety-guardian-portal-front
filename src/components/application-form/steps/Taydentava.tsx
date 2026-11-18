@@ -29,6 +29,7 @@ export const Taydentava = () => {
           <SelectionGroup
             className={styles['selection-group']}
             data-testid="group-taydentava"
+            required
             label={t('taydentava.selectionGroupLabel')}
             errorText={fieldState.error?.message}
           >
