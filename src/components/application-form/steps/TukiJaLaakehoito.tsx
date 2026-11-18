@@ -15,6 +15,7 @@ export const TukiJaLaakehoito = () => {
     <ApplicationFormStep
       data-testid="step-tuki-ja-laakehoito"
       title={t('tukiJaLaakehoito.title')}
+      headingId="tuki-ja-laakehoito-title"
     >
       <MarkdownContent data-testid="text-tuki-ja-laakehoito">
         {t('tukiJaLaakehoito.tukiJaLaakehoitoText')}
@@ -22,6 +23,7 @@ export const TukiJaLaakehoito = () => {
       <SelectionGroup
         className={styles['selection-group']}
         data-testid="group-tuki-ja-laakehoito"
+        aria-labelledby="tuki-ja-laakehoito-title"
       >
         <Controller
           name="erityisenTuenTarve"

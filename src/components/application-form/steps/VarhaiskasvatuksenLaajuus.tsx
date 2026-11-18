@@ -63,6 +63,7 @@ export const VarhaiskasvatuksenLaajuus = () => {
             <SelectionGroup
               className={styles['selection-group']}
               data-testid="group-palvelun-tarve"
+              required={!!taydentavaVarhaiskasvatus}
               errorText={fieldState.error?.message}
             >
               {palvelunTarveOptions.map((value) => (
@@ -89,9 +90,9 @@ export const VarhaiskasvatuksenLaajuus = () => {
           heading={t('varhaiskasvatuksenLaajuus.arkipoissaolotTitle')}
           data-testid="fieldset-arkipoissaolot"
         >
-          <p data-testid="text-arkipoissaolot">
+          <MarkdownContent data-testid="text-arkipoissaolot">
             {t('varhaiskasvatuksenLaajuus.arkipoissaolotText')}
-          </p>
+          </MarkdownContent>
           <Controller
             name="arkipoissaolotLkm"
             control={control}
@@ -117,10 +118,13 @@ export const VarhaiskasvatuksenLaajuus = () => {
               <NumberInput
                 id="arki-poissaolot"
                 data-testid="input-arki-poissaolot"
+                required={!!taydentavaVarhaiskasvatus}
                 label={t('varhaiskasvatuksenLaajuus.arkipoissaolotLabel')}
                 min={ARKIPOISSAOLOT_MIN}
                 max={ARKIPOISSAOLOT_MAX}
                 step={1}
+                minusStepButtonAriaLabel={t('numberInput.decrease')}
+                plusStepButtonAriaLabel={t('numberInput.increase')}
                 value={field.value ?? ''}
                 onChange={(e) =>
                   field.onChange(

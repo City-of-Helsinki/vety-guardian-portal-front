@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { get, useFormContext } from 'react-hook-form';
 import type { UseFormReturn } from 'react-hook-form';
@@ -210,11 +210,23 @@ export const ApplicationFormSteps = ({
     )?.requestSubmit();
   };
 
+  // Move focus to the new step's heading after a step change
+  const containerRef = useRef<HTMLDivElement>(null);
+  const focusedStep = useRef(current);
+  useEffect(() => {
+    if (focusedStep.current === current) return;
+    focusedStep.current = current;
+    containerRef.current?.scrollIntoView({ block: 'start' });
+    containerRef.current
+      ?.querySelector<HTMLElement>('[data-step-heading]')
+      ?.focus({ preventScroll: true });
+  }, [current]);
+
   const ActiveStep = steps[current].component;
   const isLast = current === steps.length - 1;
 
   return (
-    <div>
+    <div ref={containerRef}>
       <StepsContextProvider value={{ goToStep, currentId: steps[current].id }}>
         <Stepper
           className={styles.stepper}
