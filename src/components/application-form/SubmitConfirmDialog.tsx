@@ -8,6 +8,7 @@ import {
   IconCheckCircle,
   IconSize,
 } from 'hds-react';
+import { MarkdownContent } from '../markdown-content';
 import styles from './ApplicationForm.module.css';
 
 interface SubmitConfirmDialogProps {
@@ -32,9 +33,9 @@ const ConfirmContent = ({
   return (
     <>
       <Dialog.Content>
-        <p id="submit-confirm-dialog-description">
-          {t('submitConfirmDescription')}
-        </p>
+        <div id="submit-confirm-dialog-description">
+          <MarkdownContent>{t('submitConfirmDescription')}</MarkdownContent>
+        </div>
       </Dialog.Content>
       <Dialog.ActionButtons>
         <Button
