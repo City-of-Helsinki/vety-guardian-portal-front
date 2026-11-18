@@ -27,8 +27,8 @@ export const LabelValue = ({
       {values.length === 0 ? (
         <span data-testid={valueTestId}>{EMPTY_VALUE}</span>
       ) : (
-        values.map((line, index) => (
-          <span key={index} data-testid={valueTestId}>
+        values.map((line) => (
+          <span key={line} data-testid={valueTestId}>
             {line}
           </span>
         ))
