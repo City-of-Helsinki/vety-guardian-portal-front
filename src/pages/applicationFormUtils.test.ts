@@ -92,8 +92,20 @@ describe('toBody', () => {
       taydentavaVarhaiskasvatusAloitus: '2027-08-10',
       hoidonTarve: 'vuorohoito_varhaiskasvatus',
       palvelunTarve: 'esiopetus_4h_61_100h_vuoroh',
-      arkipoissaolotLkm: 3,
     });
+  });
+
+  it('keeps weekday absences for daytime care', () => {
+    expect(
+      toBody(
+        { ...values, hoidonTarve: 'paivaaikainen_varhaiskasvatus' },
+        'draft',
+      ),
+    ).toMatchObject({ arkipoissaolotLkm: 3 });
+  });
+
+  it('clears weekday absences for shift care', () => {
+    expect(toBody(values, 'draft')).toMatchObject({ arkipoissaolotLkm: null });
   });
 
   it('clears extended care details when extended care is not needed', () => {

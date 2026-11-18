@@ -1,5 +1,6 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
+import { SelectionGroupItem } from '../SelectionGroupItem';
 import { Checkbox, SelectionGroup } from 'hds-react';
 import type { FormValues } from '../../../types';
 import { useTranslation } from 'react-i18next';
@@ -26,10 +27,7 @@ export const TukiJaLaakehoito = () => {
           name="erityisenTuenTarve"
           control={control}
           render={({ field, fieldState }) => (
-            <div
-              id="erityisen-tuen-tarve-item"
-              className={styles['selection-group-item']}
-            >
+            <SelectionGroupItem id="erityisen-tuen-tarve-item">
               <Checkbox
                 id="erityisen-tuen-tarve"
                 data-testid="cb-erityinen-tuki"
@@ -42,17 +40,14 @@ export const TukiJaLaakehoito = () => {
               <MarkdownContent data-testid="text-erityinen-tuki">
                 {t('tukiJaLaakehoito.erityinenTukiText')}
               </MarkdownContent>
-            </div>
+            </SelectionGroupItem>
           )}
         />
         <Controller
           name="laakehoidonTarve"
           control={control}
           render={({ field, fieldState }) => (
-            <div
-              id="laakehoidon-tarve-item"
-              className={styles['selection-group-item']}
-            >
+            <SelectionGroupItem id="laakehoidon-tarve-item">
               <Checkbox
                 id="laakehoidon-tarve"
                 data-testid="cb-laakehoidon-tarve"
@@ -65,7 +60,7 @@ export const TukiJaLaakehoito = () => {
               <MarkdownContent data-testid="text-laakehoito">
                 {t('tukiJaLaakehoito.laakehoitoText')}
               </MarkdownContent>
-            </div>
+            </SelectionGroupItem>
           )}
         />
       </SelectionGroup>

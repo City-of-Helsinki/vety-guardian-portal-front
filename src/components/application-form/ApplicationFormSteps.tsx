@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { get, useFormContext } from 'react-hook-form';
 import type { UseFormReturn } from 'react-hook-form';
 
-import { StepState, Stepper, Button, ButtonVariant, Dialog } from 'hds-react';
+import { StepState, Stepper, Button, ButtonVariant } from 'hds-react';
 import { type FormValues, type FormStep } from '../../types';
 import styles from './ApplicationForm.module.css';
 import { useNavigate } from 'react-router';
@@ -12,6 +12,7 @@ import { toLanguage } from '../../i18n/i18n';
 import { useApplicationData } from './ApplicationDataContext';
 import { APPLICATION_FORM_ID } from './ApplicationForm';
 import { hyphenate } from '../../utils/hyphenate';
+import { SubmitConfirmDialog } from './SubmitConfirmDialog';
 
 // Steps are filled up to the last one whose saved values say so, stopping at the first
 // step that is known to be unfilled.
@@ -32,6 +33,23 @@ const skippedStepIds = (steps: FormStep[], values: FormValues) =>
     steps.filter((step) => step.isSkipped?.(values)).map((step) => step.id),
   );
 
+const stepStateFor = ({
+  isCurrent,
+  isSkipped,
+  isCompleted,
+  isReachable,
+}: {
+  isCurrent: boolean;
+  isSkipped: boolean;
+  isCompleted: boolean;
+  isReachable: () => boolean;
+}) => {
+  if (isCurrent) return StepState.available;
+  if (isSkipped) return StepState.disabled;
+  if (isCompleted) return StepState.completed;
+  return isReachable() ? StepState.available : StepState.disabled;
+};
+
 interface ApplicationFormStepsProps {
   steps: FormStep[];
   onStepSave: (
@@ -39,12 +57,14 @@ interface ApplicationFormStepsProps {
     form: UseFormReturn<FormValues>,
   ) => Promise<boolean>;
   isSaving?: boolean;
+  isSent?: boolean;
 }
 
 export const ApplicationFormSteps = ({
   steps,
   onStepSave,
   isSaving = false,
+  isSent = false,
 }: ApplicationFormStepsProps) => {
   const { i18n, t } = useTranslation('lomake');
   const navigate = useNavigate();
@@ -54,7 +74,7 @@ export const ApplicationFormSteps = ({
     getValues,
     setValue,
     clearErrors,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = form;
   const [savedValues, setSavedValues] = useState(() => getValues());
   const application = useApplicationData();
@@ -84,16 +104,12 @@ export const ApplicationFormSteps = ({
   const language = toLanguage(i18n.resolvedLanguage);
   const stepperSteps = steps.map((step, i) => ({
     label: hyphenate(step.label, language),
-    state:
-      i === current
-        ? StepState.available
-        : skipped.has(step.id)
-          ? StepState.disabled
-          : completed.has(step.id)
-            ? StepState.completed
-            : isReachable(i)
-              ? StepState.available
-              : StepState.disabled,
+    state: stepStateFor({
+      isCurrent: i === current,
+      isSkipped: skipped.has(step.id),
+      isCompleted: completed.has(step.id),
+      isReachable: () => isReachable(i),
+    }),
   }));
 
   // Validates and saves the current step, then moves to the target step, or to the first
@@ -180,8 +196,15 @@ export const ApplicationFormSteps = ({
 
   const closeConfirm = () => setIsConfirmOpen(false);
 
+  const [wasSubmitting, setWasSubmitting] = useState(false);
+  if (isSubmitting !== wasSubmitting) {
+    setWasSubmitting(isSubmitting);
+    if (!isSubmitting && !isSent) setIsConfirmOpen(false);
+  }
+
+  const goHome = () => navigate('/');
+
   const confirmSubmit = () => {
-    closeConfirm();
     (
       document.getElementById(APPLICATION_FORM_ID) as HTMLFormElement | null
     )?.requestSubmit();
@@ -243,41 +266,15 @@ export const ApplicationFormSteps = ({
           )}
         </div>
 
-        <Dialog
-          id="submit-confirm-dialog"
-          aria-labelledby="submit-confirm-dialog-title"
-          aria-describedby="submit-confirm-dialog-description"
+        <SubmitConfirmDialog
           isOpen={isConfirmOpen}
-          close={closeConfirm}
-          closeButtonLabelText={t('submitConfirmClose')}
+          isSent={isSent}
+          isSubmitting={isSubmitting}
+          onConfirm={confirmSubmit}
+          onClose={closeConfirm}
+          onGoHome={goHome}
           focusAfterCloseRef={submitButtonRef as React.RefObject<HTMLElement>}
-        >
-          <Dialog.Header
-            id="submit-confirm-dialog-title"
-            title={t('submitConfirmTitle')}
-          />
-          <Dialog.Content>
-            <p id="submit-confirm-dialog-description">
-              {t('submitConfirmDescription')}
-            </p>
-          </Dialog.Content>
-          <Dialog.ActionButtons>
-            <Button
-              variant={ButtonVariant.Primary}
-              onClick={confirmSubmit}
-              data-testid="btn-submit-confirm"
-            >
-              {t('submitConfirmSend')}
-            </Button>
-            <Button
-              variant={ButtonVariant.Secondary}
-              onClick={closeConfirm}
-              data-testid="btn-submit-cancel"
-            >
-              {t('submitConfirmCancel')}
-            </Button>
-          </Dialog.ActionButtons>
-        </Dialog>
+        />
       </StepsContextProvider>
     </div>
   );

@@ -25,6 +25,9 @@ export const toBody = (
       palvelunTarve: null,
       arkipoissaolotLkm: null,
     }),
+    ...(values.hoidonTarve === 'vuorohoito_varhaiskasvatus' && {
+      arkipoissaolotLkm: null,
+    }),
     status,
   };
 };

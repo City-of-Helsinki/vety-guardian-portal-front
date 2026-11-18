@@ -1,6 +1,7 @@
 import { SelectionGroup, RadioButton } from 'hds-react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { ApplicationFormStep } from '../ApplicationFormStep';
+import { SelectionGroupItem } from '../SelectionGroupItem';
 import type { FormValues } from '../../../types';
 import styles from '../ApplicationForm.module.css';
 import { useTranslation } from 'react-i18next';
@@ -31,10 +32,7 @@ export const Taydentava = () => {
             label={t('taydentava.selectionGroupLabel')}
             errorText={fieldState.error?.message}
           >
-            <div
-              id="needs-extended-care-item"
-              className={styles['selection-group-item']}
-            >
+            <SelectionGroupItem id="needs-extended-care-item">
               <RadioButton
                 id="needs-extended-care"
                 data-testid="rb-extended-care"
@@ -44,11 +42,8 @@ export const Taydentava = () => {
                 onChange={() => field.onChange(true)}
                 onBlur={field.onBlur}
               />
-            </div>
-            <div
-              id="no-extended-care-item"
-              className={styles['selection-group-item']}
-            >
+            </SelectionGroupItem>
+            <SelectionGroupItem id="no-extended-care-item">
               <RadioButton
                 id="no-extended-care"
                 data-testid="rb-no-extended-care"
@@ -65,7 +60,7 @@ export const Taydentava = () => {
                 }}
                 onBlur={field.onBlur}
               />
-            </div>
+            </SelectionGroupItem>
           </SelectionGroup>
         )}
       />
