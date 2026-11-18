@@ -21,7 +21,8 @@ i18n
     debug: true,
     fallbackLng: 'fi',
     supportedLngs: [...SUPPORTED_LANGUAGES],
-    ns: ['etusivu', 'lomake'],
+    ns: ['common', 'etusivu', 'landing', 'lomake'],
+    fallbackNS: 'common',
     interpolation: {
       escapeValue: false,
     },

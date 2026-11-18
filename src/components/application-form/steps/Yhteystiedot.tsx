@@ -7,7 +7,7 @@ import { useApplicationData } from '../ApplicationDataContext';
 import { LabelValue } from '../../summary/LabelValue';
 import { useGuardianIdentity } from '../../../auth/useGuardianIdentity';
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/;
 const PHONE_PATTERN = /^\+?[0-9\s\-()]{5,20}$/;
 
 export const Yhteystiedot = () => {

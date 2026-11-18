@@ -3,7 +3,7 @@ FROM registry.access.redhat.com/ubi9/nodejs-24 AS build
 WORKDIR /opt/app-root/src
 
 COPY --chown=1001:0 package.json package-lock.json ./
-RUN npm ci --no-audit --no-fund
+RUN npm ci --no-audit --no-fund --ignore-scripts
 
 COPY --chown=1001:0 . .
 RUN npm run build
@@ -18,6 +18,10 @@ COPY --from=build --chown=1001:0 /opt/app-root/src/dist /opt/app-root/src
 # outside the web root so nginx doesn't serve it.
 COPY docker/nginx-start/env-config.sh "${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start/"
 RUN chmod g+w /opt/app-root/src/env-config.js
+
+# The base image already defaults to UID 1001; declare it explicitly so the
+# runtime user doesn't depend on the base image (and satisfies Sonar).
+USER 1001
 
 EXPOSE 8080
 
