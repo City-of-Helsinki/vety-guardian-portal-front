@@ -50,6 +50,7 @@ export type Dependant = {
      * True if this person's VTJ record has an active address-protection flag (Turvakielto).
      */
     readonly addressProtected: boolean;
+    eligibility: Eligibility;
 };
 
 /**
@@ -57,6 +58,15 @@ export type Dependant = {
  */
 export type DependantsResponse = {
     dependants: Array<Dependant>;
+};
+
+/**
+ * Schema-only: whether a preschool application can be made for the dependant (guardian/eligibility.py).
+ */
+export type Eligibility = {
+    canApply: boolean;
+    reasons: Array<ReasonsEnum>;
+    targetPreschoolYear: number;
 };
 
 /**
@@ -285,22 +295,33 @@ export type PreschoolApplication = {
 };
 
 /**
+ * * `not_preschool_age` - not_preschool_age
+ * * `not_resident_helsinki` - not_resident_helsinki
+ */
+export type ReasonsEnum = 'not_preschool_age' | 'not_resident_helsinki';
+
+/**
  * * `draft` - Draft
  * * `submitted` - Submitted
  */
 export type StatusEnum = 'draft' | 'submitted';
 
+export type DependantWritable = {
+    [key: string]: unknown;
+};
+
 /**
  * Schema-only: the `GET /dependants/` response envelope.
  */
 export type DependantsResponseWritable = {
-    dependants: Array<unknown>;
+    dependants: Array<DependantWritable>;
 };
 
 /**
  * Schema-only: the `GET /guardians/<dependant_id>/` response envelope.
  */
 export type GuardiansResponseWritable = {
+    dependant: DependantWritable;
     guardians: Array<unknown>;
 };
 

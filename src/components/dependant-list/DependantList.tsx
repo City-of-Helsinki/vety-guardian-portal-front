@@ -78,7 +78,14 @@ export const DependantList = () => {
           key={item.id}
           item={item}
           index={index}
-          canApply={!isProtectedFamily}
+          // Eligibility (age, home municipality) is decided by the backend; see guardian/eligibility.py there.
+          canApply={!isProtectedFamily && item.eligibility.canApply}
+          // Under Turvakielto the address is withheld, so the municipality check can't pass - the
+          // Turvakielto notification above already explains why no one can apply.
+          notResidentHelsinki={
+            !isProtectedFamily &&
+            item.eligibility.reasons.includes('not_resident_helsinki')
+          }
         />
       ))}
     </div>
