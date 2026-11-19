@@ -7,7 +7,7 @@ import { preschoolApplicationFormForDependantCreate } from '../../api/generated'
 import { DependantIcon } from '../dependant-icon';
 import { PdfDownloadButton } from '../pdf-download-button';
 import styles from './DependantItem.module.css';
-import { Button, ButtonVariant } from 'hds-react';
+import { Button, ButtonVariant, Notification } from 'hds-react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
@@ -19,12 +19,16 @@ interface DependantItemProps {
   // Position in the dependant list, used only for data-testids.
   index: number;
   canApply: boolean;
+  // The child is of preschool age but their home municipality isn't Helsinki. A child of the wrong age
+  // gets no explanation on purpose.
+  notResidentHelsinki: boolean;
 }
 
 export const DependantItem = ({
   item,
   index,
   canApply,
+  notResidentHelsinki,
 }: DependantItemProps) => {
   const { t } = useTranslation('landing');
   const navigate = useNavigate();
@@ -48,6 +52,10 @@ export const DependantItem = ({
   const isSubmitted = application.data?.status === 'submitted';
 
   const age = ageFromIso(item.dateOfBirth);
+  const unknownError = t(
+    'errors.unknown',
+    'Tapahtui virhe. Yritä myöhemmin uudelleen.',
+  );
 
   return (
     <div className={styles.item} data-testid={`dependant-${index}`}>
@@ -110,11 +118,21 @@ export const DependantItem = ({
                 role="alert"
                 data-testid={`dependant-application-error-${index}`}
               >
-                {application.error.error}
+                {/* The backend's `code` is translated in Locize; `error` is only for developers. */}
+                {application.error.code
+                  ? t(`errors.${application.error.code}`, unknownError)
+                  : unknownError}
               </p>
             )}
           </div>
         </div>
+      )}
+      {notResidentHelsinki && (
+        <Notification
+          type="info"
+          label={t('eligibility.notResidentHelsinki')}
+          data-testid={`notification-not-resident-helsinki-${index}`}
+        />
       )}
     </div>
   );
