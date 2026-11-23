@@ -22,11 +22,13 @@ export const Esikatselu = () => {
   const { goToStep } = useSteps();
 
   const laajuus = [];
-  if (values.hoidonTarve) {
-    laajuus.push(t(`vakaOptions.${values.hoidonTarve}`));
-  }
-  if (values.palvelunTarve) {
-    laajuus.push(t(`vakaOptions.${values.palvelunTarve}`));
+  if (values.taydentavaVarhaiskasvatus) {
+    if (values.hoidonTarve) {
+      laajuus.push(t(`vakaOptions.${values.hoidonTarve}`));
+    }
+    if (values.palvelunTarve) {
+      laajuus.push(t(`vakaOptions.${values.palvelunTarve}`));
+    }
   }
 
   return (

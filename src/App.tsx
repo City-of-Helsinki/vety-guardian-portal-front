@@ -44,8 +44,8 @@ function App() {
       >
         <Header.ActionBar
           className=""
-          frontPageLabel="test"
-          title="test"
+          frontPageLabel=""
+          title=""
           titleHref="/"
           logoHref="/"
           logo={<Logo src={language === 'sv' ? logoSv : logoFi} alt="asd" />}
