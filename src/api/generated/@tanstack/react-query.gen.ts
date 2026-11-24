@@ -194,7 +194,8 @@ export const preschoolApplicationFormPdfRetrieveOptions = (options: Options<Pres
  *
  * Returns the dependant's existing application (200), or creates a new draft (201)
  * prefilled with the child's and guardians' VTJ data.
- * Refused (403) when the family has an active Turvakielto.
+ * Refused (403) when the family has an active Turvakielto, and creating a new draft is refused (403) when the
+ * child is not eligible (guardian/eligibility.py; `code` is the reason, e.g. "not_preschool_age").
  */
 export const preschoolApplicationFormForDependantCreateMutation = (options?: Partial<Options<PreschoolApplicationFormForDependantCreateData>>): UseMutationOptions<PreschoolApplicationFormForDependantCreateResponse, PreschoolApplicationFormForDependantCreateError, Options<PreschoolApplicationFormForDependantCreateData>> => {
     const mutationOptions: UseMutationOptions<PreschoolApplicationFormForDependantCreateResponse, PreschoolApplicationFormForDependantCreateError, Options<PreschoolApplicationFormForDependantCreateData>> = {
