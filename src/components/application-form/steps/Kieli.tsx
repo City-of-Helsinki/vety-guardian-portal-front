@@ -11,7 +11,11 @@ export const Kieli = () => {
   const { t } = useTranslation('lomake');
 
   return (
-    <ApplicationFormStep data-testid="step-kieli" title={t('kieli.title')}>
+    <ApplicationFormStep
+      data-testid="step-kieli"
+      title={t('kieli.title')}
+      headingId="kieli-title"
+    >
       <p data-testid="text-kieli">{t('kieli.kieliText')}</p>
       <Controller
         name="kieli"
@@ -21,6 +25,8 @@ export const Kieli = () => {
           <SelectionGroup
             className={styles['selection-group']}
             data-testid="group-kieli"
+            required
+            aria-labelledby="kieli-title"
             errorText={fieldState.error?.message}
           >
             <SelectionGroupItem id="esiopetuksen-kieli-fi-item">

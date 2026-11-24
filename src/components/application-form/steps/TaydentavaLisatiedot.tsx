@@ -37,6 +37,7 @@ export const TaydentavaLisatiedot = () => {
     <ApplicationFormStep
       data-testid="step-hoidon-tarve"
       title={t('taydentavaLisatiedot.title')}
+      headingId="taydentava-lisatiedot-title"
     >
       <MarkdownContent data-testid="text-taydentava-lisatiedot">
         {t('taydentavaLisatiedot.taydentavaLisatiedotText')}
@@ -50,10 +51,7 @@ export const TaydentavaLisatiedot = () => {
       <MarkdownContent>
         {t('taydentavaLisatiedot.fieldsDescription')}
       </MarkdownContent>
-      <Fieldset
-        heading={t('taydentavaLisatiedot.aloitusPvmTitle')}
-        data-testid="fieldset-aloitus-pvm"
-      >
+      <Fieldset heading={''} data-testid="fieldset-aloitus-pvm">
         <Controller
           name="taydentavaVarhaiskasvatusAloitus"
           control={control}
@@ -65,6 +63,8 @@ export const TaydentavaLisatiedot = () => {
             <DateInput
               id="extendedCareStartDate"
               data-testid="date-extended-care-start"
+              required={!!taydentavaVarhaiskasvatus}
+              label={t('taydentavaLisatiedot.aloitusPvmTitle')}
               initialMonth={new Date()}
               dateFormat={DISPLAY_DATE_FORMAT}
               language={toLanguage(i18n.resolvedLanguage)}
@@ -93,6 +93,8 @@ export const TaydentavaLisatiedot = () => {
           <SelectionGroup
             className={styles['selection-group']}
             data-testid="group-hoidon-tarve"
+            required={!!taydentavaVarhaiskasvatus}
+            aria-labelledby="taydentava-lisatiedot-title"
             errorText={fieldState.error?.message}
           >
             <SelectionGroupItem id="paiva-aikainen-item">
