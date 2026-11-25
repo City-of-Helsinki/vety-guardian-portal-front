@@ -1,4 +1,6 @@
 FROM registry.access.redhat.com/ubi9/nodejs-24 AS build
+ARG SENTRY_PROJECT
+ARG SENTRY_RELEASE
 
 WORKDIR /opt/app-root/src
 
