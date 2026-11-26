@@ -389,19 +389,6 @@ export type GdprApiV1ProfilesRetrieveResponses = {
     200: unknown;
 };
 
-export type PreschoolApplicationFormCreateData = {
-    body?: PreschoolApplicationWritable;
-    path?: never;
-    query?: never;
-    url: '/preschool-application-form/';
-};
-
-export type PreschoolApplicationFormCreateResponses = {
-    201: PreschoolApplication;
-};
-
-export type PreschoolApplicationFormCreateResponse = PreschoolApplicationFormCreateResponses[keyof PreschoolApplicationFormCreateResponses];
-
 export type PreschoolApplicationFormRetrieveData = {
     body?: never;
     path: {

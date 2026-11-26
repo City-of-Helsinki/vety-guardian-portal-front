@@ -3,8 +3,8 @@
 import { type DefaultError, queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { authIdentityCreate, gdprApiV1ProfilesDestroy, gdprApiV1ProfilesRetrieve, type Options, preschoolApplicationFormCreate, preschoolApplicationFormForDependantCreate, preschoolApplicationFormPdfRetrieve, preschoolApplicationFormRetrieve, preschoolApplicationFormUpdate, schemaRetrieve, vtjDependantsRetrieve, vtjIsProtectedFamilyRetrieve } from '../sdk.gen';
-import type { AuthIdentityCreateData, AuthIdentityCreateError, AuthIdentityCreateResponse, GdprApiV1ProfilesDestroyData, GdprApiV1ProfilesDestroyResponse, GdprApiV1ProfilesRetrieveData, PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponse, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateError, PreschoolApplicationFormForDependantCreateResponse, PreschoolApplicationFormPdfRetrieveData, PreschoolApplicationFormPdfRetrieveError, PreschoolApplicationFormPdfRetrieveResponse, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponse, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponse, SchemaRetrieveData, SchemaRetrieveResponse, VtjDependantsRetrieveData, VtjDependantsRetrieveError, VtjDependantsRetrieveResponse, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveError, VtjIsProtectedFamilyRetrieveResponse } from '../types.gen';
+import { authIdentityCreate, gdprApiV1ProfilesDestroy, gdprApiV1ProfilesRetrieve, type Options, preschoolApplicationFormForDependantCreate, preschoolApplicationFormPdfRetrieve, preschoolApplicationFormRetrieve, preschoolApplicationFormUpdate, schemaRetrieve, vtjDependantsRetrieve, vtjIsProtectedFamilyRetrieve } from '../sdk.gen';
+import type { AuthIdentityCreateData, AuthIdentityCreateError, AuthIdentityCreateResponse, GdprApiV1ProfilesDestroyData, GdprApiV1ProfilesDestroyResponse, GdprApiV1ProfilesRetrieveData, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateError, PreschoolApplicationFormForDependantCreateResponse, PreschoolApplicationFormPdfRetrieveData, PreschoolApplicationFormPdfRetrieveError, PreschoolApplicationFormPdfRetrieveResponse, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponse, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponse, SchemaRetrieveData, SchemaRetrieveResponse, VtjDependantsRetrieveData, VtjDependantsRetrieveError, VtjDependantsRetrieveResponse, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveError, VtjIsProtectedFamilyRetrieveResponse } from '../types.gen';
 
 /**
  * POST /auth/identity/
@@ -101,25 +101,6 @@ export const gdprApiV1ProfilesRetrieveOptions = (options: Options<GdprApiV1Profi
     },
     queryKey: gdprApiV1ProfilesRetrieveQueryKey(options)
 });
-
-/**
- * POST /preschool-application-form/
- *
- * Create a new application in "draft" status.
- */
-export const preschoolApplicationFormCreateMutation = (options?: Partial<Options<PreschoolApplicationFormCreateData>>): UseMutationOptions<PreschoolApplicationFormCreateResponse, DefaultError, Options<PreschoolApplicationFormCreateData>> => {
-    const mutationOptions: UseMutationOptions<PreschoolApplicationFormCreateResponse, DefaultError, Options<PreschoolApplicationFormCreateData>> = {
-        mutationFn: async (fnOptions) => {
-            const { data } = await preschoolApplicationFormCreate({
-                ...options,
-                ...fnOptions,
-                throwOnError: true
-            });
-            return data;
-        }
-    };
-    return mutationOptions;
-};
 
 export const preschoolApplicationFormRetrieveQueryKey = (options: Options<PreschoolApplicationFormRetrieveData>) => createQueryKey('preschoolApplicationFormRetrieve', options);
 

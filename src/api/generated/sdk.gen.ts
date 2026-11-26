@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AuthIdentityCreateData, AuthIdentityCreateErrors, AuthIdentityCreateResponses, GdprApiV1ProfilesDestroyData, GdprApiV1ProfilesDestroyResponses, GdprApiV1ProfilesRetrieveData, GdprApiV1ProfilesRetrieveResponses, PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponses, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateErrors, PreschoolApplicationFormForDependantCreateResponses, PreschoolApplicationFormPdfRetrieveData, PreschoolApplicationFormPdfRetrieveErrors, PreschoolApplicationFormPdfRetrieveResponses, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponses, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponses, SchemaRetrieveData, SchemaRetrieveResponses, VtjDependantsRetrieveData, VtjDependantsRetrieveErrors, VtjDependantsRetrieveResponses, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveErrors, VtjIsProtectedFamilyRetrieveResponses } from './types.gen';
+import type { AuthIdentityCreateData, AuthIdentityCreateErrors, AuthIdentityCreateResponses, GdprApiV1ProfilesDestroyData, GdprApiV1ProfilesDestroyResponses, GdprApiV1ProfilesRetrieveData, GdprApiV1ProfilesRetrieveResponses, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateErrors, PreschoolApplicationFormForDependantCreateResponses, PreschoolApplicationFormPdfRetrieveData, PreschoolApplicationFormPdfRetrieveErrors, PreschoolApplicationFormPdfRetrieveResponses, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponses, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponses, SchemaRetrieveData, SchemaRetrieveResponses, VtjDependantsRetrieveData, VtjDependantsRetrieveErrors, VtjDependantsRetrieveResponses, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveErrors, VtjIsProtectedFamilyRetrieveResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -58,21 +58,6 @@ export const gdprApiV1ProfilesRetrieve = <ThrowOnError extends boolean = false>(
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/gdpr-api/v1/profiles/{uuid}',
     ...options
-});
-
-/**
- * POST /preschool-application-form/
- *
- * Create a new application in "draft" status.
- */
-export const preschoolApplicationFormCreate = <ThrowOnError extends boolean = false>(options?: Options<PreschoolApplicationFormCreateData, ThrowOnError>) => (options?.client ?? client).post<PreschoolApplicationFormCreateResponses, unknown, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/preschool-application-form/',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
 });
 
 /**
