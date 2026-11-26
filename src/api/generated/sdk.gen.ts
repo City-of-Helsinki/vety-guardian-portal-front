@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AuthIdentityCreateData, AuthIdentityCreateErrors, AuthIdentityCreateResponses, GdprApiV1ProfilesDestroyData, GdprApiV1ProfilesDestroyResponses, GdprApiV1ProfilesRetrieveData, GdprApiV1ProfilesRetrieveResponses, PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponses, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateErrors, PreschoolApplicationFormForDependantCreateResponses, PreschoolApplicationFormPdfRetrieveData, PreschoolApplicationFormPdfRetrieveErrors, PreschoolApplicationFormPdfRetrieveResponses, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponses, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponses, SchemaRetrieveData, SchemaRetrieveResponses, VtjDependantsRetrieveData, VtjDependantsRetrieveErrors, VtjDependantsRetrieveResponses, VtjGuardiansRetrieveData, VtjGuardiansRetrieveErrors, VtjGuardiansRetrieveResponses, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveErrors, VtjIsProtectedFamilyRetrieveResponses } from './types.gen';
+import type { AuthIdentityCreateData, AuthIdentityCreateErrors, AuthIdentityCreateResponses, GdprApiV1ProfilesDestroyData, GdprApiV1ProfilesDestroyResponses, GdprApiV1ProfilesRetrieveData, GdprApiV1ProfilesRetrieveResponses, PreschoolApplicationFormCreateData, PreschoolApplicationFormCreateResponses, PreschoolApplicationFormForDependantCreateData, PreschoolApplicationFormForDependantCreateErrors, PreschoolApplicationFormForDependantCreateResponses, PreschoolApplicationFormPdfRetrieveData, PreschoolApplicationFormPdfRetrieveErrors, PreschoolApplicationFormPdfRetrieveResponses, PreschoolApplicationFormRetrieveData, PreschoolApplicationFormRetrieveResponses, PreschoolApplicationFormUpdateData, PreschoolApplicationFormUpdateResponses, SchemaRetrieveData, SchemaRetrieveResponses, VtjDependantsRetrieveData, VtjDependantsRetrieveErrors, VtjDependantsRetrieveResponses, VtjIsProtectedFamilyRetrieveData, VtjIsProtectedFamilyRetrieveErrors, VtjIsProtectedFamilyRetrieveResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -154,18 +154,6 @@ export const schemaRetrieve = <ThrowOnError extends boolean = false>(options?: O
 export const vtjDependantsRetrieve = <ThrowOnError extends boolean = false>(options?: Options<VtjDependantsRetrieveData, ThrowOnError>) => (options?.client ?? client).get<VtjDependantsRetrieveResponses, VtjDependantsRetrieveErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/vtj/dependants/',
-    ...options
-});
-
-/**
- * GET /guardians/<dependant_id>/
- * - that dependant's own guardians
- *
- * `dependant_id` is the  DATABASE id from a prior /dependants/ response's "id" field
- */
-export const vtjGuardiansRetrieve = <ThrowOnError extends boolean = false>(options: Options<VtjGuardiansRetrieveData, ThrowOnError>) => (options.client ?? client).get<VtjGuardiansRetrieveResponses, VtjGuardiansRetrieveErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/vtj/guardians/{dependant_id}/',
     ...options
 });
 

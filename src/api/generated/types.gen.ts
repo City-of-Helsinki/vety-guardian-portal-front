@@ -77,54 +77,6 @@ export type ErrorResponse = {
     code?: string;
 };
 
-export type Guardian = {
-    readonly id: string;
-    /**
-     * Henkilötunnus
-     *
-     * Finnish personal identity code (Henkilotunnus).
-     */
-    readonly ssn: string;
-    /**
-     * Etunimet
-     */
-    readonly firstNames: string;
-    /**
-     * Sukunimi
-     */
-    readonly lastName: string;
-    /**
-     * Syntymäaika
-     */
-    readonly dateOfBirth: string | null;
-    /**
-     * Lähiosoite
-     */
-    readonly streetAddress: string;
-    /**
-     * Postinumero
-     */
-    readonly postalCode: string;
-    /**
-     * Postitoimipaikka
-     */
-    readonly postalDistrict: string;
-    /**
-     * Turvakielto
-     *
-     * True if this person's VTJ record has an active address-protection flag (Turvakielto).
-     */
-    readonly addressProtected: boolean;
-};
-
-/**
- * Schema-only: the `GET /guardians/<dependant_id>/` response envelope.
- */
-export type GuardiansResponse = {
-    dependant: Dependant;
-    guardians: Array<Guardian>;
-};
-
 /**
  * * `paivaaikainen_varhaiskasvatus` - Esiopetus 4 tuntia jonka lisäksi päiväaikainen varhaiskasvatus
  * * `vuorohoito_varhaiskasvatus` - Esiopetus 4 tuntia arkisin, jonka lisäksi vuorohoidon tarve varhaiskasvatuksessa
@@ -315,14 +267,6 @@ export type DependantWritable = {
  */
 export type DependantsResponseWritable = {
     dependants: Array<DependantWritable>;
-};
-
-/**
- * Schema-only: the `GET /guardians/<dependant_id>/` response envelope.
- */
-export type GuardiansResponseWritable = {
-    dependant: DependantWritable;
-    guardians: Array<unknown>;
 };
 
 /**
@@ -581,30 +525,6 @@ export type VtjDependantsRetrieveResponses = {
 };
 
 export type VtjDependantsRetrieveResponse = VtjDependantsRetrieveResponses[keyof VtjDependantsRetrieveResponses];
-
-export type VtjGuardiansRetrieveData = {
-    body?: never;
-    path: {
-        /**
-         * Database id (UUID) of the Dependant whose guardians to fetch.
-         */
-        dependant_id: string;
-    };
-    query?: never;
-    url: '/vtj/guardians/{dependant_id}/';
-};
-
-export type VtjGuardiansRetrieveErrors = {
-    404: ErrorResponse;
-};
-
-export type VtjGuardiansRetrieveError = VtjGuardiansRetrieveErrors[keyof VtjGuardiansRetrieveErrors];
-
-export type VtjGuardiansRetrieveResponses = {
-    200: GuardiansResponse;
-};
-
-export type VtjGuardiansRetrieveResponse = VtjGuardiansRetrieveResponses[keyof VtjGuardiansRetrieveResponses];
 
 export type VtjIsProtectedFamilyRetrieveData = {
     body?: never;
