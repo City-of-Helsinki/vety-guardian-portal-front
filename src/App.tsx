@@ -48,7 +48,13 @@ function App() {
           title=""
           titleHref="/"
           logoHref="/"
-          logo={<Logo src={language === 'sv' ? logoSv : logoFi} alt="asd" />}
+          logoAriaLabel={t('header.logoLinkLabel', 'Etusivu')}
+          logo={
+            <Logo
+              src={language === 'sv' ? logoSv : logoFi}
+              alt={t('header.logoAlt', 'Helsingin kaupunki')}
+            />
+          }
         >
           <Header.LanguageSelector />
           <WithAuthenticatedUser>
